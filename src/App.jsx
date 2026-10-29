@@ -391,7 +391,7 @@ function PublicOrderingModule({onPlaceOrder}) {
   function submit(event) {
     event.preventDefault();
     if (!selected.length) return;
-    onPlaceOrder({customer:customer.trim()||'Cliente demonstrativo',place,items:selected.map(item=>(quantities[item.id]+'x '+item.name)).join(', '),total});
+    onPlaceOrder({customer:customer.trim()||'Cliente demonstrativo',place,items:selected.map(item=>(quantities[item.id]+'x '+item.name)).join(', '),selections:selected.map(item=>({name:item.name,quantity:quantities[item.id]})),total});
     setCompleted(true);
   }
   if (completed) return <section className="booking-confirmation panel"><div className="booking-success-icon"><CheckCircle2 size={30}/></div><span className="public-kicker">BRASA BURGER · DEMONSTRAÇÃO</span><h2>Pedido enviado para a cozinha!</h2><p>O pedido fictício já está disponível na central administrativa para acompanhar o preparo.</p><button className="primary-button" onClick={()=>{setCompleted(false);setQuantities({});setCustomer('');}}>Montar outro pedido</button></section>;
