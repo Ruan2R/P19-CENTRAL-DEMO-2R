@@ -17,6 +17,7 @@ const baseEnv = {
   P19_DEMO_MODE: 'true',
   DB_HOST: '', DB_PORT: '', DB_USER: '', DB_PASSWORD: '', DB_NAME: '', DB_CONNECTION_LIMIT: '',
   TURNSTILE_SECRET_KEY: '',
+  ADMIN_USERS_JSON: '', ADMIN_LOGIN_ID: '', ADMIN_PASSWORD_HASH: '', ADMIN_PASSWORD: '', ADMIN_AUTH_SECRET: '',
   AUTH_SECRET: 'p19-local-demo-secret-not-for-production-2026',
 };
 
