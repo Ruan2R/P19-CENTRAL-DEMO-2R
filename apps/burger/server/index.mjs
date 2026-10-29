@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
   process.exit(1)
 }
 const host = process.env.P16_API_HOST || '127.0.0.1'
-const port = Number(process.env.P16_API_PORT || 3001)
+const port = Number(process.env.P16_API_PORT || 3016)
 if (host !== '127.0.0.1' && host !== 'localhost') {
   throw new Error('A API desta etapa deve ficar vinculada somente a localhost (127.0.0.1).')
 }
