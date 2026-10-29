@@ -419,14 +419,18 @@ class LocalJsonStore {
     if (hasExistingData) return { seeded: false };
 
     try {
-      const date = addDateDays(getBusinessDate(), 1);
       const firstService = this.data.services.find((service) => service.id === 'corte') || this.data.services[0];
       const secondService = this.data.services.find((service) => service.id === 'barba') || this.data.services[1];
       if (!firstService) return { seeded: false };
 
-      const firstAvailability = await this.getAvailableSlots(firstService.id, ANY_PROFESSIONAL_ID, date);
-      const firstSlot = firstAvailability.slots[0]?.time;
-      if (!firstSlot) return { seeded: false };
+      let date = '';
+      let firstSlot = '';
+      for (let offset = 1; offset <= 7 && !firstSlot; offset += 1) {
+        const candidate = addDateDays(getBusinessDate(), offset);
+        const available = await this.getAvailableSlots(firstService.id, ANY_PROFESSIONAL_ID, candidate);
+        if (available.slots.length) { date = candidate; firstSlot = available.slots[0].time; }
+      }
+      if (!date || !firstSlot) return { seeded: false, reason: 'NO_DEMO_SLOTS' };
 
       const firstBooking = await this.createBookingGroup({
         date,
