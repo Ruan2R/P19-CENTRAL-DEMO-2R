@@ -260,7 +260,7 @@ export default function App() {
   function enterDemo(demo) {
     const seed = getSeedData(demo.segment === 'Vitrine' ? 'Beauty' : demo.segment);
     setActiveDemo(demo);
-    setActiveModule(getStartModule(demo));
+    setActiveModule(demo.segment === 'Vitrine' ? 'site' : 'launch');
     setSiteSegment(demo.segment === 'Vitrine' ? 'Beauty' : demo.segment);
     setAppointments(seed.appointments);
     setOrders(seed.orders);
@@ -275,7 +275,17 @@ export default function App() {
   }
   function exitDemo() { setActiveDemo(null); setMobileNav(false); }
   function canUse(module) { return activeDemo?.modules.includes(module); }
-  function changeModule(module) { setActiveModule(module); setMobileNav(false); }
+  function changeModule(module) {
+    setMobileNav(false);
+    if (module === 'launch') { setActiveModule('launch'); return; }
+    if (activeDemo && activeDemo.segment !== 'Vitrine' && module !== 'site') {
+      const targets = getNativeTargets(activeDemo);
+      const url = module === 'booking' ? targets.publicUrl : module === 'orderPublic' ? targets.appUrl : targets.adminUrl;
+      openNativeApp(url, notify);
+      return;
+    }
+    setActiveModule(module);
+  }
 
   if (!activeDemo) {
     return <div className="app-shell hub-shell">
