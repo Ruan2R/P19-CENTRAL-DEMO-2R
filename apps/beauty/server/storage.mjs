@@ -418,15 +418,20 @@ class LocalJsonStore {
 
     try {
       const today = getStudioDate();
-      const tomorrow = addDateDays(today, 1);
       const firstService = this.data.services.find((service) => service.active);
       const secondService = this.data.services.find((service) => service.active && service.id !== firstService?.id);
       if (!firstService) return { seeded: false };
 
-      const firstSlots = await this.getAvailableSlots([firstService.id], tomorrow);
-      if (!firstSlots.length) return { seeded: false, reason: 'NO_DEMO_SLOTS' };
+      let demoDate = '';
+      let firstSlots = [];
+      for (let offset = 1; offset <= 7 && !firstSlots.length; offset += 1) {
+        const candidate = addDateDays(today, offset);
+        const available = await this.getAvailableSlots([firstService.id], candidate);
+        if (available.length) { demoDate = candidate; firstSlots = available; }
+      }
+      if (!demoDate || !firstSlots.length) return { seeded: false, reason: 'NO_DEMO_SLOTS' };
       const firstResult = await this.createBooking({
-        serviceIds: [firstService.id], date: tomorrow, time: firstSlots[0],
+        serviceIds: [firstService.id], date: demoDate, time: firstSlots[0],
         customerName: 'Mariana Costa', customerPhone: '6799990011',
         customerNote: 'Agendamento fictício da demonstração 2R.', captchaToken: '', policyAcknowledged: true,
       });
@@ -445,9 +450,9 @@ class LocalJsonStore {
       }
 
       if (secondService) {
-        const secondSlots = await this.getAvailableSlots([secondService.id], tomorrow);
+        const secondSlots = await this.getAvailableSlots([secondService.id], demoDate);
         if (secondSlots.length) await this.createBooking({
-          serviceIds: [secondService.id], date: tomorrow, time: secondSlots[0],
+          serviceIds: [secondService.id], date: demoDate, time: secondSlots[0],
           customerName: 'Bianca Souza', customerPhone: '6799990012',
           customerNote: 'Agendamento fictício da demonstração 2R.', captchaToken: '', policyAcknowledged: true,
         });
@@ -459,7 +464,7 @@ class LocalJsonStore {
       });
       await this.createPayable({
         description: 'Reposição fictícia de produtos', category: 'Materiais',
-        amount_cents: 12500, due_date: tomorrow,
+        amount_cents: 12500, due_date: demoDate,
       });
       console.log('[P19 demo] Dados fictícios de Beauty preparados no armazenamento local.');
       return { seeded: true };
