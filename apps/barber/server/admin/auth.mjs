@@ -52,6 +52,10 @@ function loadUsers(env, production) {
 
   if (production) return []
 
+  if (env.P19_DEMO_MODE === 'true') {
+    return [{ id: 'DEMO', displayName: '2R Barber Demonstração', role: 'owner', passwordHash: hashAdminPassword('2Rdemo26') }]
+  }
+
   // Conta exclusivamente local para desenvolvimento. A aplicação recusa NODE_ENV=production
   // nesta etapa, e estes valores nunca devem ser usados para uma publicação real.
   return [{ id: 'ADMIN', displayName: 'Administrador Boss67', role: 'owner', passwordHash: hashAdminPassword('boss67demo') }]
