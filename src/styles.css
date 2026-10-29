@@ -446,3 +446,8 @@
  .portfolio-about-quote{grid-column:1}
 }
 @media(prefers-reduced-motion:reduce){.portfolio-shell *, .portfolio-shell *:before,.portfolio-shell *:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+.catalog-back-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 11px;border:1px solid #dce7ef;border-radius:9px;background:#fff;color:#075579;font-size:10px;font-weight:800;white-space:nowrap}
+.catalog-back-button:hover{background:#f0f9fb;border-color:#a7d9e7}
+@media(max-width:760px){.catalog-back-button{padding:0 8px}.catalog-back-button span{display:none}}
