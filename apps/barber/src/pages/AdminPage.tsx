@@ -354,7 +354,7 @@ export default function AdminPage() {
         const message = buildConfirmationMessage(group)
         try { await navigator.clipboard.writeText(message) } catch { /* Clipboard unavailable in local demo. */ }
         setWhatsappPreparedGroupId(group.id)
-        setNotice('Demonstração: mensagem preparada/copiadа. Nenhum WhatsApp será aberto. Toque novamente para registrar o envio fictício.')
+        setNotice('Demonstração: mensagem preparada/copiada. Nenhum WhatsApp será aberto. Toque novamente para registrar o envio fictício.')
         return
       }
       await markWhatsAppSent(group)
