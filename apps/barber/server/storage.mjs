@@ -465,7 +465,7 @@ class LocalJsonStore {
         description: 'Compra fictícia de produtos de barbearia',
         category: 'Materiais',
         amountCents: 9800,
-        movementDate: date,
+        movementDate: getBusinessDate(),
         paymentMethod: 'Pix',
       });
       await this.createPayable({
