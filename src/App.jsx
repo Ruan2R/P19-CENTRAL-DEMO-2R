@@ -360,6 +360,43 @@ export default function App() {
   </div>;
 }
 
+
+function NativeLaunchPage({demo,onBack,onOpenSite,notify}) {
+  const targets = getNativeTargets(demo);
+  const notes = AUTOMATION_NOTES[demo.segment];
+  const hasSite = demo.modules.includes('site');
+  const isBurger = demo.segment === 'Burger';
+  return <div className={'app-shell hub-shell native-launch ' + demo.color}>
+    <header className="topbar hub-topbar">
+      <div className="brand-lockup"><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Seu parceiro em Tecnologia</div></div></div>
+      <div className="topbar-right"><span className="demo-pill"><span className="pulse-dot"/> AMBIENTE LOCAL DE DEMONSTRAÇÃO</span><button className="secondary-button" onClick={onBack}><ArrowLeft size={15}/> Todos os acessos</button></div>
+    </header>
+    <main className="native-launch-main">
+      <div className="native-breadcrumb"><span>Central 2R</span><ArrowRight size={13}/><span>{demo.segment}</span><ArrowRight size={13}/><strong>{demo.name}</strong></div>
+      <section className="native-launch-hero">
+        <div className={'native-app-mark ' + demo.color}>{demo.segment==='Beauty'?<Sparkles size={28}/>:demo.segment==='Barber'?<Scissors size={28}/>:<ShoppingBag size={28}/>}</div>
+        <div className="native-launch-title"><span className="eyebrow muted-eyebrow">PACOTE DE DEMONSTRAÇÃO</span><h1>{demo.name}</h1><p>{demo.description}</p><div className="native-source-note"><CheckCircle2 size={15}/> Esta apresentação abre o código original do produto, com armazenamento local e dados fictícios.</div></div>
+      </section>
+      <section className="native-target-grid">
+        {hasSite && <article className="panel native-target-card"><div className="native-target-icon"><MonitorSmartphone size={20}/></div><div className="native-target-copy"><h2>Landing page</h2><p>Prévia de apresentação com identidade fictícia para explicar como a página se integra aos módulos do sistema.</p></div><button className="secondary-button" onClick={onOpenSite}>Ver prévia <ArrowUpRight size={15}/></button></article>}
+        {targets.publicUrl && <article className="panel native-target-card"><div className="native-target-icon"><CalendarDays size={20}/></div><div className="native-target-copy"><h2>Agendamento público</h2><p>Abra a página original em que o cliente escolhe os serviços e solicita o horário. A reserva aparece na administração.</p></div><button className="primary-button" onClick={()=>openNativeApp(targets.publicUrl,notify)}>{targets.publicLabel}<ArrowUpRight size={15}/></button></article>}
+        <article className="panel native-target-card"><div className="native-target-icon"><LayoutDashboard size={20}/></div><div className="native-target-copy"><h2>{isBurger?'Sistema administrativo original':'Área administrativa original'}</h2><p>Interface, navegação e regras do projeto de origem, sem substituir o painel por uma tela simulada.</p></div><button className="primary-button" onClick={()=>openNativeApp(targets.adminUrl,notify)}>{targets.adminLabel}<ArrowUpRight size={15}/></button></article>
+      </section>
+      <section className="panel automation-panel">
+        <div className="automation-heading"><div className="automation-icon"><Activity size={20}/></div><div><span className="eyebrow muted-eyebrow">LEMBRETE PARA A APRESENTAÇÃO</span><h2>{notes.title}</h2><p>Use estes pontos como roteiro enquanto mostra o fluxo real.</p></div></div>
+        <div className="automation-points">{notes.points.map((point,index)=><div className="automation-point" key={point}><span>{String(index+1).padStart(2,'0')}</span><p>{point}</p></div>)}</div>
+        <div className="automation-reminder"><Sparkles size={17}/><div><strong>O que vale destacar</strong><p>{notes.reminder}</p></div><button className="icon-quiet" title="Copiar lembrete" onClick={()=>{navigator.clipboard.writeText(notes.reminder).then(()=>notify('Lembrete copiado.')).catch(()=>notify(notes.reminder));}}><Copy size={16}/></button></div>
+      </section>
+      <section className="panel native-credentials">
+        <div className="native-credentials-head"><LockKeyhole size={19}/><div><strong>Credenciais do aplicativo original</strong><p>Usadas somente nas cópias locais deste P19; não são credenciais de clientes reais.</p></div></div>
+        <div className="native-credential-pills"><span>Usuário <code>{targets.user}</code></span><span>Senha <code>{targets.password}</code></span><button className="text-action" onClick={()=>{navigator.clipboard.writeText('Usuário: '+targets.user+'\nSenha: '+targets.password).then(()=>notify('Credenciais copiadas.')).catch(()=>notify('Copie o usuário e a senha exibidos.'));}}><Copy size={14}/> Copiar credenciais</button></div>
+        {isBurger && <p className="credentials-help">O P16 já possui dois perfis nativos: financeiro (admin) e completo (admin02). A central direciona para o perfil adequado ao pacote.</p>}
+      </section>
+      <div className="native-launch-footer"><LockKeyhole size={14}/><span>Somente dados fictícios e armazenamento local. Nenhum banco de produção é conectado pelo P19.</span></div>
+    </main>
+  </div>;
+}
+
 function MetricCard({label,value,delta,icon:Icon,kind='blue',footnote}) { return <div className="metric-card"><div className={`metric-icon ${kind}`}><Icon size={19}/></div><span className="metric-label">{label}</span><strong className="metric-value">{value}</strong><div className="metric-foot"><span className={delta?.startsWith('-')?'negative':'positive'}>{delta}</span>{footnote&&<span>{footnote}</span>}</div></div>; }
 function OverviewModule({demo,appointments,orders,products,transactions,changeModule}) {
   const burger=demo.segment==='Burger';
