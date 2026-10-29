@@ -23,9 +23,15 @@ const envBase = {
 const children = [];
 let shuttingDown = false;
 
+// Only .cmd launchers need a shell on Windows. Running node.exe through cmd.exe
+// breaks when the Node installation path contains spaces (for example, Program Files).
+function needsShell(command) {
+  return isWindows && /\.cmd$/i.test(command);
+}
+
 function runSync(command, args, cwd, env = envBase) {
   const result = spawnSync(command, args, {
-    cwd, env, stdio: 'inherit', shell: isWindows,
+    cwd, env, stdio: 'inherit', shell: needsShell(command),
   });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`Command failed (exit ${result.status}): ${command} ${args.join(' ')}`);
@@ -37,7 +43,7 @@ function startChild(label, command, args, cwd, overrides = {}) {
     cwd,
     env: { ...envBase, ...overrides },
     stdio: 'inherit',
-    shell: isWindows,
+    shell: needsShell(command),
   });
   children.push({ label, child });
   child.on('error', (error) => {
