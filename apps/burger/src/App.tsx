@@ -54,8 +54,14 @@ const money = (value: number) => value.toLocaleString('pt-BR', { style: 'currenc
 const centsToReais = (cents: number) => cents / 100
 const reaisToCents = (value: number) => Math.round((value + Number.EPSILON) * 100)
 const DEMO_USERS: Record<string, { password: string; role: AccessRole; displayName: string }> = {
-  admin: { password: 'financeiro123', role: 'finance', displayName: 'Admin Financeiro' },
-  admin02: { password: 'painel123', role: 'full', displayName: 'Admin Completo' },
+  admin: { password: '2Rdemo26', role: 'finance', displayName: '2R Burger · Financeiro Demo' },
+  admin02: { password: '2Rdemo26', role: 'full', displayName: '2R Burger · Gestão Completa' },
+}
+function getRequestedDemoAccount() {
+  if (typeof window === 'undefined') return null;
+  const id = new URLSearchParams(window.location.search).get('demoUser')?.trim().toLowerCase() || '';
+  const account = DEMO_USERS[id];
+  return account ? { id, ...account } : null;
 }
 
 function businessTodayIso() {
@@ -116,9 +122,12 @@ const emptySummary = (): FinanceSummary => ({ month: localMonth(), incomeCents: 
 function errorText(error: unknown) { return error instanceof Error ? error.message : 'Ocorreu um erro inesperado.' }
 
 function App() {
-  const [user, setUser] = useState<{ role: AccessRole; displayName: string } | null>(null)
-  const [loginId, setLoginId] = useState('admin')
-  const [password, setPassword] = useState('')
+  const [user, setUser] = useState<{ role: AccessRole; displayName: string } | null>(() => {
+    const requested = getRequestedDemoAccount();
+    return requested ? { role: requested.role, displayName: requested.displayName } : null;
+  })
+  const [loginId, setLoginId] = useState(() => getRequestedDemoAccount()?.id ?? 'admin')
+  const [password, setPassword] = useState(() => getRequestedDemoAccount()?.password ?? '')
   const [loginError, setLoginError] = useState('')
   const [view, setView] = useState<'finance' | 'orders'>('finance')
   const [financeTab, setFinanceTab] = useState<FinanceTab>('overview')
