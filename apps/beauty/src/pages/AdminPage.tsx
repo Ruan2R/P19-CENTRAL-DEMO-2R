@@ -8,7 +8,8 @@ import { parseVCardContacts } from '../lib/vcard.mjs'
 import { BookingTimeWheelPicker } from '../components/BookingTimeWheelPicker'
 import { STATUS_LABELS, WEEKDAYS, type Appointment, type AppointmentStatus, type BusinessHour, type BusinessPolicy, type CustomerProfile, type FinancialEntry, type Payable, type Promotion, type PromotionInput, type Service } from '../types'
 
-const WHATSAPP_NUMBER = '556798580350'
+const P19_DEMO_MODE = true
+const WHATSAPP_NUMBER = ''
 const INITIAL_HOURS: BusinessHour[] = WEEKDAYS.map((_, weekday) => ({ weekday, start_time: null, end_time: null, break_start: null, break_end: null, enabled: false }))
 const INITIAL_POLICIES: BusinessPolicy = { singleton: true, lateness_tolerance_minutes: 0, cancellation_notice_hours: 0, companion_policy: 'Política de acompanhantes pendente de confirmação pela Ana.', no_show_policy: 'Política de faltas, cancelamentos e sinal pendente de confirmação pela Ana.', show_lateness_policy: false, show_cancellation_policy: false, show_companion_policy: false, show_no_show_policy: false }
 
@@ -40,7 +41,7 @@ function searchComparable(value: string) {
 function whatsappHref(appointment: Appointment) {
   const customerPhone = digits(appointment.customer_phone)
   const phone = customerPhone.startsWith('55') ? customerPhone : `55${customerPhone}`
-  const message = `Olá, ${appointment.customer_name}. Aqui é a Ana, da Ana Amaral Lash Designer. Estou entrando em contato sobre seu agendamento de ${appointment.service?.name ?? 'procedimento'} para ${formatDateTime(appointment.starts_at)}. ${appointment.status === 'awaiting_deposit' ? 'Para confirmar o horário, o sinal é de ' + formatPrice(appointment.deposit_cents) + '. Posso te passar as orientações para o pagamento?' : appointment.status === 'pending_confirmation' ? 'Recebi sua solicitação e estou entrando em contato para confirmar os detalhes do horário.' : appointment.status === 'confirmed' ? 'Seu horário está confirmado! Se precisar de alguma orientação antes do atendimento, estou à disposição.' : appointment.status === 'cancelled' ? 'Estou entrando em contato para confirmar o cancelamento deste horário.' : appointment.status === 'no_show' ? 'Estou entrando em contato sobre o atendimento agendado. Vamos conversar para alinhar os próximos passos.' : 'Obrigada por escolher a Ana Amaral Lash Designer. Espero que tenha gostado do atendimento!'}`
+  const message = `Olá, ${appointment.customer_name}. Aqui é a Ana, da 2R Beauty Studio Lash Designer. Estou entrando em contato sobre seu agendamento de ${appointment.service?.name ?? 'procedimento'} para ${formatDateTime(appointment.starts_at)}. ${appointment.status === 'awaiting_deposit' ? 'Para confirmar o horário, o sinal é de ' + formatPrice(appointment.deposit_cents) + '. Posso te passar as orientações para o pagamento?' : appointment.status === 'pending_confirmation' ? 'Recebi sua solicitação e estou entrando em contato para confirmar os detalhes do horário.' : appointment.status === 'confirmed' ? 'Seu horário está confirmado! Se precisar de alguma orientação antes do atendimento, estou à disposição.' : appointment.status === 'cancelled' ? 'Estou entrando em contato para confirmar o cancelamento deste horário.' : appointment.status === 'no_show' ? 'Estou entrando em contato sobre o atendimento agendado. Vamos conversar para alinhar os próximos passos.' : 'Obrigada por escolher a 2R Beauty Studio Lash Designer. Espero que tenha gostado do atendimento!'}`
   return `https://wa.me/${phone || WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
 }
 
@@ -49,14 +50,14 @@ function StatusPill({ status }: { status: AppointmentStatus }) {
 }
 
 function HeaderBrand() {
-  return <Link to="/agendar" className="admin-brand" aria-label="Voltar ao agendamento público"><img className="admin-brand-wordmark" src="/assets/branding/logo-ana-amaral-metalico.webp" alt="Ana Amaral" /><img className="admin-brand-lash-designer" src="/assets/branding/lash-designer-ana-amaral.webp" alt="" aria-hidden="true" /></Link>
+  return <Link to="/agendar" className="admin-brand" aria-label="Voltar ao agendamento público"><img className="admin-brand-wordmark" src="/assets/branding/logo-2r-demo.svg" alt="2R Beauty Studio" /><img className="admin-brand-lash-designer" src="/assets/branding/tagline-2r-demo.svg" alt="" aria-hidden="true" /></Link>
 }
 
 export function AdminPage() {
   const [session, setSession] = useState(false)
   const [authReady, setAuthReady] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [adminDisplayName, setAdminDisplayName] = useState('Ana Amaral')
+  const [adminDisplayName, setAdminDisplayName] = useState('2R Beauty Studio')
   const [adminRole, setAdminRole] = useState<AdminRole>('studio_admin')
   const [storageMode, setStorageMode] = useState<StorageMode>('local-json')
   const [loginId, setLoginId] = useState('')
@@ -90,8 +91,9 @@ export function AdminPage() {
 
   useEffect(() => {
     let mounted = true
+    const launchDemo = new URLSearchParams(window.location.search).has('demoPackage')
     Promise.all([getAdminSession(), getHealth()])
-      .then(([auth, health]) => {
+      .then(async ([auth, health]) => {
         if (!mounted) return
         setSession(auth.authenticated)
         setIsAdmin(auth.authenticated)
@@ -100,12 +102,24 @@ export function AdminPage() {
           setAdminRole(auth.role)
         }
         setStorageMode(health.storageMode)
-        setAuthReady(true)
+        if (!auth.authenticated && launchDemo) {
+          try {
+            const identity = await loginAdmin('DEMO-2R', '2Rdemo26')
+            if (!mounted) return
+            setAdminDisplayName(identity.displayName)
+            setAdminRole(identity.role)
+            setSession(true)
+            setIsAdmin(true)
+          } catch (error) {
+            if (mounted) setPageError(error instanceof Error ? error.message : 'Não foi possível abrir o acesso demonstrativo.')
+          }
+        }
+        if (mounted) setAuthReady(true)
       })
       .catch(() => {
         if (!mounted) return
         setAuthReady(true)
-        setPageError('Não foi possível conectar ao servidor do Sistema Ana. Confira se ele está iniciado e atualize a página.')
+        setPageError('Não foi possível conectar ao servidor local de demonstração. Confira se o P19 está iniciado e atualize a página.')
       })
     return () => { mounted = false }
   }, [])
@@ -174,7 +188,7 @@ export function AdminPage() {
     try { await logoutAdmin() } catch { /* Localiza-se fora da sessão mesmo se a rede estiver indisponível. */ }
     setSession(false)
     setIsAdmin(false)
-    setAdminDisplayName('Ana Amaral')
+    setAdminDisplayName('2R Beauty Studio')
     setAdminRole('studio_admin')
     setAppointments([])
     setTab('overview')
@@ -545,9 +559,9 @@ function AdminShell({ children, tab, setTab, navItems, onLogout, onRefresh, demo
       <div className="sidebar-bottom"><div className="sidebar-user-mark">{displayInitials(adminDisplayName)}</div><div className="sidebar-user"><strong>{adminDisplayName}</strong><span>{adminRole === 'owner' ? 'Proprietário' : 'Administradora'}</span></div><span className={`connection-indicator ${demo ? 'demo' : ''}`} title={demo ? 'Modo demonstração' : 'Conectado'} /></div>
     </aside>
     <div className="admin-main-wrap">
-      <header className="admin-topbar"><div className="topbar-location"><span>Ana Amaral</span><span className="breadcrumb-separator">/</span><strong>{navItems.find((item) => item.id === tab)?.label}</strong></div><div className="topbar-actions"><Link to="/agendar" className="view-public-link" target="_blank"><ExternalLink size={15} /> Abrir agenda pública</Link>{onRefresh && <button className="icon-button" onClick={onRefresh} aria-label="Atualizar dados"><RefreshCw size={16} /></button>}{onLogout && <button className="icon-button" onClick={onLogout} aria-label="Sair do painel"><LogOut size={16} /></button>}</div></header>
+      <header className="admin-topbar"><div className="topbar-location"><span>2R Beauty Studio</span><span className="breadcrumb-separator">/</span><strong>{navItems.find((item) => item.id === tab)?.label}</strong></div><div className="topbar-actions"><Link to="/agendar" className="view-public-link" target="_blank"><ExternalLink size={15} /> Abrir agenda pública</Link>{onRefresh && <button className="icon-button" onClick={onRefresh} aria-label="Atualizar dados"><RefreshCw size={16} /></button>}{onLogout && <button className="icon-button" onClick={onLogout} aria-label="Sair do painel"><LogOut size={16} /></button>}</div></header>
       <main className="admin-content">{children}</main>
-      <footer className="admin-footer"><span>Ana Amaral</span><span>Olhar que realça a sua beleza</span></footer>
+      <footer className="admin-footer"><span>2R Beauty Studio</span><span>Seu espaço de beleza, com gestão inteligente.</span></footer>
     </div>
   </div>
 }
@@ -841,7 +855,7 @@ function AppointmentRow({ appointment, onStatusChange, compact = false }: { appo
     <div className="appointment-main"><strong>{appointment.customer_name}</strong><span>{appointment.service?.name ?? 'Procedimento'}{appointment.customer_note ? ` · ${appointment.customer_note}` : ''}</span><small>Código {appointment.public_code}</small>{appointment.promotion_name && <span className="appointment-promotion-badge"><Tag size={12} /> {appointment.promotion_name} · {formatPrice(appointment.price_cents)} <s>{formatPrice(appointment.regular_price_cents ?? appointment.price_cents)}</s></span>}{appointment.status === 'awaiting_deposit' && appointment.deposit_required && appointment.deposit_reported && !appointment.deposit_received && <span className="deposit-reported-badge" role="status">Pix informado pela cliente</span>}</div>
     {!compact && <div className="appointment-value"><strong>{formatPrice(appointment.price_cents)}</strong><span>{appointment.deposit_required ? `Sinal ${formatPrice(appointment.deposit_cents)}${appointment.deposit_received ? ' · recebido' : ' · pendente'}` : 'Sem sinal obrigatório'}</span></div>}
     <div className={`appointment-end ${!compact ? 'appointment-end-editable' : ''}`}><StatusPill status={appointment.status} />{!compact && <><select className={`appointment-status-select appointment-status-select-${appointment.status}`} aria-label={`Alterar status de ${appointment.customer_name}`} value={appointment.status} onChange={(event) => onStatusChange(appointment.id, event.target.value as AppointmentStatus)}><option value="pending_confirmation">Aguardando confirmação</option><option value="awaiting_deposit">Aguardando sinal</option><option value="confirmed">Confirmado</option><option value="completed">Concluído</option><option value="cancelled">Cancelado</option><option value="no_show">Não compareceu</option></select>{flowHint && <small className={`appointment-flow-hint ${appointment.status === 'awaiting_deposit' ? 'appointment-flow-hint-deposit' : 'appointment-flow-hint-confirmed'}`}>{flowHint}</small>}</>}</div>
-    <a className="whatsapp-action" href={whatsappHref(appointment)} target="_blank" rel="noreferrer" title="Abrir conversa direta no WhatsApp" aria-label={`Abrir WhatsApp para ${appointment.customer_name}`}><MessageCircle size={17} /></a>
+    {!P19_DEMO_MODE && (<a className="whatsapp-action" href={whatsappHref(appointment)} target="_blank" rel="noreferrer" title="Abrir conversa direta no WhatsApp" aria-label={`Abrir WhatsApp para ${appointment.customer_name}`}><MessageCircle size={17} /></a>)}
   </article>
 }
 
