@@ -62,6 +62,8 @@ const INITIAL_PRODUCTS = [
   { id:2, name:'Blend 160g', category:'Estoque', stock:18, unit:'un.', price:8.9 },
   { id:3, name:'Queijo cheddar', category:'Estoque', stock:32, unit:'fatias', price:1.2 },
   { id:4, name:'Smash clássico', category:'Produção sob pedido', stock:null, unit:'pedido', price:29.9 },
+  { id:5, name:'Batata pré-frita', category:'Estoque', stock:16, unit:'kg', price:12.5 },
+  { id:6, name:'Refrigerante lata', category:'Estoque', stock:36, unit:'un.', price:3.2 },
 ];
 const INITIAL_TRANSACTIONS = [
   { id:1, description:'Atendimentos do dia', category:'Receita', date:'Hoje', value:890 },
@@ -119,6 +121,13 @@ const BURGER_MENU = [
   { id:4, name:'Batata crocante', description:'Porção individual com tempero da casa.', price:14.90, category:'Acompanhamentos' },
   { id:5, name:'Refrigerante lata', description:'Bebida gelada 350 ml.', price:6.00, category:'Bebidas' },
 ];
+const BURGER_RECIPES = {
+  'Smash clássico': {'Pão brioche':1,'Blend 160g':1,'Queijo cheddar':1},
+  'Combo Brasa': {'Pão brioche':1,'Blend 160g':1,'Queijo cheddar':1,'Batata pré-frita':0.2,'Refrigerante lata':1},
+  'Smash duplo': {'Pão brioche':1,'Blend 160g':2,'Queijo cheddar':2},
+  'Batata crocante': {'Batata pré-frita':0.2},
+  'Refrigerante lata': {'Refrigerante lata':1},
+};
 function getSeedData(segment) {
   const seed = segment === 'Barber'
     ? { appointments:BARBER_APPOINTMENTS, clients:BARBER_CLIENTS, services:BARBER_SERVICES, transactions:BARBER_TRANSACTIONS, orders:INITIAL_ORDERS, products:INITIAL_PRODUCTS }
@@ -257,8 +266,8 @@ export default function App() {
         <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Experiência pública':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Visualize a página que pode ser apresentada ao cliente.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> DEMO ATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
         {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} activeSegment={activeSegment} onCta={()=>{if(activeDemo.segment==='Burger'&&canUse('orderPublic'))changeModule('orderPublic');else if(canUse('booking'))changeModule('booking');else notify('Esta é uma prévia visual. O fluxo interativo está disponível nos pacotes com agendamento ou pedidos.');}} />}
         {activeModule==='overview'&&<OverviewModule demo={activeDemo} appointments={appointments} orders={orders} products={products} transactions={transactions} changeModule={changeModule}/>} 
-         {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{const service=services.find(item=>item.name===payload.service);setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.service,time:payload.time,date:payload.date,status:'Confirmado',price:service?.price||0,professional:payload.professional}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />}
-         {activeModule==='orderPublic'&&<PublicOrderingModule onPlaceOrder={(payload)=>{const nextNumber=orders.reduce((max,item)=>Math.max(max,Number(item.code)||0),0)+1;setOrders(prev=>[...prev,{id:Date.now(),code:String(nextNumber).padStart(3,'0'),table:payload.place,items:payload.items,total:payload.total,status:'Novo',customer:payload.customer}]);notify('Pedido fictício enviado para a central de pedidos.');}} />}
+         {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professional}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />}
+         {activeModule==='orderPublic'&&<PublicOrderingModule onPlaceOrder={(payload)=>{const nextNumber=orders.reduce((max,item)=>Math.max(max,Number(item.code)||0),0)+1;setOrders(prev=>[...prev,{id:Date.now(),code:String(nextNumber).padStart(3,'0'),table:payload.place,items:payload.items,total:payload.total,status:'Novo',customer:payload.customer}]);const consumed={};payload.selections.forEach(selection=>Object.entries(BURGER_RECIPES[selection.name]||{}).forEach(([name,quantity])=>{consumed[name]=(consumed[name]||0)+quantity*selection.quantity;}));setProducts(prev=>prev.map(product=>product.stock!==null&&consumed[product.name]?{...product,stock:Math.max(0,Number((product.stock-consumed[product.name]).toFixed(2)))}:product));notify('Pedido fictício enviado; os ingredientes demonstrativos foram baixados do estoque.');}} />}
         {activeModule==='appointments'&&<AppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>setModal('appointment')} isBarber={isBarber} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
         {activeModule==='clients'&&<ClientsModule clients={clients} />}
         {activeModule==='services'&&<ServicesModule services={services} />}
@@ -328,27 +337,35 @@ function ClientsModule({clients}) { const [query,setQuery]=useState('');const fi
 function ServicesModule({services}) { return <><div className="service-card-grid">{services.map((s,i)=><article className="service-card" key={s.name}><div className={`service-number n${i+1}`}>{String(i+1).padStart(2,'0')}</div><div className="service-category">{s.type}</div><h3>{s.name}</h3><div className="service-detail"><Clock3 size={14}/>{s.duration}</div><div className="service-price">{money(s.price)}</div><div className="service-enabled"><span/>Disponível no exemplo</div></article>)}</div><div className="service-helper"><Settings2 size={18}/><div><strong>Catálogo demonstrativo</strong><p>Na integração das funcionalidades originais, os campos editáveis serão vinculados às regras reais do sistema de origem.</p></div></div></>; }
 function SiteModule({activeDemo,siteSegment,setSiteSegment,activeSegment,onCta}) { const changeable=activeDemo.segment==='Vitrine';const selected=SEGMENTS[siteSegment]||SEGMENTS.Beauty;return <div className={`landing-preview landing-${siteSegment.toLowerCase()}`} style={{'--landing-accent':selected.accent,'--landing-secondary':selected.secondary}}><div className="landing-preview-top"><div className="landing-preview-logo"><span>{siteSegment==='Beauty'?'SB':siteSegment==='Barber'?'BC':'BB'}</span><div><strong>{selected.customer}</strong><small>{siteSegment==='Beauty'?'BELEZA & ESTÉTICA':siteSegment==='Barber'?'BARBEARIA':'HAMBURGUERIA'}</small></div></div><div className="landing-preview-nav"><span>Início</span><span>{siteSegment==='Burger'?'Cardápio':'Serviços'}</span><span>Sobre</span><button onClick={onCta}>{selected.action}</button></div><div className="landing-mobile-menu"><Menu size={19}/></div></div>{changeable&&<div className="landing-switcher"><span><MonitorSmartphone size={15}/> Modelo de demonstração:</span>{Object.keys(SEGMENTS).map(segment=><button key={segment} onClick={()=>setSiteSegment(segment)} className={siteSegment===segment?'active':''}>{segment}</button>)}</div>}<div className="landing-hero"><div className="landing-copy"><span className="landing-kicker"><Sparkles size={14}/> {selected.short} · EXPERIÊNCIA DIGITAL</span><h2>{selected.hero}</h2><p>{selected.subtitle}</p><button className="landing-cta" onClick={onCta}>{selected.action}<ArrowRight size={16}/></button><div className="landing-social-proof"><span className="proof-avatars"><i>J</i><i>M</i><i>A</i></span><span><strong>Atendimento com carinho</strong><small>Uma experiência pensada para você</small></span></div></div><div className="landing-visual"><div className={`landing-visual-main ${siteSegment.toLowerCase()}`}><div className="visual-abstract-circle"/><div className="visual-abstract-shape"/>{siteSegment==='Beauty'?<div className="beauty-illustration"><Sparkles size={52}/><span>BEAUTY</span></div>:siteSegment==='Barber'?<div className="barber-illustration"><Scissors size={58}/><span>YOUR STYLE</span></div>:<div className="burger-illustration"><ShoppingBag size={58}/><span>GOOD FOOD</span></div>}<div className="floating-rating"><Sparkles size={14}/><span>feito para seu negócio</span></div></div></div></div><div className="landing-services"><div><span className="landing-kicker">FEITO PARA FACILITAR</span><h3>{siteSegment==='Burger'?'Mais sabor, menos complicação.':'Conheça nossos serviços'}</h3></div><div className="landing-service-list">{selected.services.map((s,i)=><div key={s[0]} className="landing-service-item"><span className="landing-service-number">0{i+1}</span><span><strong>{s[0]}</strong><small>{s[2]}</small></span><b>{s[1]}</b><ArrowUpRight size={15}/></div>)}</div></div><div className="landing-disclaimer"><Eye size={14}/> Prévia visual de landing page · conteúdo fictício · identidade adaptável à marca do cliente</div></div>; }
 function PublicBookingModule({segment,services,onBook}) {
-  const [form,setForm] = useState({client:'',contact:'',service:services[0]?.name||'',date:localDateValue(),time:'10:00',professional:'Sem preferência'});
+  const [form,setForm] = useState({client:'',contact:'',services:services[0]?.name?[services[0].name]:[],date:localDateValue(),time:'10:00',professional:'Sem preferência'});
   const [completed,setCompleted] = useState(false);
-  const chosen = services.find(service=>service.name===form.service) || services[0];
+  const selectedServices = services.filter(service=>form.services.includes(service.name));
+  const total = selectedServices.reduce((sum,service)=>sum+service.price,0);
+  const totalDuration = selectedServices.map(service=>service.duration).join(' + ');
   const timeSlots = ['09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'];
+  function toggleService(name) {
+    setForm(prev=>{
+      if(prev.services.includes(name)) return prev.services.length===1?prev:{...prev,services:prev.services.filter(item=>item!==name)};
+      return {...prev,services:[...prev.services,name]};
+    });
+  }
   function submit(event) {
     event.preventDefault();
-    if (!form.client.trim() || !form.contact.trim() || !form.service || !form.date || !form.time) return;
-    onBook({...form,client:form.client.trim(),contact:form.contact.trim()});
+    if (!form.client.trim() || !form.contact.trim() || !selectedServices.length || !form.date || !form.time) return;
+    onBook({...form,client:form.client.trim(),contact:form.contact.trim(),services:selectedServices,total});
     setCompleted(true);
   }
   if (completed) return <section className="booking-confirmation panel">
-    <div className="booking-success-icon"><CheckCircle2 size={30}/></div><span className="public-kicker">{segment.toUpperCase()} · DEMONSTRAÇÃO</span><h2>Agendamento confirmado!</h2><p>Este é um exemplo fictício. O horário foi incluído na agenda administrativa deste ambiente.</p>
-    <div className="booking-confirmation-details"><span>Cliente<strong>{form.client}</strong></span><span>Serviço<strong>{form.service}</strong></span><span>Data e horário<strong>{form.date} · {form.time}</strong></span><span>Valor demonstrativo<strong>{money(chosen?.price||0)}</strong></span></div>
+    <div className="booking-success-icon"><CheckCircle2 size={30}/></div><span className="public-kicker">{segment.toUpperCase()} · DEMONSTRAÇÃO</span><h2>Agendamento confirmado!</h2><p>Este é um exemplo fictício. O atendimento com os procedimentos selecionados foi incluído na agenda administrativa deste ambiente.</p>
+    <div className="booking-confirmation-details"><span>Cliente<strong>{form.client}</strong></span><span>Procedimentos<strong>{selectedServices.map(item=>item.name).join(' + ')}</strong></span><span>Data e horário<strong>{form.date} · {form.time}</strong></span><span>Valor demonstrativo<strong>{money(total)}</strong></span></div>
     <button className="primary-button" onClick={()=>{setCompleted(false);setForm(prev=>({...prev,client:'',contact:''}));}}>Fazer outro agendamento</button>
   </section>;
   return <div className="booking-page">
-    <div className="public-module-heading"><div><span className="public-kicker">{segment.toUpperCase()} · ÁREA DO CLIENTE</span><h2>Agende seu horário</h2><p>Escolha o serviço, encontre um horário e confirme seus dados. Tudo aqui é demonstrativo.</p></div><span className="sample-tag"><BadgeCheck size={14}/> SEM ENVIO REAL</span></div>
+    <div className="public-module-heading"><div><span className="public-kicker">{segment.toUpperCase()} · ÁREA DO CLIENTE</span><h2>Agende seu horário</h2><p>Escolha um ou mais serviços, encontre um horário e confirme seus dados. Tudo aqui é demonstrativo.</p></div><span className="sample-tag"><BadgeCheck size={14}/> SEM ENVIO REAL</span></div>
     <form className="booking-layout" onSubmit={submit}>
       <div className="booking-main-column">
-        <section className="panel booking-card"><div className="booking-step"><span>01</span><div><h3>Escolha o serviço</h3><p>Veja valores e duração antes de reservar.</p></div></div>
-          <div className="booking-service-list">{services.map(service=><button type="button" key={service.name} className={'booking-service-option'+(form.service===service.name?' selected':'')} onClick={()=>setForm(prev=>({...prev,service:service.name}))}><span className="booking-radio"/><span className="booking-service-copy"><strong>{service.name}</strong><small>{service.type} · {service.duration}</small></span><b>{money(service.price)}</b></button>)}</div>
+        <section className="panel booking-card"><div className="booking-step"><span>01</span><div><h3>Escolha os serviços</h3><p>Você pode combinar procedimentos no mesmo atendimento.</p></div></div>
+          <div className="booking-service-list">{services.map(service=><button type="button" key={service.name} className={'booking-service-option'+(form.services.includes(service.name)?' selected':'')} aria-pressed={form.services.includes(service.name)} onClick={()=>toggleService(service.name)}><span className="booking-radio"/><span className="booking-service-copy"><strong>{service.name}</strong><small>{service.type} · {service.duration}</small></span><b>{money(service.price)}</b></button>)}</div>
         </section>
         <section className="panel booking-card"><div className="booking-step"><span>02</span><div><h3>Data e horário</h3><p>Selecione uma opção para a demonstração.</p></div></div>
           <div className="booking-fields"><label>Data<input type="date" min={localDateValue()} value={form.date} onChange={e=>setForm(prev=>({...prev,date:e.target.value}))} required/></label><label>Profissional<select value={form.professional} onChange={e=>setForm(prev=>({...prev,professional:e.target.value}))}><option>Sem preferência</option>{(segment==='Barber'?['Felipe','Vitória']:['Profissional principal']).map(person=><option key={person}>{person}</option>)}</select></label></div>
@@ -358,8 +375,8 @@ function PublicBookingModule({segment,services,onBook}) {
       <aside className="panel booking-summary"><div className="booking-step"><span>03</span><div><h3>Seus dados</h3><p>Contato fictício para finalizar.</p></div></div>
         <label>Nome completo<input value={form.client} onChange={e=>setForm(prev=>({...prev,client:e.target.value}))} placeholder="Ex.: Ana Martins" required/></label>
         <label>WhatsApp<input value={form.contact} onChange={e=>setForm(prev=>({...prev,contact:e.target.value}))} placeholder="(67) 9 0000-0000" required/></label>
-        <div className="booking-total"><span>Valor demonstrativo</span><strong>{money(chosen?.price||0)}</strong><small>{chosen?.duration||'Serviço'} · {form.time}</small></div>
-        <button type="submit" className="primary-button booking-submit"><Check size={16}/> Confirmar agendamento</button><p className="booking-privacy"><LockKeyhole size={13}/> Dados fictícios. Nenhuma mensagem será enviada.</p>
+        <div className="booking-total"><span>Valor demonstrativo · {selectedServices.length} serviço(s)</span><strong>{money(total)}</strong><small>{totalDuration} · {form.time}</small></div>
+        <button type="submit" className="primary-button booking-submit" disabled={!selectedServices.length}><Check size={16}/> Confirmar agendamento</button><p className="booking-privacy"><LockKeyhole size={13}/> Dados fictícios. Nenhuma mensagem será enviada.</p>
       </aside>
     </form>
   </div>;
