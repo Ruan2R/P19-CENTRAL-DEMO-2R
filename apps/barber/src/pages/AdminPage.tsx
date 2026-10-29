@@ -348,6 +348,19 @@ export default function AdminPage() {
 
   async function handleWhatsAppAction(group: BookingGroup) {
     if (group.whatsappConfirmationMarkedAt) return
+    const p19Demo = new URLSearchParams(window.location.search).get('demoLogin') === 'DEMO'
+    if (p19Demo) {
+      if (whatsappPreparedGroupId !== group.id) {
+        const message = buildConfirmationMessage(group)
+        try { await navigator.clipboard.writeText(message) } catch { /* Clipboard unavailable in local demo. */ }
+        setWhatsappPreparedGroupId(group.id)
+        setNotice('Demonstração: mensagem preparada/copiadа. Nenhum WhatsApp será aberto. Toque novamente para registrar o envio fictício.')
+        return
+      }
+      await markWhatsAppSent(group)
+      setWhatsappPreparedGroupId(null)
+      return
+    }
     if (whatsappPreparedGroupId !== group.id) {
       openWhatsAppConfirmation(group)
       setWhatsappPreparedGroupId(group.id)
