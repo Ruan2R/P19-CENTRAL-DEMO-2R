@@ -7,16 +7,16 @@ A tela inicial também mostra estes usuários e permite copiar o usuário indivi
 | # | Nome na central | Usuário | Descrição curta |
 |---:|---|---|---|
 | 1 | 2R Landing Pages | `landing` | Landing page com alternância dos modelos Beauty, Barber e Burger. |
-| 2 | 2R Beauty Agenda | `beauty.agenda` | Agendamentos e administração básica. |
+| 2 | 2R Beauty Agenda | `beauty.agenda` | Agendamento público para clientes + agenda e administração básica. |
 | 3 | 2R Beauty Financeiro | `beauty.financeiro` | Financeiro demonstrativo isolado. |
 | 4 | 2R Beauty Web + Agenda | `beauty.siteagenda` | Landing page + agendamentos. |
-| 5 | 2R Beauty Gestão | `beauty.agenda.financeiro` | Agendamentos, administração e financeiro, sem landing page. |
+| 5 | 2R Beauty Gestão | `beauty.agenda.financeiro` | Agendamento público + agenda administrativa, clientes, serviços e financeiro; sem landing page de marketing. |
 | 6 | 2R Beauty Completo | `beauty.completo` | Landing page + agendamentos + administração e financeiro. |
-| 7 | 2R Barber Agenda | `barber.agenda` | Agendamentos e administração básica para barbearia. |
+| 7 | 2R Barber Agenda | `barber.agenda` | Agendamento público para clientes + agenda e administração básica da barbearia. |
 | 8 | 2R Barber Web + Agenda | `barber.siteagenda` | Landing page + agendamentos para barbearia. |
-| 9 | 2R Barber Gestão | `barber.agenda.financeiro` | Agenda, administração e financeiro para barbearia. |
+| 9 | 2R Barber Gestão | `barber.agenda.financeiro` | Agendamento público + agenda administrativa, serviços, clientes e financeiro. |
 | 10 | 2R Barber Completo | `barber.completo` | Landing page + agenda + gestão completa. |
-| 11 | 2R Burger Pedidos | `burger.pedidos` | Pedidos, produtos e operação demonstrativa. |
+| 11 | 2R Burger Pedidos | `burger.pedidos` | Cardápio público para montar pedidos + central administrativa de pedidos, produtos e estoque. |
 | 12 | 2R Burger Gestão | `burger.gestao` | Financeiro, produtos e estoque. |
 | 13 | 2R Burger Completo | `burger.completo` | Landing page + pedidos + produtos + estoque + financeiro. |
 
