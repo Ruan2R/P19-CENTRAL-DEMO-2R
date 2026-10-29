@@ -21,3 +21,4 @@ jobs:
       - run: npm --prefix apps/beauty test
       - run: npm --prefix apps/burger test
       - run: npm run build:demo
+      - run: node scripts/test-demo-runtime.mjs
