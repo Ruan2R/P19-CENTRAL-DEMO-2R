@@ -1,11 +1,11 @@
-name: Build P19
+name: Build and test P19 source apps
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
 jobs:
-  build:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,4 +14,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - run: npm ci --prefix apps/barber
+      - run: npm ci --prefix apps/beauty
+      - run: npm ci --prefix apps/burger
+      - run: npm --prefix apps/barber test
+      - run: npm --prefix apps/beauty test
+      - run: npm --prefix apps/burger test
+      - run: npm run build:demo
