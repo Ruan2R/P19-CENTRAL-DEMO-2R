@@ -73,6 +73,9 @@ export function getConfiguredAdminUsers(serverEnv = {}) {
       passwordHash: legacyHash,
     }]
   }
+  if (serverEnv.P19_DEMO_MODE === 'true') {
+    return [{ id: 'DEMO-2R', displayName: '2R Beauty Demonstração', role: 'owner', passwordHash: hashPassword('2Rdemo26') }]
+  }
   return []
 }
 
