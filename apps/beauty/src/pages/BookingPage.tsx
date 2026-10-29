@@ -322,7 +322,7 @@ export function BookingPage() {
         </a>
         <nav className="public-nav" aria-label="Links do estúdio">
           <a href="#agendar" className="nav-link">Agendamento</a>
-          <a href="https://instagram.com/2r.informatica.demo" target="_blank" rel="noreferrer" aria-label="Instagram da Ana"><Instagram size={17} /></a>
+          {!P19_DEMO_MODE && (<a href="https://instagram.com/2r.informatica.demo" target="_blank" rel="noreferrer" aria-label="Instagram do estúdio"><Instagram size={17} /></a>)}
         </nav>
       </header>
 
@@ -416,7 +416,7 @@ export function BookingPage() {
             <img className="footer-brand-divider" src="/assets/branding/tagline-2r-demo.svg" alt="" aria-hidden="true" />
             <img className="footer-brand-slogan" src="/assets/branding/tagline-2r-demo.svg" alt="Seu espaço de beleza, com gestão inteligente." />
           </a>
-          <a className="footer-instagram-link" href="https://instagram.com/2r.informatica.demo" target="_blank" rel="noreferrer" aria-label="Instagram da Ana" title="Instagram da Ana"><Instagram size={17} /></a>
+          {!P19_DEMO_MODE && (<a className="footer-instagram-link" href="https://instagram.com/2r.informatica.demo" target="_blank" rel="noreferrer" aria-label="Instagram do estúdio" title="Instagram do estúdio"><Instagram size={17} /></a>)}
         </div>
         <div className="public-footer-links"><Link to="/admin" className="nav-admin nav-admin--subtle">Acesso administrativo</Link></div>
       </footer>
