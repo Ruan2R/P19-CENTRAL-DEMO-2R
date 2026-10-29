@@ -146,6 +146,72 @@ function localDateValue() {
 }
 
 function money(value) { return Number(value).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function getNativeTargets(demo) {
+  const packageId = encodeURIComponent(demo.id);
+  if (demo.segment === 'Beauty') {
+    const base = 'http://127.0.0.1:3002';
+    return { appUrl: base + '/admin?demoPackage=' + packageId, adminUrl: base + '/admin?demoPackage=' + packageId,
+      publicUrl: demo.modules.includes('booking') ? base + '/agendar?demoPackage=' + packageId : null,
+      adminLabel: demo.id === 'beauty.financeiro' ? 'Abrir financeiro original' : 'Abrir administração original',
+      publicLabel: 'Abrir agendamento do cliente', user: 'DEMO-2R', password: PASSWORD };
+  }
+  if (demo.segment === 'Barber') {
+    const base = 'http://127.0.0.1:3000';
+    return { appUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
+      adminUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
+      publicUrl: demo.modules.includes('booking') ? base + '/?demoPackage=' + packageId : null,
+      adminLabel: 'Abrir administração original', publicLabel: 'Abrir agendamento do cliente',
+      user: 'DEMO', password: PASSWORD };
+  }
+  if (demo.segment === 'Burger') {
+    const login = demo.id === 'burger.gestao' ? 'admin' : 'admin02';
+    const base = 'http://127.0.0.1:5174';
+    return { appUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
+      adminUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
+      publicUrl: null,
+      adminLabel: demo.id === 'burger.gestao' ? 'Abrir acesso financeiro original' : 'Abrir sistema de pedidos original',
+      publicLabel: '', user: login, password: login === 'admin' ? 'financeiro123' : 'painel123' };
+  }
+  return { appUrl: null, adminUrl: null, publicUrl: null, adminLabel: 'Abrir aplicação original', publicLabel: '', user: demo.user, password: PASSWORD };
+}
+
+function openNativeApp(url, notify) {
+  if (!url) { notify('Esta rota não está disponível neste pacote.'); return; }
+  const child = window.open(url, '_blank');
+  if (child) { child.opener = null; return; }
+  notify('O navegador bloqueou a nova aba. Permita pop-ups para localhost e tente novamente.');
+}
+
+const AUTOMATION_NOTES = {
+  Beauty: {
+    title: 'Agendamento, cadastro e financeiro conectados',
+    points: [
+      'A disponibilidade pública é calculada pelo sistema antes de aceitar a reserva.',
+      'Quando o cliente confirma o agendamento, os dados entram na agenda e no cadastro do cliente.',
+      'O painel financeiro mantém recebimentos e lançamentos no mesmo sistema, seguindo as regras do P18.',
+    ],
+    reminder: 'Mostre primeiro o agendamento público. Depois abra a agenda administrativa e destaque como o mesmo atendimento aparece para a profissional.',
+  },
+  Barber: {
+    title: 'Disponibilidade e gestão da barbearia no mesmo fluxo',
+    points: [
+      'O agendamento considera serviços, duração, profissionais e horários disponíveis.',
+      'Combos e promoções seguem as regras de preço do sistema original.',
+      'A reserva pode ser acompanhada e ter seu status atualizado no painel administrativo.',
+    ],
+    reminder: 'Mostre a seleção de serviços/horários e depois a mesma reserva na administração. Destaque que a disponibilidade e as validações são calculadas pelo sistema.',
+  },
+  Burger: {
+    title: 'Pedidos, estoque e financeiro integrados',
+    points: [
+      'O ciclo do pedido registra status e itens no fluxo administrativo existente.',
+      'A regra de estoque registra as baixas e devoluções vinculadas aos pedidos, sem precisar repetir a movimentação manual.',
+      'O controle de pagamentos/recebíveis e os relatórios de pedidos seguem o modelo de dados do P16.',
+    ],
+    reminder: 'Crie ou avance um pedido, depois mostre o histórico do pedido, a movimentação de estoque e o reflexo financeiro/relatórios. Destaque quais ações são automáticas e quais dependem de registrar o pagamento.',
+  },
+};
+
 function IconForDemo({ demo }) {
   const Icon = demo.icon === 'beauty' ? Sparkles : demo.icon === 'barber' ? Scissors : demo.icon === 'orders' ? ShoppingBag : demo.icon === 'inventory' ? Boxes : demo.icon === 'finance' ? Wallet : demo.icon === 'site' ? MonitorSmartphone : demo.icon === 'sparkles' ? Sparkles : Grid2X2;
   return <Icon size={20} strokeWidth={1.8} />;
