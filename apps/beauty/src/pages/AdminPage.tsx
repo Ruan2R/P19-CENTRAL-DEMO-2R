@@ -64,7 +64,7 @@ export function AdminPage() {
   const [password, setPassword] = useState('')
   const [authBusy, setAuthBusy] = useState(false)
   const [authError, setAuthError] = useState('')
-  const [tab, setTab] = useState<Tab>('overview')
+  const [tab, setTab] = useState<Tab>(() => new URLSearchParams(window.location.search).get('demoPackage') === 'beauty.financeiro' ? 'finance' : 'overview')
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [promotions, setPromotions] = useState<Promotion[]>([])
@@ -191,7 +191,7 @@ export function AdminPage() {
     setAdminDisplayName('2R Beauty Studio')
     setAdminRole('studio_admin')
     setAppointments([])
-    setTab('overview')
+    setTab(demoPackageId === 'beauty.financeiro' ? 'finance' : 'overview')
     setPassword('')
   }
 
@@ -503,6 +503,13 @@ export function AdminPage() {
     { id: 'policies', label: 'Políticas', icon: ShieldCheck },
     { id: 'finance', label: 'Financeiro', icon: Wallet },
   ]
+  const demoPackageId = new URLSearchParams(window.location.search).get('demoPackage') ?? '';
+  const basicBookingTabs: Tab[] = ['overview', 'appointments', 'customers', 'services', 'hours', 'blocks'];
+  const visibleNavItems = demoPackageId === 'beauty.financeiro'
+    ? navItems.filter((item) => item.id === 'finance')
+    : ['beauty.agenda', 'beauty.siteagenda'].includes(demoPackageId)
+      ? navItems.filter((item) => basicBookingTabs.includes(item.id))
+      : navItems;
 
   if (!authReady) return <div className="auth-loading"><RefreshCw className="spin" size={22} /><span>Conferindo o acesso...</span></div>
 
@@ -530,7 +537,7 @@ export function AdminPage() {
     return <main className="admin-login-page"><header className="login-top"><HeaderBrand /><button onClick={() => void handleLogout()} className="back-to-booking"><LogOut size={16} /> Sair</button></header><section className="login-card"><div className="login-icon warning"><AlertCircle size={24} /></div><h1>Acesso <em>restrito.</em></h1><p className="login-copy">{pageError}</p><button className="button button-primary button-full" onClick={() => void handleLogout()}>Voltar para o login</button></section></main>
   }
 
-  return <AdminShell tab={tab} setTab={setTab} navItems={navItems} onLogout={handleLogout} onRefresh={() => void loadData()} demo={storageMode === 'local-json'} adminDisplayName={adminDisplayName} adminRole={adminRole}>
+  return <AdminShell tab={tab} setTab={setTab} navItems={visibleNavItems} onLogout={handleLogout} onRefresh={() => void loadData()} demo={storageMode === 'local-json'} adminDisplayName={adminDisplayName} adminRole={adminRole}>
     {storageMode === 'local-json' && <div className="preview-admin-banner"><AlertCircle size={18} /><div><strong>Ambiente de desenvolvimento local</strong><span>As alterações ficam no arquivo data/local-db.json deste computador. O sistema ainda não foi publicado na internet.</span></div></div>}
     {notice && <div className="notice-banner"><CheckCircle2 size={17} /><span>{notice}</span><button onClick={() => setNotice('')} aria-label="Fechar aviso"><X size={15} /></button></div>}
     {pageError && <div className="error-banner"><AlertCircle size={17} /><span>{pageError}</span><button onClick={() => setPageError('')} aria-label="Fechar aviso"><X size={15} /></button></div>}
@@ -559,7 +566,7 @@ function AdminShell({ children, tab, setTab, navItems, onLogout, onRefresh, demo
       <div className="sidebar-bottom"><div className="sidebar-user-mark">{displayInitials(adminDisplayName)}</div><div className="sidebar-user"><strong>{adminDisplayName}</strong><span>{adminRole === 'owner' ? 'Proprietário' : 'Administradora'}</span></div><span className={`connection-indicator ${demo ? 'demo' : ''}`} title={demo ? 'Modo demonstração' : 'Conectado'} /></div>
     </aside>
     <div className="admin-main-wrap">
-      <header className="admin-topbar"><div className="topbar-location"><span>2R Beauty Studio</span><span className="breadcrumb-separator">/</span><strong>{navItems.find((item) => item.id === tab)?.label}</strong></div><div className="topbar-actions"><Link to="/agendar" className="view-public-link" target="_blank"><ExternalLink size={15} /> Abrir agenda pública</Link>{onRefresh && <button className="icon-button" onClick={onRefresh} aria-label="Atualizar dados"><RefreshCw size={16} /></button>}{onLogout && <button className="icon-button" onClick={onLogout} aria-label="Sair do painel"><LogOut size={16} /></button>}</div></header>
+      <header className="admin-topbar"><div className="topbar-location"><span>2R Beauty Studio</span><span className="breadcrumb-separator">/</span><strong>{navItems.find((item) => item.id === tab)?.label}</strong></div><div className="topbar-actions">{navItems.some((item) => item.id === 'appointments') && <Link to="/agendar" className="view-public-link" target="_blank"><ExternalLink size={15} /> Abrir agenda pública</Link>}{onRefresh && <button className="icon-button" onClick={onRefresh} aria-label="Atualizar dados"><RefreshCw size={16} /></button>}{onLogout && <button className="icon-button" onClick={onLogout} aria-label="Sair do painel"><LogOut size={16} /></button>}</div></header>
       <main className="admin-content">{children}</main>
       <footer className="admin-footer"><span>2R Beauty Studio</span><span>Seu espaço de beleza, com gestão inteligente.</span></footer>
     </div>
