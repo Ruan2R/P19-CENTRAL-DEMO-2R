@@ -287,7 +287,9 @@ export default function App() {
     setActiveModule(module);
   }
 
-  if (activeDemo && activeDemo.segment !== 'Vitrine' && activeModule === 'launch') { return <NativeLaunchPage demo={activeDemo} onBack={exitDemo} onOpenSite={() => setActiveModule('site')} notify={notify} />; }\n\n  if (!activeDemo) {
+  if (activeDemo && activeDemo.segment !== 'Vitrine' && activeModule === 'launch') { return <NativeLaunchPage demo={activeDemo} onBack={exitDemo} onOpenSite={() => setActiveModule('site')} notify={notify} />; }
+
+  if (!activeDemo) {
     return <div className="app-shell hub-shell">
       <header className="topbar hub-topbar">
         <div className="brand-lockup"><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Seu parceiro em Tecnologia</div></div></div>
