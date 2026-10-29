@@ -30,16 +30,16 @@ Todos os perfis usam a senha compartilhada `2Rdemo26`. Na tela inicial, os cart�
 | # | Acesso | Usuário | O que demonstra |
 |---:|---|---|---|
 | 1 | 2R Landing Pages | `landing` | Modelos de landing page Beauty, Barber e Burger, com seletor de modelo. |
-| 2 | 2R Beauty Agenda | `beauty.agenda` | Agendamentos e administração básica da agenda. |
+| 2 | 2R Beauty Agenda | `beauty.agenda` | Agendamento público para clientes, agenda e administração básica. |
 | 3 | 2R Beauty Financeiro | `beauty.financeiro` | Módulo financeiro demonstrativo. |
 | 4 | 2R Beauty Web + Agenda | `beauty.siteagenda` | Landing page e agendamentos. |
-| 5 | 2R Beauty Gestão | `beauty.agenda.financeiro` | Agendamentos, clientes, serviços e financeiro, sem landing page. |
+| 5 | 2R Beauty Gestão | `beauty.agenda.financeiro` | Agendamento público, agenda administrativa, clientes, serviços e financeiro; sem landing page de marketing. |
 | 6 | 2R Beauty Completo | `beauty.completo` | Landing page, agendamentos, administração e financeiro. |
-| 7 | 2R Barber Agenda | `barber.agenda` | Agendamentos e administração básica para barbearia. |
+| 7 | 2R Barber Agenda | `barber.agenda` | Agendamento público para clientes, agenda e administração básica para barbearia. |
 | 8 | 2R Barber Web + Agenda | `barber.siteagenda` | Landing page e agendamentos para barbearia. |
-| 9 | 2R Barber Gestão | `barber.agenda.financeiro` | Agendamentos, administração e financeiro. |
+| 9 | 2R Barber Gestão | `barber.agenda.financeiro` | Agendamento público, agenda administrativa e financeiro. |
 | 10 | 2R Barber Completo | `barber.completo` | Landing page, agendamentos e gestão completa. |
-| 11 | 2R Burger Pedidos | `burger.pedidos` | Pedidos e operação com produtos/estoque demonstrativos. |
+| 11 | 2R Burger Pedidos | `burger.pedidos` | Cardápio público para montar pedidos + central administrativa, produtos e estoque. |
 | 12 | 2R Burger Gestão | `burger.gestao` | Financeiro, produtos e estoque. |
 | 13 | 2R Burger Completo | `burger.completo` | Landing page, pedidos, produtos, estoque e financeiro. |
 
