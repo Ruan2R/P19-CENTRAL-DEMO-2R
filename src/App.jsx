@@ -305,7 +305,7 @@ export default function App() {
     return <div className="app-shell hub-shell">
       <header className="topbar hub-topbar">
         <div className="brand-lockup"><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Seu parceiro em Tecnologia</div></div></div>
-        <div className="topbar-right"><span className="demo-pill"><span className="pulse-dot"/> AMBIENTE DE DEMONSTRAÇÃO</span><div className="user-avatar">RC</div></div>
+        <div className="topbar-right"><span className="demo-pill"><span className="pulse-dot"/> AMBIENTE DE DEMONSTRAÇÃO</span><button className="catalog-back-button" onClick={() => setPage('portfolio')}><ArrowLeft size={15}/><span>Portfólio</span></button><div className="user-avatar">RC</div></div>
       </header>
       <main className="hub-main">
         <section className="hero-banner">
