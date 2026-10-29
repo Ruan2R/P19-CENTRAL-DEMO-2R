@@ -149,14 +149,14 @@ function money(value) { return Number(value).toLocaleString('pt-BR',{style:'curr
 function getNativeTargets(demo) {
   const packageId = encodeURIComponent(demo.id);
   if (demo.segment === 'Beauty') {
-    const base = 'http://127.0.0.1:3002';
+    const base = 'http://127.0.0.1:3018';
     return { appUrl: base + '/admin?demoPackage=' + packageId, adminUrl: base + '/admin?demoPackage=' + packageId,
       publicUrl: demo.modules.includes('booking') ? base + '/agendar?demoPackage=' + packageId : null,
       adminLabel: demo.id === 'beauty.financeiro' ? 'Abrir financeiro original' : 'Abrir administração original',
       publicLabel: 'Abrir agendamento do cliente', user: 'DEMO-2R', password: PASSWORD };
   }
   if (demo.segment === 'Barber') {
-    const base = 'http://127.0.0.1:3000';
+    const base = 'http://127.0.0.1:3015';
     return { appUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
       adminUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
       publicUrl: demo.modules.includes('booking') ? base + '/?demoPackage=' + packageId : null,
@@ -165,12 +165,12 @@ function getNativeTargets(demo) {
   }
   if (demo.segment === 'Burger') {
     const login = demo.id === 'burger.gestao' ? 'admin' : 'admin02';
-    const base = 'http://127.0.0.1:5174';
+    const base = 'http://127.0.0.1:5176';
     return { appUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
       adminUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
       publicUrl: null,
       adminLabel: demo.id === 'burger.gestao' ? 'Abrir acesso financeiro original' : 'Abrir sistema de pedidos original',
-      publicLabel: '', user: login, password: login === 'admin' ? 'financeiro123' : 'painel123' };
+      publicLabel: '', user: login, password: PASSWORD };
   }
   return { appUrl: null, adminUrl: null, publicUrl: null, adminLabel: 'Abrir aplicação original', publicLabel: '', user: demo.user, password: PASSWORD };
 }
