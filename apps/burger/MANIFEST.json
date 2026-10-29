@@ -1,0 +1,16 @@
+{
+  "project": "P16-SISTEMA-ADEGA-DO-COPAO",
+  "stage": 36,
+  "base": "GitHub main após Etapa 35",
+  "purpose": "Consolidação da UX: deixar claro que venda avulsa baixa apenas estoque e não gera entrada financeira automaticamente.",
+  "changedFiles": [
+    "src/App.tsx",
+    "README.md",
+    "MANIFEST.json"
+  ],
+  "loginChanged": false,
+  "financialModelChanged": false,
+  "stockModelChanged": false,
+  "localDataPreserved": true,
+  "dependenciesChanged": false
+}

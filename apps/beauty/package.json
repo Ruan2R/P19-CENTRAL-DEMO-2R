@@ -1,0 +1,35 @@
+{
+  "name": "p18-sistema-ana",
+  "private": true,
+  "version": "0.4.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server/index.mjs",
+    "start": "node server/index.mjs",
+    "prebuild": "npm install --include=dev",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty",
+    "admin:setup": "node server/setup-admin.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "db:check-local-json": "node scripts/migrate-local-json-to-mysql.mjs --check-only",
+    "db:import-local-json": "node scripts/migrate-local-json-to-mysql.mjs",
+    "db:make-production-seed": "node scripts/create-production-seed.mjs",
+    "check:server": "node --check server/index.mjs && node --check server/auth.mjs && node --check server/domain.mjs && node --check server/http-security.mjs && node --check server/session-manager.mjs && node --check server/storage.mjs && node --check server/setup-admin.mjs && node --check scripts/create-production-seed.mjs && node --check scripts/lib/local-json-migration.mjs && node --check scripts/lib/production-seed.mjs && node --check scripts/migrate-local-json-to-mysql.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.4",
+    "mysql2": "^3.15.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "~5.9.2",
+    "vite": "^7.1.7"
+  }
+}

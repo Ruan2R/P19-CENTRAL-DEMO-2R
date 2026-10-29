@@ -1,0 +1,33 @@
+/* P18 — Ana Amaral: tokens da identidade visual. Valores derivados do pacote de referência. */
+:root {
+  color-scheme: light;
+  --aa-white-soft: #FBFBFA;
+  --aa-pearl-white: #F1F2F3;
+  --aa-off-white: #E7E9EB;
+  --aa-silver-light: #D7DADF;
+  --aa-silver-mid: #B5BBC2;
+  --aa-metal-gray: #8A9199;
+  --aa-graphite: #42474D;
+  --aa-soft-black: #171A1E;
+  --color-background: var(--aa-pearl-white);
+  --color-surface: var(--aa-white-soft);
+  --color-surface-muted: var(--aa-off-white);
+  --color-border: var(--aa-silver-light);
+  --color-border-accent: var(--aa-silver-mid);
+  --color-icon-muted: var(--aa-metal-gray);
+  --color-text: var(--aa-graphite);
+  --color-text-strong: var(--aa-soft-black);
+  /* Aliases antigos para mudar apenas a camada visual, sem alterar a lógica. */
+  --ink: var(--aa-graphite);
+  --ink-soft: #5F666D;
+  --muted: #737A82;
+  --paper: var(--aa-white-soft);
+  --cream: var(--aa-pearl-white);
+  --cream-deep: var(--aa-off-white);
+  --line: var(--aa-silver-light);
+  --gold: var(--aa-silver-mid);
+  --gold-dark: #646C74;
+  --rose: var(--aa-metal-gray);
+  --green: #617769;
+  --shadow: 0 18px 50px rgba(28, 34, 40, .075);
+}

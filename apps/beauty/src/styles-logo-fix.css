@@ -1,0 +1,1019 @@
+/* P18 — compatibilidade de layout legada; a identidade atual é aplicada por styles-p18-identity.css. */
+
+/* Cabeçalho centralizado; a marca renderizada atualmente vem dos assets transparentes no JSX. */
+.public-header {
+  justify-content: center;
+}
+
+.public-header > .brand-lockup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 148px;
+  height: 70px;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  filter: none;
+  text-decoration: none;
+}
+
+.public-header > .brand-lockup::before {
+  content: "";
+  display: block;
+  flex: 0 0 150px;
+  width: 150px;
+  height: 55px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: none;
+}
+
+.public-header > .brand-lockup::after {
+  content: "";
+  display: none;
+  color: #8e6948;
+  font-family: Inter, sans-serif;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+/* Mantém o texto alternativo acessível enquanto a identidade é renderizada pelos assets atuais. */
+.public-header > .brand-lockup img,
+.public-footer > a:first-child > img {
+  position: absolute;
+  width: 1px !important;
+  height: 1px !important;
+  max-width: 1px !important;
+  max-height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+  opacity: 0;
+}
+
+/* Mantém a navegação à direita no desktop sem deslocar a marca do centro. */
+.public-header > .public-nav {
+  position: absolute;
+  top: 50%;
+  right: clamp(22px, 5.5vw, 88px);
+  transform: translateY(-50%);
+}
+
+/* Rodapé: substitui o antigo cartaz retangular por uma assinatura horizontal limpa. */
+.public-footer {
+  align-items: center;
+  gap: 12px 18px;
+}
+
+.public-footer > a:first-child {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 9px;
+  width: auto;
+  min-width: 0;
+  background: transparent;
+  text-decoration: none;
+}
+
+.public-footer > a:first-child::before {
+  content: "";
+  display: block;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 39px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: grayscale(100%);
+}
+
+.public-footer > a:first-child::after {
+  content: "";
+  display: none;
+  color: #5b4437;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.075em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.public-footer > span {
+  color: #9a8774;
+  font-size: 11px;
+}
+
+.public-footer-links {
+  flex: 0 0 auto;
+  gap: 15px;
+}
+
+@media (max-width: 760px) {
+  .public-header > .brand-lockup {
+    width: 158px;
+    height: 58px;
+  }
+
+  .public-header > .brand-lockup::before {
+    flex-basis: 150px;
+    width: 150px;
+    height: 54px;
+  }
+
+  .public-header > .brand-lockup::after {
+    display: none;
+  }
+
+  .public-header > .public-nav {
+    right: 18px;
+  }
+
+  .public-footer {
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 17px;
+  }
+
+  .public-footer > a:first-child {
+    gap: 8px;
+  }
+
+  .public-footer > a:first-child::before {
+    flex-basis: 30px;
+    width: 30px;
+    height: 35px;
+  }
+
+  .public-footer > a:first-child::after {
+    font-size: 11px;
+    letter-spacing: 0.055em;
+  }
+
+  .public-footer > span {
+    display: none;
+  }
+
+  .public-footer-links {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .public-footer {
+    align-items: flex-start;
+  }
+
+  .public-footer-links {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    padding-left: 38px;
+  }
+}
+/* P17 v0.4.3 — refinamento de acabamento e ritmo visual mobile-first. */
+
+/* Cabeçalho: a marca ganha um pouco mais de presença sem virar um banner. */
+.public-header {
+  min-height: 86px;
+  background: linear-gradient(180deg, #fffdfa 0%, #fbf7f1 100%);
+}
+
+.public-header::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 42px;
+  height: 2px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(197, 160, 109, 0.18), #c5a06d, rgba(197, 160, 109, 0.18));
+}
+
+.public-header > .brand-lockup::before {
+  flex-basis: 47px;
+  width: 50px;
+  height: 47px;
+  filter:
+    drop-shadow(0 2px 3px rgba(72, 54, 40, 0.30))
+    drop-shadow(0 0 8px rgba(197, 160, 109, 0.18));
+}
+
+.public-header > .brand-lockup::after {
+  font-size: 7px;
+  letter-spacing: 0.17em;
+  color: #806044;
+}
+
+/* Os cartões informativos ficam menos rígidos e mais próximos da linguagem premium. */
+.extra-card {
+  border-radius: 9px;
+  border-color: #e8dbcd;
+  background: rgba(255, 253, 249, 0.78);
+  box-shadow: 0 5px 16px rgba(64, 45, 30, 0.035);
+}
+
+.extra-icon {
+  box-shadow: inset 0 0 0 1px rgba(197, 160, 109, 0.08);
+}
+
+/* Um pequeno detalhe de marca conecta visualmente o rodapé à página. */
+.public-footer {
+  position: relative;
+  background: linear-gradient(180deg, #f6f0e8 0%, #f3ece3 100%);
+}
+
+.public-footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 46px;
+  height: 2px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(197, 160, 109, 0.18), #c5a06d, rgba(197, 160, 109, 0.18));
+}
+
+@media (max-width: 760px) {
+  .public-header {
+    min-height: 86px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .public-header > .brand-lockup {
+    width: 150px;
+    height: 70px;
+  }
+
+  .public-header > .brand-lockup::before {
+    flex-basis: 43px;
+    width: 47px;
+    height: 43px;
+  }
+
+  .public-header > .brand-lockup::after {
+    font-size: 6.5px;
+    letter-spacing: 0.15em;
+  }
+
+  .booking-extras {
+    gap: 12px;
+  }
+
+  .extra-card {
+    border-radius: 9px;
+    box-shadow: 0 4px 13px rgba(64, 45, 30, 0.035);
+  }
+
+  /* Fechamento mais intencional no celular: assinatura, subtítulo e links centralizados. */
+  .public-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 11px;
+    padding: 25px 17px 27px;
+    text-align: center;
+  }
+
+  .public-footer > a:first-child {
+    justify-content: center;
+    gap: 9px;
+  }
+
+  .public-footer > a:first-child::before {
+    flex-basis: 33px;
+    width: 33px;
+    height: 38px;
+  }
+
+  .public-footer > a:first-child::after {
+    font-size: 12px;
+    letter-spacing: 0.065em;
+  }
+
+  .public-footer > span {
+    display: block;
+    margin-top: -7px;
+    color: #9a8267;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .public-footer-links {
+    display: flex;
+    width: 100%;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 20px;
+    margin-top: 3px;
+  }
+}
+
+@media (max-width: 360px) {
+  .public-footer-links {
+    gap: 10px 15px;
+  }
+
+  .public-footer-links > a {
+    font-size: 10px;
+  }
+}
+
+/* P17 v0.4.4 — assinatura horizontal no cabeçalho e rodapé reorganizado. */
+
+/* Cabeçalho: transforma o monograma isolado em uma assinatura de marca horizontal. */
+.public-header {
+  justify-content: space-between;
+  min-height: 88px;
+  height: 88px;
+  padding: 0 clamp(18px, 5.5vw, 88px);
+}
+
+.public-header > .brand-lockup {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: auto;
+  height: 100%;
+  margin: 0 auto 0 0;
+}
+
+.public-header > .brand-lockup::before {
+  flex: 0 0 47px;
+  width: 47px;
+  height: 53px;
+  filter: brightness(0) saturate(100%) invert(24%) sepia(10%) saturate(900%) hue-rotate(343deg) brightness(91%) contrast(91%) drop-shadow(0 1px 1px rgba(72, 54, 40, 0.10));
+}
+
+.public-header > .brand-lockup::after {
+  content: "";
+  display: none;
+  padding: 0 0 6px;
+  background-image: linear-gradient(90deg, #c5a06d 0 34px, transparent 34px);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: left bottom;
+  color: #5b4437;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.105em;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.public-header > .public-nav {
+  position: absolute;
+  top: 50%;
+  right: clamp(18px, 5.5vw, 88px);
+  transform: translateY(-50%);
+}
+
+/* Rodapé: primeira linha com a marca à esquerda e Instagram ao lado; acesso abaixo. */
+.public-footer {
+  display: grid;
+  grid-template-columns: max-content 36px;
+  grid-template-areas:
+    "brand instagram"
+    "admin admin";
+  justify-content: start;
+  align-items: center;
+  justify-items: start;
+  column-gap: 14px;
+  row-gap: 13px;
+  padding: 22px clamp(18px, 5.5vw, 88px);
+}
+
+.public-footer > a:first-child {
+  grid-area: brand;
+  justify-self: start;
+}
+
+.public-footer > span {
+  display: none;
+}
+
+.public-footer-links {
+  display: contents;
+}
+
+.public-footer-links > a:first-child {
+  grid-area: admin;
+  justify-self: start;
+  align-self: start;
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.public-footer-links > a:last-child {
+  grid-area: instagram;
+  display: grid;
+  place-items: center;
+  justify-self: start;
+  align-self: center;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #e1d0bc;
+  border-radius: 50%;
+  background: #fbf7f1;
+  color: #8e6948;
+  font-size: 0;
+  line-height: 0;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.public-footer-links > a:last-child:hover {
+  background: #f2e7d8;
+  border-color: #c5a06d;
+  transform: translateY(-1px);
+}
+
+.public-footer-links > a:last-child > svg:first-child {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+.public-footer-links > a:last-child > svg:not(:first-child) {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .public-header {
+    min-height: 82px;
+    height: 82px;
+    padding: 0 18px;
+  }
+
+  .public-header > .brand-lockup {
+    gap: 10px;
+    width: auto;
+    height: 100%;
+  }
+
+  .public-header > .brand-lockup::before {
+    flex-basis: 43px;
+    width: 43px;
+    height: 49px;
+    filter: brightness(0) saturate(100%) invert(24%) sepia(10%) saturate(900%) hue-rotate(343deg) brightness(91%) contrast(91%) drop-shadow(0 1px 1px rgba(72, 54, 40, 0.08));
+  }
+
+  .public-header > .brand-lockup::after {
+    padding-bottom: 5px;
+    font-size: 13px;
+    letter-spacing: 0.085em;
+  }
+
+  .public-header > .public-nav {
+    right: 18px;
+  }
+
+  .public-footer {
+    grid-template-columns: max-content 34px;
+    grid-template-areas:
+      "brand instagram"
+      "admin admin";
+    justify-content: start;
+    justify-items: start;
+    align-items: center;
+    row-gap: 12px;
+    column-gap: 13px;
+    padding: 20px 18px 22px;
+  }
+
+  .public-footer > a:first-child {
+    gap: 8px;
+  }
+
+  .public-footer > a:first-child::before {
+    flex-basis: 30px;
+    width: 30px;
+    height: 35px;
+  }
+
+  .public-footer > a:first-child::after {
+    font-size: 11px;
+    letter-spacing: 0.055em;
+  }
+
+  .public-footer-links > a:first-child {
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .public-header > .brand-lockup::before {
+    flex-basis: 38px;
+    width: 38px;
+    height: 45px;
+  }
+
+  .public-header > .brand-lockup::after {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* P17 v0.4.5 — correção fiel dos alinhamentos solicitados. */
+
+/* Cabeçalho: centraliza a assinatura horizontal no eixo da página. */
+.public-header {
+  position: relative;
+  justify-content: center;
+}
+
+.public-header > .brand-lockup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  z-index: 1;
+}
+
+/* A navegação permanece ancorada à direita, sem deslocar a marca central. */
+.public-header > .public-nav {
+  position: absolute;
+  top: 50%;
+  right: clamp(18px, 5.5vw, 88px);
+  transform: translateY(-50%);
+}
+
+/* Rodapé: marca + ícone real do Instagram na primeira linha; acesso centrado abaixo. */
+.public-footer {
+  display: grid;
+  grid-template-columns: max-content 36px minmax(0, 1fr);
+  grid-template-areas:
+    "brand instagram spacer"
+    "admin admin admin";
+  justify-content: stretch;
+  justify-items: start;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 13px;
+  width: 100%;
+}
+
+.public-footer > a:first-child {
+  grid-area: brand;
+  justify-self: start;
+}
+
+.public-footer > span {
+  display: none !important;
+}
+
+.public-footer-links {
+  display: contents;
+}
+
+.public-footer-links > a:first-child {
+  grid-area: admin;
+  justify-self: stretch;
+  align-self: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* Preserva o texto acessível do link, mas exibe o símbolo de câmera do Instagram. */
+.public-footer-links > a:last-child {
+  grid-area: instagram;
+  display: grid;
+  place-items: center;
+  justify-self: start;
+  align-self: center;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #e1d0bc;
+  border-radius: 50%;
+  background: #fbf7f1;
+  color: #8e6948;
+  font-size: 0;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.public-footer-links > a:last-child::before {
+  content: "";
+  display: block;
+  width: 17px;
+  height: 17px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e6948' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='2' width='20' height='20' rx='5'/%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Ccircle cx='17.5' cy='6.5' r='.5' fill='%238e6948'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.public-footer-links > a:last-child > svg {
+  display: none !important;
+}
+
+.public-footer-links > a:last-child:hover {
+  background: #f2e7d8;
+  border-color: #c5a06d;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 760px) {
+  .public-header {
+    min-height: 82px;
+    height: 82px;
+    padding: 0 18px;
+  }
+
+  .public-header > .brand-lockup {
+    left: 50%;
+    width: auto;
+    max-width: calc(100% - 36px);
+    gap: 10px;
+  }
+
+  .public-header > .public-nav {
+    right: 18px;
+  }
+
+  .public-footer {
+    grid-template-columns: max-content 36px minmax(0, 1fr);
+    grid-template-areas:
+      "brand instagram spacer"
+      "admin admin admin";
+    justify-content: stretch;
+    justify-items: start;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 13px;
+    padding: 20px 18px 22px;
+  }
+
+  .public-footer-links > a:first-child {
+    justify-self: stretch;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .public-header > .brand-lockup {
+    gap: 7px;
+    max-width: calc(100% - 28px);
+  }
+
+  .public-header > .brand-lockup::before {
+    flex-basis: 34px;
+    width: 34px;
+    height: 41px;
+  }
+
+  .public-header > .brand-lockup::after {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* P17 v0.4.7 — bloco marca + Instagram centralizado na página.
+   Os espaços laterais iguais centralizam a composição como um conjunto, sem
+   deslocar a marca para a esquerda. O acesso administrativo ocupa a linha abaixo. */
+.public-footer {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) max-content 44px minmax(0, 1fr);
+  grid-template-areas:
+    ". brand instagram ."
+    "admin admin admin admin";
+  justify-content: stretch;
+  justify-items: start;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 12px;
+  width: 100%;
+}
+
+.public-footer > a:first-child {
+  grid-area: brand;
+  justify-self: start;
+}
+
+.public-footer > span {
+  display: none !important;
+}
+
+.public-footer-links {
+  display: contents !important;
+}
+
+/* Link administrativo: uma linha própria, alinhada ao centro real do rodapé. */
+.public-footer-links > a:first-child {
+  grid-area: admin;
+  display: flex !important;
+  justify-self: stretch;
+  align-self: center;
+  justify-content: center !important;
+  align-items: center;
+  width: 100%;
+  min-height: 30px;
+  max-width: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  box-sizing: border-box;
+}
+
+/* Instagram: ícone sozinho, maior e sem círculo, borda ou fundo. */
+.public-footer-links > a:last-child {
+  grid-area: instagram;
+  display: grid !important;
+  place-items: center;
+  justify-self: start;
+  align-self: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #8e6948;
+  font-size: 0 !important;
+  line-height: 0;
+  text-decoration: none;
+  transform: none !important;
+}
+
+.public-footer-links > a:last-child::before {
+  content: "";
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e6948' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.25' y='3.25' width='17.5' height='17.5' rx='5'/%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Ccircle cx='17.6' cy='6.5' r='.7' fill='%238e6948' stroke='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.public-footer-links > a:last-child > svg {
+  display: none !important;
+}
+
+.public-footer-links > a:last-child:hover,
+.public-footer-links > a:last-child:focus-visible {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #6f5035;
+  transform: none !important;
+}
+
+.public-footer-links > a:last-child:hover::before {
+  filter: brightness(0.82);
+}
+
+@media (max-width: 760px) {
+  .public-footer {
+    grid-template-columns: minmax(0, 1fr) max-content 44px minmax(0, 1fr);
+    grid-template-areas:
+      ". brand instagram ."
+      "admin admin admin admin";
+    justify-content: stretch;
+    justify-items: start;
+    column-gap: 10px;
+    row-gap: 12px;
+    padding: 20px 18px 22px;
+  }
+
+  .public-footer-links > a:first-child {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%;
+    text-align: center !important;
+  }
+
+  .public-footer-links > a:last-child {
+    width: 44px;
+    height: 44px;
+  }
+
+  .public-footer-links > a:last-child::before {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* P18 v0.1.1 — identidade neutra Ana Amaral: branco, cinza e carvão. */
+:root {
+  color: #2d2f34;
+  background: #fafafa;
+  --ink: #2d2f34;
+  --ink-soft: #555860;
+  --muted: #777a82;
+  --paper: #ffffff;
+  --cream: #f6f6f7;
+  --cream-deep: #e9eaed;
+  --line: #dedfe3;
+  --gold: #9b9ea5;
+  --gold-dark: #4b4e55;
+  --rose: #747780;
+  --green: #617769;
+  --shadow: 0 18px 50px rgba(30, 32, 38, .08);
+}
+body, .booking-site { background: #f7f7f8; color: #2d2f34; }
+.demo-ribbon { background: #2d2f34; color: #fff; }
+.demo-ribbon span { background: #bfc2c8; box-shadow: 0 0 0 3px rgba(220, 222, 226, .16); }
+.public-header { background: rgba(255,255,255,.96); border-bottom-color: #e1e2e6; }
+.public-nav { color: #595c63; }
+.public-nav > a:hover { color: #2d2f34; }
+.nav-admin { border-color: #d7d9de; color: #3a3c42; }
+.nav-admin:hover { background: #f0f1f3; border-color: #b7bac1; }
+.booking-hero { background: transparent; }
+.hero-backdrop { background: radial-gradient(ellipse at 35% 30%, rgba(220,222,226,.38), rgba(247,247,248,0) 65%); }
+.eyebrow, .panel-step-label { color: #666971; }
+.booking-hero h1, .success-card h1, .login-card h1 { color: #2d2f34; }
+.booking-hero h1 em, .success-card h1 em, .login-card h1 em { color: #777a82; }
+.booking-intro, .hero-trust-row { color: #656870; }
+.hero-trust-row svg, .field-label, .form-section-title strong { color: #4d5057; }
+.booking-panel-wrap { background: #fff; border-color: #dedfe3; }
+.booking-panel-heading { border-bottom-color: #e6e7ea; }
+.booking-panel-heading h2 { color: #2d2f34; }
+.booking-panel-heading p, .form-section-title small { color: #777a82; }
+.step-number { background: #eceef0; color: #50535a; }
+.button-primary { background: #3e4148; color: #fff; box-shadow: 0 5px 13px rgba(30,32,38,.12); }
+.button-primary:hover:not(:disabled) { background: #292b30; box-shadow: 0 7px 16px rgba(30,32,38,.16); }
+.button-quiet { color: #555860; }
+.button-quiet:hover, .button-outline:hover { background: #f0f1f3; }
+.button-outline { background: #fff; border-color: #d5d7dc; color: #454850; }
+.extra-card { border-color: #dedfe3; background: rgba(255,255,255,.9); }
+.extra-icon { background: #eceef0; color: #4b4e55; }
+.extra-card p { color: #686b73; }
+.public-footer { border-top-color: #dedfe3; background: #f0f1f3; color: #656870; }
+.public-footer > span { color: #656870; }
+.multi-service-group { border-color: #dfe0e4; background: #fff; }
+.multi-service-group legend, .admin-service-multi-picker legend { color: #4b4e55; }
+.multi-service-option.is-selected, .admin-service-option:has(input:checked) { background: #f1f2f4; }
+.multi-service-option input, .admin-service-option input { accent-color: #44474e; }
+.policy-display-toggle { border-color: #dedfe3; background: #fff; }
+.policy-display-toggle:has(input:checked) { border-color: #a8abb2; background: #f4f5f6; }
+.policy-display-toggle input { accent-color: #44474e; }
+.policy-display-toggle strong { color: #3a3c42; }
+.policy-display-toggle small { color: #747780; }
+.location-card-link { color: #454850; }
+.public-footer > a:first-child::after {
+  content: "ANA AMARAL";
+  display: block;
+  color: #454850;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .075em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+
+/* P18 v0.1.2 — acabamento em branco, carvão e prata; remove os últimos acentos bege do tema herdado. */
+:root {
+  --ink: #303238;
+  --ink-soft: #555962;
+  --muted: #777c85;
+  --paper: #ffffff;
+  --cream: #f5f6f7;
+  --cream-deep: #e7e9ed;
+  --line: #dfe1e5;
+  --gold: #adb2bb;       /* prata acetinada */
+  --gold-dark: #555a64;  /* grafite */
+  --rose: #858b95;
+  --green: #617769;
+  --shadow: 0 18px 50px rgba(35, 38, 44, .08);
+}
+
+body, .booking-site { background: #f6f7f8; color: #303238; }
+.public-header { background: rgba(255,255,255,.97); border-bottom: 1px solid #e0e2e6; }
+.public-header::after, .public-footer::before {
+  background: linear-gradient(90deg, rgba(174,178,187,.14), #aeb3bc, rgba(174,178,187,.14));
+}
+.public-header > .brand-lockup::before { filter: grayscale(100%) contrast(.98); }
+.booking-hero { background: transparent; }
+.hero-backdrop { background: radial-gradient(ellipse at 35% 30%, rgba(205,209,216,.42), rgba(246,247,248,0) 68%); }
+.eyebrow, .panel-step-label, .field-label, .form-section-title strong { color: #656a73; }
+.booking-hero h1, .success-card h1, .login-card h1, .booking-panel-heading h2 { color: #2e3035; }
+.booking-hero h1 em, .success-card h1 em, .login-card h1 em { color: #8e939d; }
+.booking-intro, .hero-trust-row, .booking-panel-heading p, .form-section-title small { color: #686d76; }
+.hero-trust-row svg, .date-input-wrap > svg, .input-with-icon svg, .empty-slots svg { color: #858b95; }
+.booking-panel-wrap { background: #fff; border-color: #dfe1e5; box-shadow: 0 14px 38px rgba(35,38,44,.055); }
+.booking-panel-heading { border-bottom-color: #e5e7eb; }
+.booking-form input, .booking-form select, .booking-form textarea,
+.login-form input, .block-form input, .service-create-form input,
+.service-create-form select, .admin-booking-form input, .admin-booking-form select,
+.admin-booking-form textarea { border-color: #d5d8de; background: #fff; color: #303238; }
+.booking-form input:focus, .booking-form select:focus, .booking-form textarea:focus,
+.login-form input:focus, .block-form input:focus { border-color: #a6abb4; box-shadow: 0 0 0 3px rgba(166,171,180,.18); }
+.step-number, .extra-icon, .welcome-sparkle, .block-form-icon { background: #eceef1; color: #565b64; }
+.button-primary { background: #3d4047; color: #fff; box-shadow: 0 5px 13px rgba(30,32,38,.12); }
+.button-primary:hover:not(:disabled) { background: #292b30; }
+.button-outline { background: #fff; border-color: #d2d5dc; color: #454952; }
+.button-outline:hover, .button-quiet:hover { background: #f0f1f3; }
+.button-quiet, .nav-admin { color: #555a63; }
+.nav-admin { border-color: #d6d9df; }
+.nav-admin:hover { background: #f0f1f3; border-color: #b9bec7; }
+.extra-card, .multi-service-group, .admin-service-multi-picker { border-color: #dfe1e5; background: rgba(255,255,255,.94); }
+.extra-card { box-shadow: 0 5px 16px rgba(35,38,44,.035); }
+.extra-icon { box-shadow: inset 0 0 0 1px rgba(174,178,187,.18); }
+.extra-card h3 { color: #303238; }
+.extra-card p, .multi-service-option-main small, .admin-service-option small { color: #6d727b; }
+.multi-service-group legend, .admin-service-multi-picker legend { color: #565b64; }
+.multi-service-option.is-selected, .admin-service-option:has(input:checked) { background: #f0f1f3; }
+.multi-service-option input, .admin-service-option input, .policy-display-toggle input { accent-color: #646a74; }
+.policy-display-toggle, .policy-display-toggle:has(input:checked) { border-color: #dfe1e5; background: #f8f9fa; }
+.policy-display-toggle:has(input:checked) { border-color: #aeb3bc; background: #f0f1f3; }
+.policy-display-toggle strong { color: #393c43; }
+.policy-display-toggle small { color: #717680; }
+.demo-notice { border-color: #d8dbe1; background: #f3f4f6; color: #646a73; }
+.demo-ribbon { background: #303238; color: #fff; }
+.demo-ribbon span { background: #c4c8cf; box-shadow: 0 0 0 3px rgba(220,222,226,.15); }
+.public-footer { border-top-color: #dfe1e5; background: linear-gradient(180deg, #f2f3f5 0%, #e9ebef 100%); color: #656a73; }
+.public-footer > span { color: #686d76; }
+.public-footer > a:first-child::before { filter: grayscale(100%) contrast(1.05); }
+.public-footer > a:first-child::after { color: #4c5058; }
+.location-card-link { color: #4c515a; }
+
+/* O último link do rodapé é WhatsApp: não aplicar o antigo ícone de câmera do Instagram. */
+.public-footer-links > a:last-child::before { content: none !important; display: none !important; background-image: none !important; }
+.public-footer-links > a:last-child > svg { display: inline-block !important; width: 15px; height: 15px; }
+.public-footer-links > a:last-child { display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: auto; height: auto; color: #454952; border: 0; background: transparent; }
+.public-footer-links > a:last-child:hover,
+.public-footer-links > a:last-child:focus-visible { color: #25272c; background: transparent; box-shadow: none; }
+
+/* O WhatsApp flutuante mantém a cor reconhecível do aplicativo; os demais elementos seguem a paleta prata. */
+.floating-whatsapp { background: #16a34a; }
+@media (prefers-reduced-motion: reduce) {
+  .button-primary, .button-outline, .button-quiet, .extra-card { transition: none !important; }
+}
+
+
+/* P18 v0.1.2 — renderização dos arquivos originais da marca (em vez dos pseudo-elementos herdados). */
+.public-header > .brand-lockup { display: flex !important; width: 180px; height: 68px; max-width: calc(100% - 112px); justify-content: center; align-items: center; }
+.public-header > .brand-lockup::before, .public-header > .brand-lockup::after { display: none !important; content: none !important; }
+.public-header > .brand-lockup img { position: static !important; display: block !important; width: 100% !important; height: auto !important; max-width: 180px !important; max-height: 60px !important; padding: 0 !important; margin: 0 !important; overflow: visible; clip: auto !important; clip-path: none !important; white-space: normal; border: 0; opacity: 1 !important; object-fit: contain; }
+.public-footer { display: flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 25px 18px 27px; text-align: center; }
+.public-footer > a:first-child { display: flex !important; position: relative; width: min(230px, 76vw); max-width: 230px; min-width: 0; justify-content: center; align-items: center; margin: 0; padding: 0; background: transparent; }
+.public-footer > a:first-child::before, .public-footer > a:first-child::after { display: none !important; content: none !important; }
+.public-footer > a:first-child img { position: static !important; display: block !important; width: 100% !important; height: auto !important; max-width: 230px !important; max-height: 100px !important; padding: 0 !important; margin: 0 !important; overflow: visible; clip: auto !important; clip-path: none !important; white-space: normal; border: 0; opacity: 1 !important; object-fit: contain; }
+.public-footer > span { display: block !important; color: #656a73; font-size: 11px; line-height: 1.5; margin: -3px 0 0; }
+.public-footer-links { display: flex !important; flex-wrap: wrap; flex: 0 0 auto; align-items: center; justify-content: center; gap: 10px 20px; width: 100%; margin-top: 3px; }
+.public-footer-links > a:first-child { display: inline-flex !important; width: auto; min-height: 32px; max-width: none; justify-content: center !important; padding: 4px 0 !important; margin: 0 !important; color: #5b6069; }
+.public-footer-links > a:last-child { grid-area: auto; display: inline-flex !important; width: auto; height: auto; min-height: 32px; justify-content: center; align-items: center; gap: 6px; padding: 4px 0 !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; color: #454952; font-size: 11px !important; line-height: 1.4; background: transparent !important; }
+.public-footer-links > a:last-child::before { display: none !important; content: none !important; background-image: none !important; }
+.public-footer-links > a:last-child > svg { display: inline-block !important; width: 15px; height: 15px; }
+@media (max-width: 760px) {
+  .public-header > .brand-lockup { width: 164px; height: 62px; max-width: calc(100% - 88px); }
+  .public-header > .brand-lockup img { max-width: 164px !important; max-height: 54px !important; }
+  .public-footer { padding: 23px 16px 25px; }
+  .public-footer > a:first-child { width: min(220px, 78vw); }
+  .public-footer > a:first-child img { max-width: 220px !important; }
+  .public-footer-links { gap: 8px 18px; }
+}
