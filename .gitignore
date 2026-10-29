@@ -5,3 +5,9 @@ dist/
 !.env.example
 .DS_Store
 Thumbs.db
+
+# Local, fictitious data and generated builds for source-app copies
+apps/**/node_modules/
+apps/**/dist/
+apps/**/data/*.json
+apps/**/data/*.tmp
