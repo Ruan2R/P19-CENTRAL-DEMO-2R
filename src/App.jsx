@@ -5,7 +5,8 @@ import {
   FileText, Filter, Grid2X2, LayoutDashboard, Menu, Package, Plus, Scissors,
   Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
   TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
-  MoreHorizontal, CheckCircle2, Clock, CircleAlert, RefreshCw
+  MoreHorizontal, CheckCircle2, Clock, CircleAlert, RefreshCw,
+  Code2, Wrench, Network, Mail, Linkedin, ShieldCheck
 } from 'lucide-react';
 
 const PASSWORD = '2Rdemo26';
@@ -146,17 +147,23 @@ function localDateValue() {
 }
 
 function money(value) { return Number(value).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+const DEMO_BASE_URLS = {
+  Beauty: import.meta.env.VITE_DEMO_BEAUTY_URL || 'http://127.0.0.1:3018',
+  Barber: import.meta.env.VITE_DEMO_BARBER_URL || 'http://127.0.0.1:3015',
+  Burger: import.meta.env.VITE_DEMO_BURGER_URL || 'http://127.0.0.1:5176',
+};
+
 function getNativeTargets(demo) {
   const packageId = encodeURIComponent(demo.id);
   if (demo.segment === 'Beauty') {
-    const base = 'http://127.0.0.1:3018';
+    const base = DEMO_BASE_URLS.Beauty;
     return { appUrl: base + '/admin?demoPackage=' + packageId, adminUrl: base + '/admin?demoPackage=' + packageId,
       publicUrl: demo.modules.includes('booking') ? base + '/agendar?demoPackage=' + packageId : null,
       adminLabel: demo.id === 'beauty.financeiro' ? 'Abrir financeiro original' : 'Abrir administração original',
       publicLabel: 'Abrir agendamento do cliente', user: 'DEMO-2R', password: PASSWORD };
   }
   if (demo.segment === 'Barber') {
-    const base = 'http://127.0.0.1:3015';
+    const base = DEMO_BASE_URLS.Barber;
     return { appUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
       adminUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
       publicUrl: demo.modules.includes('booking') ? base + '/?demoPackage=' + packageId : null,
@@ -165,7 +172,7 @@ function getNativeTargets(demo) {
   }
   if (demo.segment === 'Burger') {
     const login = demo.id === 'burger.gestao' ? 'admin' : 'admin02';
-    const base = 'http://127.0.0.1:5176';
+    const base = DEMO_BASE_URLS.Burger;
     return { appUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
       adminUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
       publicUrl: null,
@@ -220,6 +227,7 @@ function getStartModule(demo) { return demo.modules[0] === 'site' && demo.module
 
 export default function App() {
   const [activeDemo, setActiveDemo] = useState(null);
+  const [page, setPage] = useState('portfolio');
   const [activeModule, setActiveModule] = useState('overview');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('Todos');
@@ -273,7 +281,7 @@ export default function App() {
     setMobileNav(false);
     setModal(null);
   }
-  function exitDemo() { setActiveDemo(null); setMobileNav(false); }
+  function exitDemo() { setActiveDemo(null); setMobileNav(false); setPage('portfolio'); }
   function canUse(module) { return activeDemo?.modules.includes(module); }
   function changeModule(module) {
     setMobileNav(false);
@@ -288,6 +296,10 @@ export default function App() {
   }
 
   if (activeDemo && activeDemo.segment !== 'Vitrine' && activeModule === 'launch') { return <NativeLaunchPage demo={activeDemo} onBack={exitDemo} onOpenSite={() => setActiveModule('site')} notify={notify} />; }
+
+  if (!activeDemo && page === 'portfolio') {
+    return <PortfolioHome onOpenDemo={(id) => { const selected = DEMOS.find(item => item.id === id); if (selected) enterDemo(selected); }} onOpenCatalog={() => setPage('catalog')} />;
+  }
 
   if (!activeDemo) {
     return <div className="app-shell hub-shell">
@@ -543,3 +555,142 @@ function PublicOrderingModule({onPlaceOrder}) {
 }
 function OrderRows({orders}) { return <div className="simple-order-list">{orders.map(o=><div className="simple-order-row" key={o.id}><span className="order-mini-icon"><ShoppingBag size={16}/></span><span><strong>Pedido #{o.code}</strong><small>{o.items}</small></span><span className="order-list-right"><strong>{money(o.total)}</strong><StatusBadge status={o.status}/></span></div>)}</div>; }
 function Modal({title,onClose,children}) { return <div className="modal-overlay" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><section className="modal-card"><div className="modal-heading"><div><span className="eyebrow muted-eyebrow">MODO DEMONSTRAÇÃO</span><h2>{title}</h2></div><button className="icon-quiet" onClick={onClose} aria-label="Fechar"><X size={19}/></button></div>{children}</section></div>; }
+
+
+
+function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  function closeMenu() { setMobileMenuOpen(false); }
+
+  return <div className="portfolio-shell">
+    <header className="portfolio-header">
+      <div className="portfolio-header-inner">
+        <a className="portfolio-brand" href="#inicio" onClick={closeMenu} aria-label="2R Informática — início">
+          <img src="/2r-logo.svg" alt="" />
+          <span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span>
+        </a>
+        <button className="portfolio-menu-toggle" type="button" onClick={() => setMobileMenuOpen(v => !v)} aria-expanded={mobileMenuOpen} aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}>
+          {mobileMenuOpen ? <X size={21}/> : <Menu size={21}/>}
+        </button>
+        <nav className={'portfolio-nav' + (mobileMenuOpen ? ' is-open' : '')} aria-label="Navegação principal">
+          <a href="#solucoes" onClick={closeMenu}>Soluções</a>
+          <a href="#projetos" onClick={closeMenu}>Projetos</a>
+          <a href="#sobre" onClick={closeMenu}>Sobre mim</a>
+          <a className="portfolio-nav-cta" href="#contato" onClick={closeMenu}>Vamos conversar <ArrowUpRight size={16}/></a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section className="portfolio-hero" id="inicio">
+        <div className="portfolio-hero-grid" aria-hidden="true"></div>
+        <div className="portfolio-container portfolio-hero-layout">
+          <div className="portfolio-hero-copy">
+            <div className="portfolio-eyebrow"><span className="portfolio-live-dot"></span> TECNOLOGIA • APLICAÇÕES WEB • INFRAESTRUTURA</div>
+            <h1>Ideias em tecnologia.<br/><span>Soluções na prática.</span></h1>
+            <p>Sou Ruan, da 2R Informática. Desenvolvo aplicações web que ajudam negócios a organizar a rotina, conectar informações e trabalhar com mais praticidade.</p>
+            <div className="portfolio-hero-actions">
+              <a className="portfolio-button portfolio-button-primary" href="#projetos">Explorar projetos <ArrowRight size={17}/></a>
+              <a className="portfolio-button portfolio-button-secondary" href="#contato">Falar comigo <Mail size={16}/></a>
+            </div>
+            <div className="portfolio-quick-access" aria-label="Atalhos diretos para soluções">
+              <a href="#projeto-beauty"><span><CalendarDays size={17}/></span><b>Agendamentos</b><ArrowUpRight size={14}/></a>
+              <a href="#projeto-burger"><span><Wallet size={17}/></span><b>Gestão e financeiro</b><ArrowUpRight size={14}/></a>
+              <a href="#projeto-burger"><span><ShoppingBag size={17}/></span><b>Pedidos e estoque</b><ArrowUpRight size={14}/></a>
+            </div>
+          </div>
+          <div className="portfolio-hero-visual">
+            <div className="portfolio-photo-halo" aria-hidden="true"></div>
+            <div className="portfolio-photo-frame">
+              <img className="portfolio-profile-photo" src="/ruan-profile.jpg" alt="Ruan Rodrigues, da 2R Informática" fetchPriority="high"/>
+              <div className="portfolio-photo-overlay">
+                <div className="portfolio-photo-logo"><img src="/2r-logo.svg" alt=""/></div>
+                <div><strong>Ruan Rodrigues</strong><span>Desenvolvimento web · Tecnologia</span></div>
+              </div>
+            </div>
+            <div className="portfolio-floating-card portfolio-floating-top"><span><Code2 size={17}/></span><div><strong>Aplicações web</strong><small>Soluções para o dia a dia</small></div></div>
+            <div className="portfolio-floating-card portfolio-floating-bottom"><span><ShieldCheck size={17}/></span><div><strong>Prático e funcional</strong><small>Feito para resolver problemas</small></div></div>
+            <div className="portfolio-hero-caption"><span className="portfolio-caption-line"></span> SEU PARCEIRO EM TECNOLOGIA</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="portfolio-section portfolio-shortcuts-section" id="solucoes">
+        <div className="portfolio-container">
+          <div className="portfolio-section-heading portfolio-heading-row">
+            <div><span className="portfolio-section-kicker">COMO POSSO AJUDAR</span><h2>Tecnologia com objetivo claro.</h2><p>Escolha o tipo de solução e vá direto ao que interessa.</p></div>
+            <a className="portfolio-text-link" href="#projetos">Ver os projetos <ArrowRight size={16}/></a>
+          </div>
+          <div className="portfolio-service-grid">
+            <a className="portfolio-service-card" href="#projetos"><span className="portfolio-service-icon"><Code2 size={21}/></span><span className="portfolio-service-copy"><strong>Aplicações web</strong><small>Sistemas que organizam processos e informações.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#projeto-beauty"><span className="portfolio-service-icon"><CalendarDays size={21}/></span><span className="portfolio-service-copy"><strong>Agendamento e atendimento</strong><small>Serviços, horários e clientes no mesmo fluxo.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#projeto-burger"><span className="portfolio-service-icon"><CircleDollarSign size={21}/></span><span className="portfolio-service-copy"><strong>Gestão do negócio</strong><small>Pedidos, financeiro, produtos e estoque.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#contato"><span className="portfolio-service-icon"><Network size={21}/></span><span className="portfolio-service-copy"><strong>Suporte e infraestrutura</strong><small>Redes, equipamentos e suporte de TI.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+          </div>
+        </div>
+      </section>
+
+      <section className="portfolio-section portfolio-projects-section" id="projetos">
+        <div className="portfolio-container">
+          <div className="portfolio-section-heading portfolio-projects-heading">
+            <div><span className="portfolio-section-kicker">PROJETOS EM DESTAQUE</span><h2>Veja os sistemas funcionando.</h2><p>Explore demonstrações interativas com dados fictícios e navegue pelas funcionalidades de cada solução.</p></div>
+            <span className="portfolio-projects-count"><strong>03</strong><small>sistemas demonstrativos</small></span>
+          </div>
+          <div className="portfolio-project-grid">
+            <article className="portfolio-project-card portfolio-project-beauty" id="projeto-beauty">
+              <div className="portfolio-project-art portfolio-beauty-art"><div className="portfolio-art-window"><span></span><span></span><span></span></div><div className="portfolio-art-calendar"><div className="portfolio-calendar-top"><CalendarDays size={18}/><b>Agenda</b><span>DEMO</span></div><div className="portfolio-calendar-row"><i></i><span>09:00</span><b>Atendimento</b></div><div className="portfolio-calendar-row"><i></i><span>10:30</span><b>Procedimento</b></div><div className="portfolio-calendar-row"><i></i><span>13:00</span><b>Atendimento</b></div></div><div className="portfolio-art-bubble"><Sparkles size={18}/></div></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDAMENTO & GESTÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>2R Beauty</h3><p>Agendamento de serviços, disponibilidade de horários, administração da agenda, clientes e controle financeiro.</p><div className="portfolio-feature-tags"><span>Agenda online</span><span>Clientes</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenDemo('beauty.completo')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+            </article>
+            <article className="portfolio-project-card portfolio-project-barber" id="projeto-barber">
+              <div className="portfolio-project-art portfolio-barber-art"><div className="portfolio-barber-window"><div className="portfolio-barber-side"><Scissors size={23}/><span>BARBER STUDIO</span></div><div className="portfolio-barber-content"><div className="portfolio-barber-title"><b>Agenda do dia</b><small>Profissionais e horários</small></div><div className="portfolio-barber-appointment"><span>09:00</span><div><b>Serviço agendado</b><small>40 min · confirmado</small></div><i></i></div><div className="portfolio-barber-appointment"><span>10:00</span><div><b>Serviço agendado</b><small>30 min · confirmado</small></div><i></i></div></div></div><div className="portfolio-art-bubble portfolio-barber-bubble"><CheckCircle2 size={19}/></div></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDA & OPERAÇÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>2R Barber</h3><p>Agenda com duração dos serviços, seleção de profissional, disponibilidade e área administrativa com gestão integrada.</p><div className="portfolio-feature-tags"><span>Profissionais</span><span>Disponibilidade</span><span>Gestão</span></div><button className="portfolio-project-button" onClick={() => onOpenDemo('barber.completo')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+            </article>
+            <article className="portfolio-project-card portfolio-project-burger" id="projeto-burger">
+              <div className="portfolio-project-art portfolio-burger-art"><div className="portfolio-burger-dashboard"><div className="portfolio-burger-dashboard-top"><span><ShoppingBag size={17}/><b>Pedidos</b></span><small>EXEMPLO</small></div><div className="portfolio-burger-order"><span>001</span><div><b>Pedido em andamento</b><small>Itens e status do pedido</small></div><i className="burger-state"></i></div><div className="portfolio-burger-order"><span>002</span><div><b>Pedido recebido</b><small>Estoque vinculado ao fluxo</small></div><i className="burger-state burger-state-warm"></i></div><div className="portfolio-burger-mini-stats"><div><small>Produtos</small><b>24</b></div><div><small>Pedidos</small><b>08</b></div><div><small>Estoque</small><b>Ativo</b></div></div></div></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>VENDAS & CONTROLE</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>2R Burger</h3><p>Gestão de pedidos, produtos, movimentações de estoque e controles financeiros conectados à operação.</p><div className="portfolio-feature-tags"><span>Pedidos</span><span>Estoque</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenDemo('burger.completo')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+            </article>
+          </div>
+          <div className="portfolio-demo-note"><ShieldCheck size={18}/><p><strong>Ambiente de demonstração</strong> — os cadastros e movimentações apresentados são fictícios. As demonstrações servem para explorar os fluxos e funcionalidades.</p></div>
+          <div className="portfolio-all-projects"><span>Procurando uma combinação específica de funcionalidades?</span><button onClick={onOpenCatalog}>Ver todos os pacotes demonstrativos <ArrowRight size={16}/></button></div>
+        </div>
+      </section>
+
+      <section className="portfolio-process-section">
+        <div className="portfolio-container portfolio-process-layout">
+          <div><span className="portfolio-section-kicker">MEU JEITO DE TRABALHAR</span><h2>Menos complicação.<br/><span>Mais clareza no dia a dia.</span></h2><p>A tecnologia precisa facilitar a rotina, não criar mais etapas. Por isso, a ideia é manter as informações acessíveis, os fluxos claros e as ações principais fáceis de encontrar — tanto no computador quanto no celular.</p><a className="portfolio-text-link" href="#contato">Vamos conversar sobre sua necessidade <ArrowRight size={16}/></a></div>
+          <div className="portfolio-principles">
+            <article><span>01</span><div><strong>Fluxos objetivos</strong><p>Ações principais visíveis, sem obrigar a pessoa a procurar onde começar.</p></div><CheckCircle2 size={18}/></article>
+            <article><span>02</span><div><strong>Informações conectadas</strong><p>Quando o sistema permite, um registro alimenta as áreas relacionadas sem retrabalho desnecessário.</p></div><CheckCircle2 size={18}/></article>
+            <article><span>03</span><div><strong>PC e celular desde o início</strong><p>Interfaces planejadas para telas grandes e pequenas, com os ajustes validados ao longo do projeto.</p></div><CheckCircle2 size={18}/></article>
+          </div>
+        </div>
+      </section>
+
+      <section className="portfolio-section portfolio-about-section" id="sobre">
+        <div className="portfolio-container portfolio-about-layout">
+          <div className="portfolio-about-mark"><img src="/2r-logo.svg" alt="Logotipo da 2R Informática"/></div>
+          <div><span className="portfolio-section-kicker">SOBRE A 2R INFORMÁTICA</span><h2>Tecnologia próxima, prática e feita para pessoas.</h2><p>Minha experiência une suporte técnico, redes, infraestrutura e desenvolvimento de aplicações web. Isso ajuda a enxergar tanto a parte técnica quanto o uso real das ferramentas no dia a dia do negócio.</p><p>O objetivo é construir soluções fáceis de entender, com funcionalidades úteis e espaço para evoluir conforme a necessidade.</p></div>
+          <div className="portfolio-about-quote"><span>“</span><strong>Seu parceiro em Tecnologia.</strong><small>2R Informática</small></div>
+        </div>
+      </section>
+
+      <section className="portfolio-contact-section" id="contato">
+        <div className="portfolio-container portfolio-contact-layout">
+          <div><span className="portfolio-section-kicker">VAMOS TIRAR A IDEIA DO PAPEL?</span><h2>Tem uma necessidade?<br/><span>Vamos pensar na solução.</span></h2><p>Converse comigo sobre uma aplicação web, uma melhoria de processo ou uma demanda de tecnologia para seu negócio.</p></div>
+          <div className="portfolio-contact-actions">
+            <a className="portfolio-button portfolio-button-primary" href="mailto:r.cintra.r.2002@gmail.com"><Mail size={17}/> Entrar em contato por e-mail <ArrowUpRight size={16}/></a>
+            <a className="portfolio-button portfolio-button-secondary" href="https://www.linkedin.com/in/ruanrodrigues2r/" target="_blank" rel="noreferrer"><Linkedin size={17}/> Perfil profissional <ArrowUpRight size={16}/></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer className="portfolio-footer">
+      <div className="portfolio-container portfolio-footer-inner">
+        <a className="portfolio-brand portfolio-footer-brand" href="#inicio"><img src="/2r-logo.svg" alt=""/><span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span></a>
+        <span>© {new Date().getFullYear()} 2R Informática. Tecnologia com propósito.</span>
+        <button onClick={onOpenCatalog}>Acesso técnico às demonstrações <ArrowUpRight size={15}/></button>
+      </div>
+    </footer>
+  </div>;
+}
