@@ -343,15 +343,15 @@ export default function BookingPage() {
   return (
     <main className="page-shell">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="Boss67 Barbearia — agendamento">
+        <a className="brand" href="/" aria-label="2R Barber Studio — agendamento">
           <span className="brand-mark">B67</span>
-          <span><strong>BOSS67</strong><small>BARBEARIA</small></span>
+          <span><strong>2R BARBER</strong><small>BARBEARIA</small></span>
         </a>
         <span className="topbar-note">AGENDAMENTO ONLINE</span>
       </header>
 
       <section className="intro">
-        <p className="eyebrow">BOSS67 BARBEARIA · SIDROLÂNDIA - MS</p>
+        <p className="eyebrow">2R BARBER BARBEARIA · SIDROLÂNDIA - MS</p>
         <h1>Seu próximo corte<br /><span>começa aqui.</span></h1>
         <p className="intro-copy">Escolha seus procedimentos, encontre um horário e confirme seu atendimento.</p>
       </section>
@@ -574,7 +574,7 @@ export default function BookingPage() {
           <div className="confirmation-mark" aria-hidden="true">✓</div>
           <p className="eyebrow">AGENDAMENTO REGISTRADO</p>
           <h2 id="confirmation-title">Fechado, {booking.customer.name.split(/\s+/)[0]}!</h2>
-          <p className="confirmation-copy">Seu horário foi reservado no sistema da Boss67 Barbearia.</p>
+          <p className="confirmation-copy">Seu horário foi reservado no sistema da 2R Barber Studio.</p>
           <div className="booking-code"><span>Código do atendimento</span><strong>{booking.publicCode}</strong></div>
           <div className="review-meta"><div><span>Data</span><strong>{formatDate(booking.date)}</strong></div><div><span>Procedimentos</span><strong>{booking.items.length}</strong></div></div>
           <div className="review-items">
@@ -588,7 +588,7 @@ export default function BookingPage() {
         </section>
       )}
 
-      <footer className="footer"><span>Boss67 Barbearia</span><span>P15 · Núcleo de agendamento</span></footer>
+      <footer className="footer"><span>2R Barber Studio</span><span>P15 · Núcleo de agendamento</span></footer>
     </main>
   )
 }
