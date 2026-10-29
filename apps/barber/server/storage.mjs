@@ -434,7 +434,18 @@ class LocalJsonStore {
         customerWhatsapp: '6799990021',
         items: [{ serviceId: firstService.id, professionalId: ANY_PROFESSIONAL_ID, time: firstSlot }],
       });
-      await this.recordBookingReceipt(firstBooking.id, 'Pix');
+
+      // Preserve one completed sample appointment so the real linked-receipt flow is visible.
+      const yesterday = addDateDays(getBusinessDate(), -1);
+      const seededGroup = this.data.bookingGroups.find((group) => group.id === firstBooking.id);
+      if (seededGroup) {
+        seededGroup.bookingDate = yesterday;
+        seededGroup.status = 'completed';
+        seededGroup.updatedAt = new Date().toISOString();
+        for (const item of this.data.bookingItems.filter((row) => row.bookingGroupId === seededGroup.id)) item.date = yesterday;
+        await this.persist(this.data);
+        await this.recordBookingReceipt(seededGroup.id, 'Pix');
+      }
 
       if (secondService) {
         const nextAvailability = await this.getAvailableSlots(secondService.id, ANY_PROFESSIONAL_ID, date);
@@ -1561,7 +1572,8 @@ class MySqlStore {
 
 export async function createStorage(env, projectRoot) {
   if (env.P19_DEMO_MODE === 'true') {
-    const filePath = path.join(projectRoot, 'data', 'local-db.json');
+    // The presentation copy must never reuse a client's database or a pre-existing local store.
+    const filePath = path.join(projectRoot, 'data', 'p19-demo-db.json');
     const demoStore = new LocalJsonStore(filePath);
     await demoStore.init();
     await demoStore.seedP19DemoData();
