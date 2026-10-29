@@ -412,6 +412,65 @@ class LocalJsonStore {
     return this
   }
 
+  async seedP19DemoData() {
+    const hasExistingData = this.data.bookingGroups.length || this.data.bookingItems.length ||
+      this.data.customers.length || this.data.financialEntries.length || this.data.payables.length ||
+      this.data.promotions.length;
+    if (hasExistingData) return { seeded: false };
+
+    try {
+      const date = addDateDays(getBusinessDate(), 1);
+      const firstService = this.data.services.find((service) => service.id === 'corte') || this.data.services[0];
+      const secondService = this.data.services.find((service) => service.id === 'barba') || this.data.services[1];
+      if (!firstService) return { seeded: false };
+
+      const firstAvailability = await this.getAvailableSlots(firstService.id, ANY_PROFESSIONAL_ID, date);
+      const firstSlot = firstAvailability.slots[0]?.time;
+      if (!firstSlot) return { seeded: false };
+
+      const firstBooking = await this.createBookingGroup({
+        date,
+        customerName: 'Lucas Mendes',
+        customerWhatsapp: '6799990021',
+        items: [{ serviceId: firstService.id, professionalId: ANY_PROFESSIONAL_ID, time: firstSlot }],
+      });
+      await this.recordBookingReceipt(firstBooking.id, 'Pix');
+
+      if (secondService) {
+        const nextAvailability = await this.getAvailableSlots(secondService.id, ANY_PROFESSIONAL_ID, date);
+        const nextSlot = nextAvailability.slots.find((slot) => slot.time !== firstSlot)?.time;
+        if (nextSlot) {
+          await this.createBookingGroup({
+            date,
+            customerName: 'Mariana Souza',
+            customerWhatsapp: '6799990022',
+            items: [{ serviceId: secondService.id, professionalId: ANY_PROFESSIONAL_ID, time: nextSlot }],
+          });
+        }
+      }
+
+      await this.createFinancialEntry({
+        direction: 'expense',
+        description: 'Compra fictícia de produtos de barbearia',
+        category: 'Materiais',
+        amountCents: 9800,
+        movementDate: date,
+        paymentMethod: 'Pix',
+      });
+      await this.createPayable({
+        description: 'Reposição fictícia de materiais',
+        category: 'Estoque',
+        amountCents: 12500,
+        dueDate: date,
+      });
+      console.log('[P19 demo] Dados fictícios de Barber preparados no armazenamento local.');
+      return { seeded: true };
+    } catch (error) {
+      console.warn('[P19 demo] Não foi possível preparar todos os exemplos de Barber:', error?.message || error);
+      return { seeded: false, error: error?.message || String(error) };
+    }
+  }
+
   async persist(data) {
     const temporaryPath = `${this.filePath}.${process.pid}.${randomUUID()}.tmp`
     await writeFile(temporaryPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8')
@@ -1501,6 +1560,14 @@ class MySqlStore {
 }
 
 export async function createStorage(env, projectRoot) {
+  if (env.P19_DEMO_MODE === 'true') {
+    const filePath = path.join(projectRoot, 'data', 'local-db.json');
+    const demoStore = new LocalJsonStore(filePath);
+    await demoStore.init();
+    await demoStore.seedP19DemoData();
+    return demoStore;
+  }
+
   const mysqlKeys = ['DB_HOST', 'DB_USER', 'DB_NAME', 'DB_PASSWORD']
   const mysqlRequested = mysqlKeys.some((key) => Boolean(env[key]))
   const mysqlConfigured = mysqlKeys.every((key) => Boolean(env[key]))
