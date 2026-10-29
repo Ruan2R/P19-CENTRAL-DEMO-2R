@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="150" viewBox="0 0 520 150" role="img" aria-label="2R Beauty Studio">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#003E6A"/><stop offset="1" stop-color="#0392B2"/></linearGradient></defs>
+  <rect x="4" y="12" width="124" height="124" rx="28" fill="url(#g)"/>
+  <path d="M34 53c5-11 16-17 31-17 18 0 29 10 29 24 0 10-5 17-16 26L53 106h42" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M68 71h20" stroke="#5EE1E7" stroke-width="7" stroke-linecap="round"/>
+  <text x="152" y="74" font-family="Inter,Arial,sans-serif" font-size="45" font-weight="800" letter-spacing="2" fill="#003E6A">2R BEAUTY</text>
+  <text x="155" y="108" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="600" letter-spacing="5" fill="#0392B2">STUDIO</text>
+</svg>
