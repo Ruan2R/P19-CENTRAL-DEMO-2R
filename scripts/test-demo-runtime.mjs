@@ -88,8 +88,8 @@ try {
   });
   assert.equal(p16SeedResponse.status, 200, 'P16 should allow its local demo seed endpoint');
   const p16Seed = await p16SeedResponse.json();
-  assert.ok(p16Seed.products > 0, 'P16 demo must have fictitious products/stock');
-  assert.ok(p16Seed.orders > 0, 'P16 demo must have fictitious orders');
+  assert.ok((p16Seed.newProducts ?? p16Seed.products) > 0, 'P16 demo must have fictitious products/stock');
+  assert.ok((p16Seed.newOrders ?? p16Seed.orders) > 0, 'P16 demo must have fictitious orders');
 
   const [barberDb, beautyDb, burgerDb] = await Promise.all([
     readDb(apps.barber, 'p19-demo-db.json'),
