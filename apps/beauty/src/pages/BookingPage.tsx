@@ -7,7 +7,8 @@ import { formatBrazilPhoneInput } from '../lib/phone.mjs'
 import { TurnstileWidget } from '../components/TurnstileWidget'
 import { BookingTimeWheelPicker } from '../components/BookingTimeWheelPicker'
 
-const WHATSAPP_NUMBER = '556798580350'
+const P19_DEMO_MODE = true
+const WHATSAPP_NUMBER = ''
 const PUBLIC_SITE = '/agendar'
 const DEFAULT_POLICIES: BusinessPolicy = { singleton: true, lateness_tolerance_minutes: 0, cancellation_notice_hours: 0, companion_policy: 'Política de acompanhantes pendente de confirmação pela Ana.', no_show_policy: 'Política de faltas e cancelamentos pendente de confirmação pela Ana.', show_lateness_policy: false, show_cancellation_policy: false, show_companion_policy: false, show_no_show_policy: false }
 
@@ -304,9 +305,9 @@ export function BookingPage() {
           </div>
           <a className="button button-quiet button-full" href={PUBLIC_SITE}>Voltar ao agendamento</a>
         </div>
-        <a className="floating-whatsapp" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="Abrir WhatsApp do estúdio" title="WhatsApp do estúdio">
+        {!P19_DEMO_MODE && (<a className="floating-whatsapp" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="Abrir WhatsApp do estúdio" title="WhatsApp do estúdio">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1.2C5.57.2.27 5.5.27 12.03c0 2.08.54 4.1 1.56 5.88L.2 23.8l6.03-1.58a11.8 11.8 0 0 0 5.87 1.55h.01c6.52 0 11.82-5.3 11.82-11.82 0-3.16-1.23-6.13-3.41-8.47ZM12.11 21.7h-.01a9.65 9.65 0 0 1-4.92-1.35l-.35-.21-3.58.94.96-3.49-.23-.36a9.68 9.68 0 1 1 8.13 4.47Zm5.3-7.24c-.29-.15-1.7-.84-1.96-.94-.26-.1-.45-.15-.64.15-.19.29-.73.94-.89 1.13-.16.2-.33.22-.61.08-.29-.15-1.2-.44-2.28-1.41-.84-.75-1.41-1.68-1.58-1.96-.16-.29-.02-.44.12-.59.13-.13.29-.33.43-.49.15-.16.2-.28.3-.47.1-.2.05-.36-.02-.5-.07-.15-.64-1.54-.88-2.11-.23-.55-.47-.47-.64-.48h-.54c-.19 0-.5.07-.77.36-.26.29-1 1-.1 2.42.89 1.42 1.03 1.65 1.28 1.94.15.19 1.74 2.66 4.21 3.72.59.25 1.05.4 1.4.51.59.19 1.12.16 1.54.1.47-.07 1.45-.59 1.66-1.17.2-.57.2-1.07.14-1.17-.06-.1-.25-.16-.53-.3Z"></path></svg>
-        </a>
+        </a>)}
       </main>
     )
   }
@@ -315,13 +316,13 @@ export function BookingPage() {
     <div className="booking-site">
       {storageMode === 'local-json' && <div className="demo-ribbon"><span /> Ambiente local — agendamentos ficam salvos somente neste computador</div>}
       <header className="public-header">
-        <a href={PUBLIC_SITE} className="brand-lockup" aria-label="Agendar com Ana Amaral">
-          <img className="brand-wordmark" src="/assets/branding/logo-ana-amaral-metalico.webp" alt="Ana Amaral" />
-          <img className="brand-lash-designer" src="/assets/branding/lash-designer-ana-amaral.webp" alt="" aria-hidden="true" />
+        <a href={PUBLIC_SITE} className="brand-lockup" aria-label="Agendar com 2R Beauty Studio">
+          <img className="brand-wordmark" src="/assets/branding/logo-2r-demo.svg" alt="2R Beauty Studio" />
+          <img className="brand-lash-designer" src="/assets/branding/tagline-2r-demo.svg" alt="" aria-hidden="true" />
         </a>
         <nav className="public-nav" aria-label="Links do estúdio">
           <a href="#agendar" className="nav-link">Agendamento</a>
-          <a href="https://instagram.com/anaamaral_lash" target="_blank" rel="noreferrer" aria-label="Instagram da Ana"><Instagram size={17} /></a>
+          <a href="https://instagram.com/2r.informatica.demo" target="_blank" rel="noreferrer" aria-label="Instagram da Ana"><Instagram size={17} /></a>
         </nav>
       </header>
 
@@ -332,7 +333,7 @@ export function BookingPage() {
             <p className="eyebrow"><Sparkles size={14} /> DESIGN DO OLHAR COM DELICADEZA E PRECISÃO</p>
             <h1>Um olhar que revela<br /><em>a sua essência.</em></h1>
             <p className="booking-intro">Escolha seu procedimento e encontre um horário para cuidar do seu olhar com calma e atenção aos detalhes.</p>
-            <div className="hero-trust-row"><span><Check size={15} /> Cuidado em cada detalhe</span><span><Check size={15} /> Sidrolândia, MS</span></div>
+            <div className="hero-trust-row"><span><Check size={15} /> Cuidado em cada detalhe</span><span><Check size={15} /> Ambiente demonstrativo</span></div>
           </div>
           <div className="booking-panel-wrap" id="agendar">
             <div className="booking-panel-heading">
@@ -403,25 +404,25 @@ export function BookingPage() {
 
         <section className="booking-extras">
           <div className="extra-card"><span className="extra-icon"><Heart size={19} /></span><div><h3>Seu olhar em primeiro plano</h3><p>Delicadeza, técnica e atenção aos detalhes para valorizar suas características e respeitar seu estilo.</p></div></div>
-          <div className="extra-card"><span className="extra-icon"><CalendarDays size={19} /></span><div><h3>Como funciona?</h3><p>Após realizar o agendamento, você receberá em breve uma confirmação com os detalhes do atendimento pelo WhatsApp.</p></div></div>
+          <div className="extra-card"><span className="extra-icon"><CalendarDays size={19} /></span><div><h3>Como funciona?</h3><p>O fluxo de confirmação do atendimento pode ser acompanhado no painel administrativo.</p></div></div>
           <div className="extra-card"><span className="extra-icon"><MapPin size={19} /></span><div><h3>Informações para sua visita</h3><p>Após a confirmação do horário, Ana envia as orientações de localização pelo WhatsApp.</p></div></div>
         </section>
       </main>
       <footer className="public-footer">
         <div className="footer-brand-row">
-          <a href={PUBLIC_SITE} className="footer-brand-lockup" aria-label="Ana Amaral — Lash Designer">
-            <img className="footer-wordmark" src="/assets/branding/logo-ana-amaral-metalico.webp" alt="Ana Amaral" />
-            <img className="footer-lash-designer" src="/assets/branding/lash-designer-ana-amaral.webp" alt="" aria-hidden="true" />
-            <img className="footer-brand-divider" src="/assets/branding/divisor-coracao-ana-amaral.webp" alt="" aria-hidden="true" />
-            <img className="footer-brand-slogan" src="/assets/branding/slogan-ana-amaral.webp" alt="Olhar que realça a sua beleza" />
+          <a href={PUBLIC_SITE} className="footer-brand-lockup" aria-label="2R Beauty Studio — Lash Designer">
+            <img className="footer-wordmark" src="/assets/branding/logo-2r-demo.svg" alt="2R Beauty Studio" />
+            <img className="footer-lash-designer" src="/assets/branding/tagline-2r-demo.svg" alt="" aria-hidden="true" />
+            <img className="footer-brand-divider" src="/assets/branding/tagline-2r-demo.svg" alt="" aria-hidden="true" />
+            <img className="footer-brand-slogan" src="/assets/branding/tagline-2r-demo.svg" alt="Seu espaço de beleza, com gestão inteligente." />
           </a>
-          <a className="footer-instagram-link" href="https://instagram.com/anaamaral_lash" target="_blank" rel="noreferrer" aria-label="Instagram da Ana" title="Instagram da Ana"><Instagram size={17} /></a>
+          <a className="footer-instagram-link" href="https://instagram.com/2r.informatica.demo" target="_blank" rel="noreferrer" aria-label="Instagram da Ana" title="Instagram da Ana"><Instagram size={17} /></a>
         </div>
         <div className="public-footer-links"><Link to="/admin" className="nav-admin nav-admin--subtle">Acesso administrativo</Link></div>
       </footer>
-      <a className="floating-whatsapp" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="Falar com o estúdio pelo WhatsApp" title="Falar com o estúdio pelo WhatsApp">
+      {!P19_DEMO_MODE && (<a className="floating-whatsapp" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="Falar com o estúdio pelo WhatsApp" title="Falar com o estúdio pelo WhatsApp">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1.2C5.57.2.27 5.5.27 12.03c0 2.08.54 4.1 1.56 5.88L.2 23.8l6.03-1.58a11.8 11.8 0 0 0 5.87 1.55h.01c6.52 0 11.82-5.3 11.82-11.82 0-3.16-1.23-6.13-3.41-8.47ZM12.11 21.7h-.01a9.65 9.65 0 0 1-4.92-1.35l-.35-.21-3.58.94.96-3.49-.23-.36a9.68 9.68 0 1 1 8.13 4.47Zm5.3-7.24c-.29-.15-1.7-.84-1.96-.94-.26-.1-.45-.15-.64.15-.19.29-.73.94-.89 1.13-.16.2-.33.22-.61.08-.29-.15-1.2-.44-2.28-1.41-.84-.75-1.41-1.68-1.58-1.96-.16-.29-.02-.44.12-.59.13-.13.29-.33.43-.49.15-.16.2-.28.3-.47.1-.2.05-.36-.02-.5-.07-.15-.64-1.54-.88-2.11-.23-.55-.47-.47-.64-.48h-.54c-.19 0-.5.07-.77.36-.26.29-1 1-.1 2.42.89 1.42 1.03 1.65 1.28 1.94.15.19 1.74 2.66 4.21 3.72.59.25 1.05.4 1.4.51.59.19 1.12.16 1.54.1.47-.07 1.45-.59 1.66-1.17.2-.57.2-1.07.14-1.17-.06-.1-.25-.16-.53-.3Z"></path></svg>
-      </a>
+      </a>)}
     </div>
   )
 }
