@@ -566,7 +566,7 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
     <header className="portfolio-header">
       <div className="portfolio-header-inner">
         <a className="portfolio-brand" href="#inicio" onClick={closeMenu} aria-label="2R Informática — início">
-          <img src="/2r-logo.webp" alt="" />
+          <img src="/2r-logo.png" alt="" />
           <span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span>
         </a>
         <button className="portfolio-menu-toggle" type="button" onClick={() => setMobileMenuOpen(v => !v)} aria-expanded={mobileMenuOpen} aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}>
@@ -604,7 +604,7 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
             <div className="portfolio-photo-frame">
               <img className="portfolio-profile-photo" src="/ruan-profile.jpg" alt="Ruan Rodrigues, da 2R Informática" fetchPriority="high"/>
               <div className="portfolio-photo-overlay">
-                <div className="portfolio-photo-logo"><img src="/2r-logo.webp" alt=""/></div>
+                <div className="portfolio-photo-logo"><img src="/2r-logo.png" alt=""/></div>
                 <div><strong>Ruan Rodrigues</strong><span>Desenvolvimento web · Tecnologia</span></div>
               </div>
             </div>
@@ -668,7 +668,7 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
 
       <section className="portfolio-section portfolio-about-section" id="sobre">
         <div className="portfolio-container portfolio-about-layout">
-          <div className="portfolio-about-mark"><img src="/2r-logo.webp" alt="Logotipo da 2R Informática"/></div>
+          <div className="portfolio-about-mark"><img src="/2r-logo.png" alt="Logotipo da 2R Informática"/></div>
           <div><span className="portfolio-section-kicker">SOBRE A 2R INFORMÁTICA</span><h2>Tecnologia próxima, prática e feita para pessoas.</h2><p>Minha experiência une suporte técnico, redes, infraestrutura e desenvolvimento de aplicações web. Isso ajuda a enxergar tanto a parte técnica quanto o uso real das ferramentas no dia a dia do negócio.</p><p>O objetivo é construir soluções fáceis de entender, com funcionalidades úteis e espaço para evoluir conforme a necessidade.</p></div>
           <div className="portfolio-about-quote"><span>“</span><strong>Seu parceiro em Tecnologia.</strong><small>2R Informática</small></div>
         </div>
@@ -687,7 +687,7 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
 
     <footer className="portfolio-footer">
       <div className="portfolio-container portfolio-footer-inner">
-        <a className="portfolio-brand portfolio-footer-brand" href="#inicio"><img src="/2r-logo.webp" alt=""/><span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span></a>
+        <a className="portfolio-brand portfolio-footer-brand" href="#inicio"><img src="/2r-logo.png" alt=""/><span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span></a>
         <span>© {new Date().getFullYear()} 2R Informática. Tecnologia com propósito.</span>
         <button onClick={onOpenCatalog}>Acesso técnico às demonstrações <ArrowUpRight size={15}/></button>
       </div>
