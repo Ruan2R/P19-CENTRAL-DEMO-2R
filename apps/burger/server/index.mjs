@@ -15,7 +15,7 @@ if (host !== '127.0.0.1' && host !== 'localhost') {
 }
 if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('P16_API_PORT inválida.')
 
-const store = await createJsonStore({ rootDir: root })
+const store = await createJsonStore({ rootDir: root, filePath: path.join(root, 'data', process.env.P19_DEMO_MODE === 'true' ? 'p19-demo-db.json' : 'local-db.json') })
 const server = createApiServer({ store })
 server.headersTimeout = 10_000
 server.requestTimeout = 20_000
