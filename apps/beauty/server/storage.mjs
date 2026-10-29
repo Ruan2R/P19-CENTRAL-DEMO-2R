@@ -15,12 +15,19 @@ const DEFAULT_SERVICES = [
   ['maquiagem-social', 'Maquiagem social', 'Maquiagem', 'Maquiagem social personalizada para a sua ocasião.', 40, 16000, 50],
 ]
 
+const P19_DEMO_SERVICES = [
+  ['design-sobrancelhas-demo', 'Design de sobrancelhas', 'Sobrancelhas', 'Design personalizado para valorizar o olhar.', 40, 3500, 10],
+  ['tintura-sobrancelhas-demo', 'Tintura de sobrancelhas', 'Sobrancelhas', 'Cor e definição para as sobrancelhas.', 20, 1800, 20],
+  ['brow-lamination-demo', 'Brow lamination', 'Sobrancelhas', 'Alinhamento e definição dos fios.', 60, 10500, 30],
+  ['lash-lifting-demo', 'Lash lifting', 'Cílios', 'Curvatura e realce dos cílios naturais.', 90, 13500, 40],
+  ['maquiagem-social-demo', 'Maquiagem social', 'Maquiagem', 'Produção para eventos e ocasiões especiais.', 60, 15000, 50],
+];
 const DEFAULT_POLICIES = {
   singleton: true,
   lateness_tolerance_minutes: 0,
   cancellation_notice_hours: 0,
-  companion_policy: 'Política de acompanhantes pendente de confirmação pela Ana.',
-  no_show_policy: 'Política de faltas, cancelamentos e sinal pendente de confirmação pela Ana.',
+  companion_policy: 'Orientações para acompanhantes do ambiente demonstrativo.',
+  no_show_policy: 'Política demonstrativa para faltas e cancelamentos.',
   show_lateness_policy: false,
   show_cancellation_policy: false,
   show_companion_policy: false,
@@ -44,8 +51,11 @@ function hasPublicGuidelines(policies = {}) {
   return Boolean(policies.show_lateness_policy || policies.show_cancellation_policy || policies.show_companion_policy || policies.show_no_show_policy)
 }
 
-function defaultHours() {
-  return Array.from({ length: 7 }, (_, weekday) => ({ weekday, enabled: false, start_time: null, end_time: null, break_start: null, break_end: null }))
+function defaultHours({ demo = false } = {}) {
+  return Array.from({ length: 7 }, (_, weekday) => {
+    const enabled = demo && weekday >= 1 && weekday <= 6;
+    return { weekday, enabled, start_time: enabled ? '09:00' : null, end_time: enabled ? '18:00' : null, break_start: enabled ? '12:00' : null, break_end: enabled ? '13:00' : null };
+  });
 }
 
 function isUntouchedDemoCatalog(data) {
@@ -73,15 +83,16 @@ function isUntouchedDemoCatalog(data) {
   })
 }
 
-function initialLocalData({ includeDemoServices = false } = {}) {
+function initialLocalData({ includeDemoServices = false, p19DemoMode = false } = {}) {
   const now = new Date().toISOString()
+  const serviceSeed = p19DemoMode ? P19_DEMO_SERVICES : includeDemoServices ? DEFAULT_SERVICES : [];
   return {
     schema_version: 1,
-    services: includeDemoServices ? DEFAULT_SERVICES.map(([slug, name, category, description, duration_minutes, price_cents, sort_order]) => ({
+    services: serviceSeed.map(([slug, name, category, description, duration_minutes, price_cents, sort_order]) => ({
       id: randomUUID(), slug, name, category, description, duration_minutes, price_cents,
       deposit_percent: 0, active: true, sort_order, created_at: now, updated_at: now,
-    })) : [],
-    business_hours: defaultHours(),
+    })),
+    business_hours: defaultHours({ demo: p19DemoMode }),
     business_policies: structuredClone(DEFAULT_POLICIES),
     date_blocks: [],
     appointments: [],
@@ -314,9 +325,10 @@ function validateCustomerUpdateInput(input, current) {
 }
 
 class LocalJsonStore {
-  constructor(filePath, { includeDemoServices = false } = {}) {
+  constructor(filePath, { includeDemoServices = false, p19DemoMode = false } = {}) {
     this.filePath = filePath
     this.includeDemoServices = includeDemoServices
+    this.p19DemoMode = p19DemoMode
     this.data = null
     this.writeQueue = Promise.resolve()
     this.mode = 'local-json'
@@ -346,6 +358,14 @@ class LocalJsonStore {
       if (!Array.isArray(this.data.financial_entries)) { this.data.financial_entries = []; migrated = true }
       if (!Array.isArray(this.data.payables)) { this.data.payables = []; migrated = true }
       if (!Array.isArray(this.data.promotions)) { this.data.promotions = []; migrated = true }
+      if (this.p19DemoMode && this.data.services.length === 0 &&
+          ['appointments', 'customers', 'promotions', 'financial_entries', 'payables', 'date_blocks'].every((key) => (this.data[key] ?? []).length === 0)) {
+        const seeded = initialLocalData({ p19DemoMode: true });
+        this.data.services = seeded.services;
+        this.data.business_hours = seeded.business_hours;
+        this.data.business_policies = seeded.business_policies;
+        migrated = true;
+      }
       for (const appointment of this.data.appointments ?? []) {
         if (!Object.prototype.hasOwnProperty.call(appointment, 'deposit_reported')) {
           appointment.deposit_reported = false
@@ -366,7 +386,7 @@ class LocalJsonStore {
       if (migrated) await this.persist()
     } catch (error) {
       if (error?.code !== 'ENOENT') throw error
-      this.data = initialLocalData({ includeDemoServices: this.includeDemoServices })
+      this.data = initialLocalData({ includeDemoServices: this.includeDemoServices, p19DemoMode: this.p19DemoMode })
       await this.persist()
     }
   }
@@ -388,6 +408,64 @@ class LocalJsonStore {
       return jsonSafe(result)
     } finally {
       release()
+    }
+  }
+
+  async seedP19DemoData() {
+    const hasExistingActivity = ['appointments', 'customers', 'promotions', 'financial_entries', 'payables', 'date_blocks']
+      .some((key) => (this.data[key] ?? []).length > 0);
+    if (hasExistingActivity) return { seeded: false };
+
+    try {
+      const today = getStudioDate();
+      const tomorrow = addDateDays(today, 1);
+      const firstService = this.data.services.find((service) => service.active);
+      const secondService = this.data.services.find((service) => service.active && service.id !== firstService?.id);
+      if (!firstService) return { seeded: false };
+
+      const firstSlots = await this.getAvailableSlots([firstService.id], tomorrow);
+      if (!firstSlots.length) return { seeded: false, reason: 'NO_DEMO_SLOTS' };
+      const firstResult = await this.createBooking({
+        serviceIds: [firstService.id], date: tomorrow, time: firstSlots[0],
+        customerName: 'Mariana Costa', customerPhone: '6799990011',
+        customerNote: 'Agendamento fictício da demonstração 2R.', captchaToken: '', policyAcknowledged: true,
+      });
+      const completedSample = this.data.appointments.find((item) => item.public_code === firstResult.public_code);
+      if (completedSample) {
+        const yesterday = addDateDays(today, -1);
+        const startsAt = localDateTimeToUtc(yesterday, '10:00');
+        completedSample.starts_at = startsAt.toISOString();
+        completedSample.ends_at = new Date(startsAt.getTime() + Number(firstService.duration_minutes) * 60_000).toISOString();
+        completedSample.created_at = startsAt.toISOString();
+        completedSample.updated_at = new Date().toISOString();
+        await this.persist();
+        await this.updateAppointmentStatus(completedSample.id, 'confirmed');
+        await this.updateAppointmentStatus(completedSample.id, 'completed');
+        await this.receiveAppointmentBalance(completedSample.id, 'Pix');
+      }
+
+      if (secondService) {
+        const secondSlots = await this.getAvailableSlots([secondService.id], tomorrow);
+        if (secondSlots.length) await this.createBooking({
+          serviceIds: [secondService.id], date: tomorrow, time: secondSlots[0],
+          customerName: 'Bianca Souza', customerPhone: '6799990012',
+          customerNote: 'Agendamento fictício da demonstração 2R.', captchaToken: '', policyAcknowledged: true,
+        });
+      }
+
+      await this.createFinancialEntry({
+        direction: 'expense', description: 'Compra fictícia de materiais', category: 'Materiais',
+        amount_cents: 8500, movement_date: today, payment_method: 'Pix',
+      });
+      await this.createPayable({
+        description: 'Reposição fictícia de produtos', category: 'Materiais',
+        amount_cents: 12500, due_date: tomorrow,
+      });
+      console.log('[P19 demo] Dados fictícios de Beauty preparados no armazenamento local.');
+      return { seeded: true };
+    } catch (error) {
+      console.warn('[P19 demo] Não foi possível preparar todos os exemplos de Beauty:', error?.message || error);
+      return { seeded: false, error: error?.message || String(error) };
     }
   }
 
@@ -1309,6 +1387,15 @@ function normalizeSqlService(service) {
 }
 
 export async function createStorage(env, projectRoot) {
+  if (env.P19_DEMO_MODE === 'true') {
+    // Presentation data is isolated from the P18 local store and any production database.
+    const filePath = path.join(projectRoot, 'data', 'p19-demo-db.json');
+    const store = new LocalJsonStore(filePath, { p19DemoMode: true });
+    await store.init();
+    await store.seedP19DemoData();
+    return store;
+  }
+
   const mysqlRequested = Boolean(env.DB_HOST || env.DB_USER || env.DB_NAME || env.DB_PASSWORD)
   const hasMysql = Boolean(env.DB_HOST && env.DB_USER && env.DB_NAME && env.DB_PASSWORD)
   if (mysqlRequested && !hasMysql) throw new Error('Incomplete MySQL configuration. Set DB_HOST, DB_USER, DB_PASSWORD and DB_NAME together.')
