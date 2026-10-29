@@ -96,7 +96,7 @@ function buildConfirmationMessage(group: BookingGroup) {
   return [
     `Olá, ${firstName}!`,
     '',
-    'Aqui é da Boss67 Barbearia.',
+    'Aqui é da 2R Barber Studio.',
     '',
     `Seu agendamento está confirmado para ${formatDateLong(group.date)}.`,
     '',
@@ -161,8 +161,8 @@ function AdminIcon({ name, size = 20 }: { name: AdminIconName; size?: number }) 
 export default function AdminPage() {
   const [authChecked, setAuthChecked] = useState(false)
   const [user, setUser] = useState<AdminUser | null>(null)
-  const [loginId, setLoginId] = useState('')
-  const [password, setPassword] = useState('')
+  const [loginId, setLoginId] = useState(() => new URLSearchParams(window.location.search).get('demoLogin') === 'DEMO' ? 'DEMO' : '')
+  const [password, setPassword] = useState(() => new URLSearchParams(window.location.search).get('demoLogin') === 'DEMO' ? '2Rdemo26' : '')
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginError, setLoginError] = useState('')
   const [agendaDate, setAgendaDate] = useState(businessDateToday)
@@ -185,7 +185,8 @@ export default function AdminPage() {
   const [bookingSearch, setBookingSearch] = useState('')
 
   useEffect(() => {
-    document.title = 'Boss67 | Área administrativa'
+    const demoMode = new URLSearchParams(window.location.search).get('demoLogin') === 'DEMO'
+    document.title = '2R Barber | Área administrativa'
     let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]')
     if (!robots) {
       robots = document.createElement('meta')
@@ -194,14 +195,40 @@ export default function AdminPage() {
     }
     robots.content = 'noindex, nofollow, noarchive'
     let active = true
-    apiGet<SessionResponse>('/api/admin/session')
-      .then((result) => { if (active) setUser(result.authenticated ? result.user : null) })
-      .catch(() => { if (active) setUser(null) })
-      .finally(() => { if (active) setAuthChecked(true) })
+    async function initializeSession() {
+      try {
+        const result = await apiGet<SessionResponse>('/api/admin/session')
+        if (!active) return
+        if (result.authenticated && result.user) {
+          setUser(result.user)
+          return
+        }
+        if (demoMode) {
+          const demo = await apiPost<{ authenticated: boolean; user: AdminUser }>('/api/admin/login', { id: 'DEMO', password: '2Rdemo26' })
+          if (!active) return
+          setUser(demo.user)
+          setLoginId('')
+          setPassword('')
+          return
+        }
+        setUser(null)
+      } catch (error) {
+        if (!active) return
+        if (demoMode) {
+          try {
+            const demo = await apiPost<{ authenticated: boolean; user: AdminUser }>('/api/admin/login', { id: 'DEMO', password: '2Rdemo26' })
+            if (active) { setUser(demo.user); setLoginId(''); setPassword('') }
+          } catch { setUser(null) }
+        } else setUser(null)
+      } finally {
+        if (active) setAuthChecked(true)
+      }
+    }
+    void initializeSession()
     return () => {
       active = false
-      document.title = 'Boss67 Barbearia | Agendamento Online em Sidrolândia - MS'
-      robots?.setAttribute('content', 'index, follow, max-image-preview:large')
+      document.title = '2R Barber | Agendamento demonstrativo'
+      robots?.setAttribute('content', 'noindex, nofollow, noarchive')
     }
   }, [])
 
@@ -333,14 +360,14 @@ export default function AdminPage() {
 
   if (!authChecked) {
     return <main className="page-shell admin-shell">
-      <header className="topbar"><Link className="brand" to="/" aria-label="Voltar ao agendamento"><span className="brand-mark">B67</span><span><strong>BOSS67</strong><small>BARBEARIA</small></span></Link><span className="topbar-note">ÁREA ADMINISTRATIVA</span></header>
+      <header className="topbar"><Link className="brand" to="/" aria-label="Voltar ao agendamento"><span className="brand-mark">2R</span><span><strong>2R BARBER</strong><small>BARBEARIA</small></span></Link><span className="topbar-note">ÁREA ADMINISTRATIVA</span></header>
       <section className="booking-panel admin-loading"><p className="message" role="status">Verificando sua sessão...</p></section>
     </main>
   }
 
   if (!user) {
     return <main className="page-shell admin-shell">
-      <header className="topbar"><Link className="brand" to="/" aria-label="Voltar ao agendamento"><span className="brand-mark">B67</span><span><strong>BOSS67</strong><small>BARBEARIA</small></span></Link><span className="topbar-note">ÁREA ADMINISTRATIVA</span></header>
+      <header className="topbar"><Link className="brand" to="/" aria-label="Voltar ao agendamento"><span className="brand-mark">2R</span><span><strong>2R BARBER</strong><small>BARBEARIA</small></span></Link><span className="topbar-note">ÁREA ADMINISTRATIVA</span></header>
       <section className="booking-panel admin-login-panel" aria-labelledby="admin-login-title">
         <div className="section-heading"><span className="step-index">01</span><div><p className="eyebrow">ACESSO RESTRITO</p><h1 id="admin-login-title">Entre para gerenciar a agenda.</h1></div></div>
         <p className="step-description">Acesse com seu ID administrativo e senha.</p>
@@ -350,10 +377,10 @@ export default function AdminPage() {
           <label>Senha<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" maxLength={200} placeholder="Sua senha" required /></label>
           <button className="primary-button full-width" disabled={loginLoading}>{loginLoading ? 'Entrando...' : 'Entrar na administração'}</button>
         </form>
-        <p className="form-hint admin-dev-hint">Ambiente local de desenvolvimento: ID <strong>ADMIN</strong> · senha <strong>boss67demo</strong>. Essa credencial é apenas para testes locais.</p>
+        <p className="form-hint admin-dev-hint">Acesso de demonstração: ID <strong>DEMO</strong> · senha <strong>2Rdemo26</strong>. Todos os dados deste ambiente são fictícios.</p>
         <Link className="back-link" to="/">Voltar ao agendamento</Link>
       </section>
-      <footer className="footer"><span>Boss67 Barbearia</span><span>P15 · Núcleo administrativo</span></footer>
+      <footer className="footer"><span>2R Barber Studio</span><span>P15 · Núcleo administrativo</span></footer>
     </main>
   }
 
@@ -379,8 +406,8 @@ export default function AdminPage() {
   return (
     <div className="admin-app">
       <aside className="admin-sidebar">
-        <Link className="brand admin-sidebar-brand" to="/" aria-label="Boss67 Barbearia — agendamento público">
-          <span className="brand-mark">B67</span><span><strong>BOSS67</strong><small>BARBEARIA</small></span>
+        <Link className="brand admin-sidebar-brand" to="/" aria-label="2R Barber Studio — agendamento público">
+          <span className="brand-mark">2R</span><span><strong>2R BARBER</strong><small>BARBEARIA</small></span>
         </Link>
         <div className="admin-sidebar-divider" />
         <p className="admin-menu-label">MENU PRINCIPAL</p>
@@ -400,7 +427,7 @@ export default function AdminPage() {
 
       <div className="admin-main-wrap">
         <header className="admin-toolbar">
-          <div className="admin-breadcrumb"><span>Boss67 Barbearia</span><span className="admin-breadcrumb-divider">/</span><strong>{adminSectionLabels[adminSection]}</strong></div>
+          <div className="admin-breadcrumb"><span>2R Barber Studio</span><span className="admin-breadcrumb-divider">/</span><strong>{adminSectionLabels[adminSection]}</strong></div>
           <div className="admin-toolbar-actions">
             <Link to="/" target="_blank" rel="noreferrer" className="admin-view-public" aria-label="Abrir agendamento público"><AdminIcon name="external" size={15} /><span>Ver agendamento</span></Link>
             <button className="admin-icon-action" type="button" onClick={refreshCurrentView} aria-label="Atualizar dados"><AdminIcon name="refresh" size={17} /></button>
@@ -498,7 +525,7 @@ export default function AdminPage() {
 
           {(['services', 'professionals', 'hours', 'blocks'] as AdminSection[]).includes(adminSection) && <AdminSettings key={`${adminSection}-${settingsRefreshKey}`} section={adminSection as 'services' | 'professionals' | 'hours' | 'blocks'} onNotice={(message) => { setNotice(message); setAgendaError(''); setReloadKey((value) => value + 1) }} />}
         </main>
-        <footer className="admin-footer"><span>Boss67 Barbearia</span><span>Agenda e gestão de atendimentos</span></footer>
+        <footer className="admin-footer"><span>2R Barber Studio</span><span>Agenda e gestão de atendimentos</span></footer>
       </div>
     </div>
   )
