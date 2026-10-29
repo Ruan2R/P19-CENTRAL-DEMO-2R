@@ -413,6 +413,11 @@ export default function AdminPage() {
     setSettingsRefreshKey((value) => value + 1)
   }
 
+  const p19Package = new URLSearchParams(window.location.search).get('demoPackage') ?? '';
+  const isBasicBarberPackage = ['barber.agenda', 'barber.siteagenda'].includes(p19Package);
+  const visibleAdminNavItems = isBasicBarberPackage
+    ? adminNavItems.filter((item) => !['promotions', 'finance'].includes(item.id))
+    : adminNavItems;
   const upcomingGroups = (agenda?.bookingGroups ?? []).filter((group) => group.status === 'confirmed').slice(0, 5)
   const firstName = user.displayName.trim().split(/\s+/)[0] || 'Administrador'
 
@@ -425,7 +430,7 @@ export default function AdminPage() {
         <div className="admin-sidebar-divider" />
         <p className="admin-menu-label">MENU PRINCIPAL</p>
         <nav className="admin-nav" aria-label="Painel administrativo">
-          {adminNavItems.map((item) => (
+          {visibleAdminNavItems.map((item) => (
             <button key={item.id} type="button" className={adminSection === item.id ? 'active' : ''} aria-current={adminSection === item.id ? 'page' : undefined} onClick={() => navigateTo(item.id)}>
               <AdminIcon name={item.icon} size={19} /><span>{item.label}</span>
             </button>
