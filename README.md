@@ -59,7 +59,7 @@ As URLs podem ser configuradas no ambiente de build do portfólio:
 - `VITE_DEMO_BARBER_URL`: endereço público base do P15 (site e API).
 - `VITE_DEMO_BURGER_URL`: endereço público da interface do P16; a API do Burger também deve estar implantada e configurada no próprio front-end.
 
-O arquivo `.env.example` mostra as variáveis usadas para essa configuração. Os valores `127.0.0.1` presentes no código são apenas os padrões para desenvolvimento local; não devem ser usados numa publicação pública.
+O arquivo `.env.example` mostra as variáveis usadas para essa configuração. O front-end atual do Burger consulta a API pela mesma origem em `/api`; na publicação, essa rota precisa ser encaminhada ao servidor da API por um proxy reverso ou o cliente precisa ser adaptado para a URL pública da API. Os valores `127.0.0.1` presentes no código são apenas os padrões para desenvolvimento local; não devem ser usados numa publicação pública.
 
 ## Acessos do catálogo técnico
 
