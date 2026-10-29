@@ -3,17 +3,17 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { BookingPage } from './pages/BookingPage'
 import { AdminPage } from './pages/AdminPage'
 
-const PUBLIC_TITLE = 'Ana Amaral Lash Designer | Agendamento online'
-const PUBLIC_DESCRIPTION = 'Agende seu atendimento com Ana Amaral, Lash Designer em Sidrolândia, MS. Conheça os procedimentos e solicite seu horário.'
+const PUBLIC_TITLE = '2R Beauty Studio | Agendamento online'
+const PUBLIC_DESCRIPTION = 'Conheça os serviços do 2R Beauty Studio e solicite um horário de demonstração.'
 
 function RouteMetadata() {
   const { pathname } = useLocation()
 
   useEffect(() => {
     const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/')
-    const title = isAdminRoute ? 'Acesso administrativo | Ana Amaral Lash Designer' : PUBLIC_TITLE
+    const title = isAdminRoute ? 'Acesso administrativo | 2R Beauty Studio' : PUBLIC_TITLE
     const description = isAdminRoute
-      ? 'Área administrativa restrita da agenda de Ana Amaral Lash Designer.'
+      ? 'Área administrativa fictícia do 2R Beauty Studio.'
       : PUBLIC_DESCRIPTION
 
     document.title = title
