@@ -25,9 +25,9 @@ const DEMOS = [
   { id:'barber.siteagenda', name:'2R Barber Web + Agenda', segment:'Barber', title:'Landing page + agendamentos', description:'Página de apresentação da barbearia integrada ao exemplo de agendamentos.', modules:['site','booking','appointments','clients','services','professionals','hours','blocks','promotions'], color:'amber', icon:'site' },
   { id:'barber.agenda.financeiro', name:'2R Barber Gestão', segment:'Barber', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda, serviços, clientes e financeiro para demonstrar uma gestão mais completa.', modules:['overview','booking','appointments','clients','services','professionals','hours','blocks','promotions','finance'], color:'amber', icon:'finance' },
   { id:'barber.completo', name:'2R Barber Completo', segment:'Barber', title:'Solução completa Barber', description:'Landing page, agendamentos e administração completa com dados de demonstração.', modules:['site','overview','booking','appointments','clients','services','professionals','hours','blocks','promotions','finance'], color:'amber', icon:'sparkles' },
-  { id:'burger.pedidos', name:'2R Burger Pedidos', segment:'Burger', title:'Pedidos e operação', description:'Operação interna de atendimento, lançamento de pedidos, acompanhamento do preparo e controle de estoque.', modules:['overview','orders'], color:'orange', icon:'orders' },
-  { id:'burger.gestao', name:'2R Burger Gestão', segment:'Burger', title:'Financeiro, produtos e estoque', description:'Controle demonstrativo de produtos, estoque e movimentações financeiras.', modules:['overview','finance'], color:'orange', icon:'inventory' },
-  { id:'burger.completo', name:'2R Burger Completo', segment:'Burger', title:'Solução completa Burger', description:'Landing page, operação interna de pedidos, produtos, estoque e financeiro reunidos em uma demonstração.', modules:['site','overview','finance','orders'], color:'orange', icon:'sparkles' },
+  { id:'burger.pedidos', name:'2R Burger Pedidos', segment:'Burger', title:'Pedidos e operação', description:'Operação interna de atendimento, lançamento de pedidos, acompanhamento do preparo e controle de estoque.', modules:['orders'], color:'orange', icon:'orders' },
+  { id:'burger.gestao', name:'2R Burger Gestão', segment:'Burger', title:'Financeiro, produtos e estoque', description:'Controle demonstrativo de produtos, estoque e movimentações financeiras.', modules:['finance'], color:'orange', icon:'inventory' },
+  { id:'burger.completo', name:'2R Burger Completo', segment:'Burger', title:'Solução completa Burger', description:'Landing page, operação interna de pedidos, produtos, estoque e financeiro reunidos em uma demonstração.', modules:['finance','orders','site'], color:'orange', icon:'sparkles' },
 ];
 
 const MODULES = {
@@ -305,6 +305,10 @@ export default function App() {
   const isBarber = activeDemo.segment === 'Barber';
   const isBeauty = activeDemo.segment === 'Beauty';
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
+
+  if (isBurger && ['finance','orders'].includes(activeModule)) {
+    return <BurgerP16Showcase module={activeModule} notify={notify} onNavigate={changeModule} onExit={exitDemo} availableModules={currentModules}/>;
+  }
 
   return <div className={`app-shell demo-app ${activeDemo.color}`}>
     <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
