@@ -1897,3 +1897,14 @@
   .bb-confirmation { padding:16px; }
   .bb-confirmation-meta { grid-template-columns:1fr 1fr; }
 }
+
+
+/* Burger P16 main navigation — keeps the main operational areas obvious. */
+.p16-main-tabs { display:flex; align-items:center; flex-wrap:wrap; gap:5px; width:fit-content; max-width:100%; padding:4px; border:1px solid #e4e9ed; border-radius:9px; background:#f3f5f6; }
+.p16-main-tabs button { min-height:35px; padding:8px 15px; border:0; border-radius:6px; background:transparent; color:#748797; font-size:10px; font-weight:900; cursor:pointer; }
+.p16-main-tabs button:hover { background:#fff; color:#40586d; }
+.p16-main-tabs button.active { background:#fff; color:#987238; box-shadow:0 2px 6px rgba(28,45,62,.09); }
+@media (max-width:460px) {
+  .p16-main-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; }
+  .p16-main-tabs button { padding:8px 6px; }
+}
