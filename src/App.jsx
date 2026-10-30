@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import BeautyBookingPreview from './components/BeautyBookingPreview';
+import BeautyAdminShowcase from './components/BeautyAdminShowcase';
 import {
   Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, ChevronDown,
   CircleDollarSign, ClipboardList, Clock3, Copy, CreditCard, ExternalLink, Eye,
@@ -6,16 +8,16 @@ import {
   Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
   TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
   MoreHorizontal, CheckCircle2, Clock, CircleAlert, RefreshCw,
-  Code2, Wrench, Network, Linkedin, ShieldCheck
+  Code2, Wrench, Network, Linkedin, ShieldCheck, DoorClosed, Tag
 } from 'lucide-react';
 
 const DEMOS = [
   { id:'landing', name:'2R Landing Pages', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de página de demonstração.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
-  { id:'beauty.agenda', name:'2R Beauty Agenda', segment:'Beauty', title:'Agendamentos e administração básica', description:'Agendamento público para clientes, agenda do dia, serviços e cadastros fictícios para apresentar a rotina de uma profissional.', modules:['overview','booking','appointments','clients','services'], color:'rose', icon:'beauty' },
+  { id:'beauty.agenda', name:'2R Beauty Agenda', segment:'Beauty', title:'Agendamentos e administração básica', description:'Agendamento público para clientes, agenda do dia, serviços e cadastros fictícios para apresentar a rotina de uma profissional.', modules:['overview','booking','appointments','clients','services','promotions','hours','blocks','policies'], color:'rose', icon:'beauty' },
   { id:'beauty.financeiro', name:'2R Beauty Financeiro', segment:'Beauty', title:'Financeiro', description:'Demonstração isolada de receitas, despesas, movimentações e resumo do período.', modules:['finance'], color:'rose', icon:'finance' },
-  { id:'beauty.siteagenda', name:'2R Beauty Web + Agenda', segment:'Beauty', title:'Landing page + agendamentos', description:'Página pública para apresentar serviços e um fluxo de agendamento demonstrativo.', modules:['site','booking','appointments','clients','services'], color:'rose', icon:'site' },
-  { id:'beauty.agenda.financeiro', name:'2R Beauty Gestão', segment:'Beauty', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda administrativa, clientes, serviços e financeiro; sem landing page de marketing neste pacote.', modules:['overview','booking','appointments','clients','services','finance'], color:'rose', icon:'finance' },
-  { id:'beauty.completo', name:'2R Beauty Completo', segment:'Beauty', title:'Solução completa Beauty', description:'Experiência completa com landing page, agendamentos, gestão administrativa e financeiro.', modules:['site','overview','booking','appointments','clients','services','finance'], color:'rose', icon:'sparkles' },
+  { id:'beauty.siteagenda', name:'2R Beauty Web + Agenda', segment:'Beauty', title:'Landing page + agendamentos', description:'Página pública para apresentar serviços e um fluxo de agendamento demonstrativo.', modules:['site','booking','appointments','clients','services','promotions','hours','blocks','policies'], color:'rose', icon:'site' },
+  { id:'beauty.agenda.financeiro', name:'2R Beauty Gestão', segment:'Beauty', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda administrativa, clientes, serviços e financeiro; sem landing page de marketing neste pacote.', modules:['overview','booking','appointments','clients','services','promotions','hours','blocks','policies','finance'], color:'rose', icon:'finance' },
+  { id:'beauty.completo', name:'2R Beauty Completo', segment:'Beauty', title:'Solução completa Beauty', description:'Experiência completa com landing page, agendamentos, gestão administrativa e financeiro.', modules:['site','overview','booking','appointments','clients','services','promotions','hours','blocks','policies','finance'], color:'rose', icon:'sparkles' },
   { id:'barber.agenda', name:'2R Barber Agenda', segment:'Barber', title:'Agendamentos e administração', description:'Agendamento público para clientes, agenda administrativa, procedimentos, profissionais, promoções e gestão básica de uma barbearia.', modules:['overview','booking','appointments','clients','services','servicePromotions'], color:'amber', icon:'barber' },
   { id:'barber.siteagenda', name:'2R Barber Web + Agenda', segment:'Barber', title:'Landing page + agendamentos', description:'Página de apresentação da barbearia integrada ao exemplo de agendamentos.', modules:['site','booking','appointments','clients','services'], color:'amber', icon:'site' },
   { id:'barber.agenda.financeiro', name:'2R Barber Gestão', segment:'Barber', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda, serviços, clientes e financeiro para demonstrar uma gestão mais completa.', modules:['overview','booking','appointments','clients','services','finance'], color:'amber', icon:'finance' },
@@ -31,6 +33,10 @@ const MODULES = {
   booking: { label:'Agendamento público', icon:CalendarDays, description:'Página do cliente para escolher serviço e horário' },
   appointments: { label:'Agendamentos', icon:CalendarDays, description:'Agenda e atendimentos' },
   servicePromotions: { label:'Promoções', icon:Sparkles, description:'Exemplos de ofertas individuais e combos de procedimentos' },
+  promotions: { label:'Promoções', icon:Tag, description:'Campanhas com validade e preços promocionais por procedimento' },
+  hours: { label:'Horários', icon:Clock3, description:'Funcionamento semanal e intervalos de atendimento' },
+  blocks: { label:'Bloqueios', icon:DoorClosed, description:'Folgas e períodos indisponíveis na agenda' },
+  policies: { label:'Políticas', icon:ShieldCheck, description:'Orientações apresentadas antes do agendamento público' },
   clients: { label:'Clientes', icon:Users, description:'Base de clientes fictícios' },
   services: { label:'Serviços', icon:Scissors, description:'Procedimentos e duração' },
   finance: { label:'Financeiro', icon:Wallet, description:'Receitas, despesas e saldo' },
@@ -293,6 +299,7 @@ export default function App() {
   const activeSegment = SEGMENTS[siteSegment] || SEGMENTS.Beauty;
   const isBurger = activeDemo.segment === 'Burger';
   const isBarber = activeDemo.segment === 'Barber';
+  const isBeauty = activeDemo.segment === 'Beauty';
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
 
   return <div className={`app-shell demo-app ${activeDemo.color}`}>
@@ -305,16 +312,17 @@ export default function App() {
         <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Landing pages na prática':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Entenda o papel de uma página de apresentação e explore um exemplo visual.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> PRÉVIA INTERATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
         {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
         {activeModule==='overview'&&<OverviewModule demo={activeDemo} appointments={appointments} orders={orders} products={products} transactions={transactions} changeModule={changeModule}/>} 
-         {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professionalAssignments?.map(item=>item.service+': '+item.professional).join(' · ')}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />}
+         {activeModule==='booking'&&(isBeauty?<BeautyBookingPreview notify={notify}/>:<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professionalAssignments?.map(item=>item.service+': '+item.professional).join(' · ')}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />)}
          {activeModule==='orders'&&<BurgerOrdersModule attendanceOpen={attendanceOpen} setAttendanceOpen={setAttendanceOpen} attendanceOrders={attendanceOrders} setAttendanceOrders={setAttendanceOrders} products={products} setProducts={setProducts} notify={notify} />}
-        {activeModule==='appointments'&&<AppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>setModal('appointment')} isBarber={isBarber} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
-        {activeModule==='clients'&&<ClientsModule clients={clients} />}
-        {activeModule==='services'&&<ServicesModule services={services} />}
-        {activeModule==='finance'&&<FinanceModule transactions={transactions} setTransactions={setTransactions} openModal={()=>setModal('transaction')} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} />}
+        {!isBeauty&&activeModule==='appointments'&&<AppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>setModal('appointment')} isBarber={isBarber} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
+        {isBeauty&&['appointments','clients','services','promotions','hours','blocks','policies','finance'].includes(activeModule)&&<BeautyAdminShowcase module={activeModule} notify={notify}/>}
+        {!isBeauty&&activeModule==='clients'&&<ClientsModule clients={clients} />}
+        {!isBeauty&&activeModule==='services'&&<ServicesModule services={services} />}
+        {!isBeauty&&activeModule==='finance'&&<FinanceModule transactions={transactions} setTransactions={setTransactions} openModal={()=>setModal('transaction')} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} />}
         {activeModule==='servicePromotions'&&<PromotionsPreview promotions={promotions} setPromotions={setPromotions} />}
         {activeModule==='products'&&<ProductsModule products={products} />}
         {activeModule==='inventory'&&<InventoryModule products={products} setProducts={setProducts} />}
-        {activeDemo.segment !== 'Burger' && AUTOMATION_NOTES[activeDemo.segment] && <section className="panel automation-panel preview-automation-panel">
+        {activeDemo.segment !== 'Burger' && !isBeauty && AUTOMATION_NOTES[activeDemo.segment] && <section className="panel automation-panel preview-automation-panel">
           <div className="automation-heading"><div className="automation-icon"><Activity size={20}/></div><div><span className="eyebrow muted-eyebrow">COMO AS ÁREAS SE CONECTAM</span><h2>{AUTOMATION_NOTES[activeDemo.segment].title}</h2><p>Resumo ilustrativo do que esta modalidade pode reunir.</p></div></div>
           <div className="automation-points">{AUTOMATION_NOTES[activeDemo.segment].points.map((point,index)=><div className="automation-point" key={point}><span>{String(index+1).padStart(2,'0')}</span><p>{point}</p></div>)}</div>
         </section>}
