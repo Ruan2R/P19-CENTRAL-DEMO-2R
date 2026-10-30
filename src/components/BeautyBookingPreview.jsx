@@ -8,20 +8,20 @@ function localDate(offset = 0) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-  return `\${year}-\${month}-\${day}`;
+  return `${year}-${month}-${day}`;
 }
 function money(cents) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cents / 100);
 }
 function readableDate(value) {
   if (!value) return 'Selecione uma data';
-  return new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).format(new Date(`\${value}T12:00:00`));
+  return new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).format(new Date(`${value}T12:00:00`));
 }
 function formatInputPhone(value) {
   const digits = value.replace(/\D/g, '').slice(0, 11);
-  if (digits.length <= 2) return digits ? `(\${digits}` : '';
-  if (digits.length <= 7) return `(\${digits.slice(0, 2)}) \${digits.slice(2)}`;
-  return `(\${digits.slice(0, 2)}) \${digits.slice(2, 7)}-\${digits.slice(7)}`;
+  if (digits.length <= 2) return digits ? `(${digits}` : '';
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
 const SERVICES = [
   { id: 'svc-01', name: 'Lash lifting', category: 'Cílios', description: 'Realce e curvatura natural dos fios.', duration: 90, price: 15000, depositPercent: 20 },
@@ -44,7 +44,7 @@ function buildMinuteSlots() {
   const slots = [];
   for (let hour = 8; hour <= 18; hour += 1) {
     for (let minute = 0; minute < 60; minute += 1) {
-      const label = `\${String(hour).padStart(2, '0')}:\${String(minute).padStart(2, '0')}`;
+      const label = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
       if (hour === 12 || (hour === 13 && minute < 30)) continue;
       slots.push(label);
     }
@@ -168,7 +168,7 @@ export default function BeautyBookingPreview({ notify = () => {} }) {
               {items.map((service) => {
                 const promotion = promotionByService.get(service.id);
                 const checked = selectedIds.includes(service.id);
-                return <label className={`beauty-service-option \${checked ? 'is-selected' : ''}`} key={service.id}>
+                return <label className={`beauty-service-option ${checked ? 'is-selected' : ''}`} key={service.id}>
                   <input type="checkbox" checked={checked} onChange={() => toggleService(service.id)} />
                   <span><strong>{service.name}</strong><small>{service.description} · {service.duration} min {promotion ? '· promoção vigente' : ''}</small></span>
                   <b>{money(promotion?.price ?? service.price)}{promotion && <s>{money(service.price)}</s>}</b>
