@@ -9,22 +9,20 @@ import {
   Code2, Wrench, Network, Mail, Linkedin, ShieldCheck
 } from 'lucide-react';
 
-const PASSWORD = '2Rdemo26';
-
 const DEMOS = [
-  { id:'landing', name:'2R Landing Pages', user:'landing', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de acesso.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
-  { id:'beauty.agenda', name:'2R Beauty Agenda', user:'beauty.agenda', segment:'Beauty', title:'Agendamentos e administração básica', description:'Agendamento público para clientes, agenda do dia, serviços e cadastros fictícios para apresentar a rotina de uma profissional.', modules:['overview','booking','appointments','clients','services'], color:'rose', icon:'beauty' },
-  { id:'beauty.financeiro', name:'2R Beauty Financeiro', user:'beauty.financeiro', segment:'Beauty', title:'Financeiro', description:'Demonstração isolada de receitas, despesas, movimentações e resumo do período.', modules:['finance'], color:'rose', icon:'finance' },
-  { id:'beauty.siteagenda', name:'2R Beauty Web + Agenda', user:'beauty.siteagenda', segment:'Beauty', title:'Landing page + agendamentos', description:'Página pública para apresentar serviços e um fluxo de agendamento demonstrativo.', modules:['site','booking','appointments','clients','services'], color:'rose', icon:'site' },
-  { id:'beauty.agenda.financeiro', name:'2R Beauty Gestão', user:'beauty.agenda.financeiro', segment:'Beauty', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda administrativa, clientes, serviços e financeiro; sem landing page de marketing neste pacote.', modules:['overview','booking','appointments','clients','services','finance'], color:'rose', icon:'finance' },
-  { id:'beauty.completo', name:'2R Beauty Completo', user:'beauty.completo', segment:'Beauty', title:'Solução completa Beauty', description:'Experiência completa com landing page, agendamentos, gestão administrativa e financeiro.', modules:['site','overview','booking','appointments','clients','services','finance'], color:'rose', icon:'sparkles' },
-  { id:'barber.agenda', name:'2R Barber Agenda', user:'barber.agenda', segment:'Barber', title:'Agendamentos e administração', description:'Agendamento público para clientes, agenda administrativa, procedimentos, profissionais e gestão básica de uma barbearia.', modules:['overview','booking','appointments','clients','services'], color:'amber', icon:'barber' },
-  { id:'barber.siteagenda', name:'2R Barber Web + Agenda', user:'barber.siteagenda', segment:'Barber', title:'Landing page + agendamentos', description:'Página de apresentação da barbearia integrada ao exemplo de agendamentos.', modules:['site','booking','appointments','clients','services'], color:'amber', icon:'site' },
-  { id:'barber.agenda.financeiro', name:'2R Barber Gestão', user:'barber.agenda.financeiro', segment:'Barber', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda, serviços, clientes e financeiro para demonstrar uma gestão mais completa.', modules:['overview','booking','appointments','clients','services','finance'], color:'amber', icon:'finance' },
-  { id:'barber.completo', name:'2R Barber Completo', user:'barber.completo', segment:'Barber', title:'Solução completa Barber', description:'Landing page, agendamentos e administração completa com dados de demonstração.', modules:['site','overview','booking','appointments','clients','services','finance'], color:'amber', icon:'sparkles' },
-  { id:'burger.pedidos', name:'2R Burger Pedidos', user:'burger.pedidos', segment:'Burger', title:'Pedidos e operação', description:'Cardápio público para montar pedidos, acompanhar a operação e explorar produtos e estoque de uma hamburgueria ou adega.', modules:['overview','orderPublic','orders','products','inventory'], color:'orange', icon:'orders' },
-  { id:'burger.gestao', name:'2R Burger Gestão', user:'burger.gestao', segment:'Burger', title:'Financeiro, produtos e estoque', description:'Controle demonstrativo de produtos, estoque e movimentações financeiras.', modules:['overview','finance','products','inventory'], color:'orange', icon:'inventory' },
-  { id:'burger.completo', name:'2R Burger Completo', user:'burger.completo', segment:'Burger', title:'Solução completa Burger', description:'Landing page, pedidos, produtos, estoque e financeiro reunidos em uma demonstração.', modules:['site','overview','orderPublic','orders','products','inventory','finance'], color:'orange', icon:'sparkles' },
+  { id:'landing', name:'2R Landing Pages', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de acesso.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
+  { id:'beauty.agenda', name:'2R Beauty Agenda', segment:'Beauty', title:'Agendamentos e administração básica', description:'Agendamento público para clientes, agenda do dia, serviços e cadastros fictícios para apresentar a rotina de uma profissional.', modules:['overview','booking','appointments','clients','services'], color:'rose', icon:'beauty' },
+  { id:'beauty.financeiro', name:'2R Beauty Financeiro', segment:'Beauty', title:'Financeiro', description:'Demonstração isolada de receitas, despesas, movimentações e resumo do período.', modules:['finance'], color:'rose', icon:'finance' },
+  { id:'beauty.siteagenda', name:'2R Beauty Web + Agenda', segment:'Beauty', title:'Landing page + agendamentos', description:'Página pública para apresentar serviços e um fluxo de agendamento demonstrativo.', modules:['site','booking','appointments','clients','services'], color:'rose', icon:'site' },
+  { id:'beauty.agenda.financeiro', name:'2R Beauty Gestão', segment:'Beauty', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda administrativa, clientes, serviços e financeiro; sem landing page de marketing neste pacote.', modules:['overview','booking','appointments','clients','services','finance'], color:'rose', icon:'finance' },
+  { id:'beauty.completo', name:'2R Beauty Completo', segment:'Beauty', title:'Solução completa Beauty', description:'Experiência completa com landing page, agendamentos, gestão administrativa e financeiro.', modules:['site','overview','booking','appointments','clients','services','finance'], color:'rose', icon:'sparkles' },
+  { id:'barber.agenda', name:'2R Barber Agenda', segment:'Barber', title:'Agendamentos e administração', description:'Agendamento público para clientes, agenda administrativa, procedimentos, profissionais e gestão básica de uma barbearia.', modules:['overview','booking','appointments','clients','services'], color:'amber', icon:'barber' },
+  { id:'barber.siteagenda', name:'2R Barber Web + Agenda', segment:'Barber', title:'Landing page + agendamentos', description:'Página de apresentação da barbearia integrada ao exemplo de agendamentos.', modules:['site','booking','appointments','clients','services'], color:'amber', icon:'site' },
+  { id:'barber.agenda.financeiro', name:'2R Barber Gestão', segment:'Barber', title:'Agendamentos + gestão + financeiro', description:'Agendamento público, agenda, serviços, clientes e financeiro para demonstrar uma gestão mais completa.', modules:['overview','booking','appointments','clients','services','finance'], color:'amber', icon:'finance' },
+  { id:'barber.completo', name:'2R Barber Completo', segment:'Barber', title:'Solução completa Barber', description:'Landing page, agendamentos e administração completa com dados de demonstração.', modules:['site','overview','booking','appointments','clients','services','finance'], color:'amber', icon:'sparkles' },
+  { id:'burger.pedidos', name:'2R Burger Pedidos', segment:'Burger', title:'Pedidos e operação', description:'Cardápio público para montar pedidos, acompanhar a operação e explorar produtos e estoque de uma hamburgueria ou adega.', modules:['overview','orderPublic','orders','products','inventory'], color:'orange', icon:'orders' },
+  { id:'burger.gestao', name:'2R Burger Gestão', segment:'Burger', title:'Financeiro, produtos e estoque', description:'Controle demonstrativo de produtos, estoque e movimentações financeiras.', modules:['overview','finance','products','inventory'], color:'orange', icon:'inventory' },
+  { id:'burger.completo', name:'2R Burger Completo', segment:'Burger', title:'Solução completa Burger', description:'Landing page, pedidos, produtos, estoque e financeiro reunidos em uma demonstração.', modules:['site','overview','orderPublic','orders','products','inventory','finance'], color:'orange', icon:'sparkles' },
 ];
 
 const MODULES = {
@@ -98,10 +96,10 @@ const BARBER_CLIENTS = [
   { name:'Rafael Martins', contact:'(67) 9 0000-0104', visits:16, last:'27 out.' },
 ];
 const BARBER_APPOINTMENTS = [
-  { id:21, client:'Lucas Mendes', service:'Corte degradê', time:'09:00', date:'Hoje', status:'Confirmado', price:55, professional:'Felipe' },
-  { id:22, client:'Pedro Henrique', service:'Barba completa', time:'10:00', date:'Hoje', status:'Confirmado', price:35, professional:'Vitória' },
-  { id:23, client:'André Costa', service:'Corte + barba', time:'11:30', date:'Hoje', status:'Aguardando', price:80, professional:'Felipe' },
-  { id:24, client:'Rafael Martins', service:'Corte degradê', time:'14:00', date:'Hoje', status:'Confirmado', price:55, professional:'Felipe' },
+  { id:21, client:'Lucas Mendes', service:'Corte degradê', time:'09:00', date:'Hoje', status:'Confirmado', price:55, professional:'Profissional 1' },
+  { id:22, client:'Pedro Henrique', service:'Barba completa', time:'10:00', date:'Hoje', status:'Confirmado', price:35, professional:'Profissional 2' },
+  { id:23, client:'André Costa', service:'Corte + barba', time:'11:30', date:'Hoje', status:'Aguardando', price:80, professional:'Profissional 1' },
+  { id:24, client:'Rafael Martins', service:'Corte degradê', time:'14:00', date:'Hoje', status:'Confirmado', price:55, professional:'Profissional 1' },
 ];
 const BARBER_TRANSACTIONS = [
   { id:21, description:'Cortes e serviços do dia', category:'Receita', date:'Hoje', value:620 },
@@ -147,48 +145,6 @@ function localDateValue() {
 }
 
 function money(value) { return Number(value).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
-const DEMO_BASE_URLS = {
-  Beauty: import.meta.env.VITE_DEMO_BEAUTY_URL || 'http://127.0.0.1:3018',
-  Barber: import.meta.env.VITE_DEMO_BARBER_URL || 'http://127.0.0.1:3015',
-  Burger: import.meta.env.VITE_DEMO_BURGER_URL || 'http://127.0.0.1:5176',
-};
-
-function getNativeTargets(demo) {
-  const packageId = encodeURIComponent(demo.id);
-  if (demo.segment === 'Beauty') {
-    const base = DEMO_BASE_URLS.Beauty;
-    return { appUrl: base + '/admin?demoPackage=' + packageId, adminUrl: base + '/admin?demoPackage=' + packageId,
-      publicUrl: demo.modules.includes('booking') ? base + '/agendar?demoPackage=' + packageId : null,
-      adminLabel: demo.id === 'beauty.financeiro' ? 'Abrir financeiro original' : 'Abrir administração original',
-      publicLabel: 'Abrir agendamento do cliente', user: 'DEMO-2R', password: PASSWORD };
-  }
-  if (demo.segment === 'Barber') {
-    const base = DEMO_BASE_URLS.Barber;
-    return { appUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
-      adminUrl: base + '/admin/?demoPackage=' + packageId + '&demoLogin=DEMO',
-      publicUrl: demo.modules.includes('booking') ? base + '/?demoPackage=' + packageId : null,
-      adminLabel: 'Abrir administração original', publicLabel: 'Abrir agendamento do cliente',
-      user: 'DEMO', password: PASSWORD };
-  }
-  if (demo.segment === 'Burger') {
-    const login = demo.id === 'burger.gestao' ? 'admin' : 'admin02';
-    const base = DEMO_BASE_URLS.Burger;
-    return { appUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
-      adminUrl: base + '/?demoUser=' + login + '&demoPackage=' + packageId,
-      publicUrl: null,
-      adminLabel: demo.id === 'burger.gestao' ? 'Abrir acesso financeiro original' : 'Abrir sistema de pedidos original',
-      publicLabel: '', user: login, password: PASSWORD };
-  }
-  return { appUrl: null, adminUrl: null, publicUrl: null, adminLabel: 'Abrir aplicação original', publicLabel: '', user: demo.user, password: PASSWORD };
-}
-
-function openNativeApp(url, notify) {
-  if (!url) { notify('Esta rota não está disponível neste pacote.'); return; }
-  const child = window.open(url, '_blank');
-  if (child) { child.opener = null; return; }
-  notify('O navegador bloqueou a nova aba. Permita pop-ups para localhost e tente novamente.');
-}
-
 const AUTOMATION_NOTES = {
   Beauty: {
     title: 'Agendamento, cadastro e financeiro conectados',
@@ -223,7 +179,7 @@ function IconForDemo({ demo }) {
   const Icon = demo.icon === 'beauty' ? Sparkles : demo.icon === 'barber' ? Scissors : demo.icon === 'orders' ? ShoppingBag : demo.icon === 'inventory' ? Boxes : demo.icon === 'finance' ? Wallet : demo.icon === 'site' ? MonitorSmartphone : demo.icon === 'sparkles' ? Sparkles : Grid2X2;
   return <Icon size={20} strokeWidth={1.8} />;
 }
-function getStartModule(demo) { return demo.modules[0] === 'site' && demo.modules.length > 1 ? 'site' : demo.modules[0]; }
+function getStartModule(demo) { return demo.modules[0]; }
 
 export default function App() {
   const [activeDemo, setActiveDemo] = useState(null);
@@ -231,8 +187,6 @@ export default function App() {
   const [activeModule, setActiveModule] = useState('overview');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('Todos');
-  const [showAccessDetails, setShowAccessDetails] = useState(true);
-  const [copied, setCopied] = useState('');
   const [mobileNav, setMobileNav] = useState(false);
   const [appointments, setAppointments] = useState(INITIAL_APPOINTMENTS);
   const [orders, setOrders] = useState(INITIAL_ORDERS);
@@ -247,7 +201,7 @@ export default function App() {
   const [transactionForm, setTransactionForm] = useState({description:'',category:'Receita',value:''});
 
   const visibleDemos = useMemo(() => DEMOS.filter(demo => {
-    const matchesText = `${demo.name} ${demo.title} ${demo.description} ${demo.user}`.toLowerCase().includes(search.toLowerCase());
+    const matchesText = `${demo.name} ${demo.title} ${demo.description}`.toLowerCase().includes(search.toLowerCase());
     const matchesFilter = filter === 'Todos' || demo.segment === filter;
     return matchesText && matchesFilter;
   }), [search, filter]);
@@ -256,19 +210,10 @@ export default function App() {
     setToast(message);
     window.setTimeout(() => setToast(''), 2300);
   }
-  async function copyText(value, key) {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(key);
-      window.setTimeout(() => setCopied(''), 1600);
-    } catch {
-      notify(`Copie manualmente: ${value}`);
-    }
-  }
   function enterDemo(demo) {
     const seed = getSeedData(demo.segment === 'Vitrine' ? 'Beauty' : demo.segment);
     setActiveDemo(demo);
-    setActiveModule(demo.segment === 'Vitrine' ? 'site' : 'launch');
+    setActiveModule(getStartModule(demo));
     setSiteSegment(demo.segment === 'Vitrine' ? 'Beauty' : demo.segment);
     setAppointments(seed.appointments);
     setOrders(seed.orders);
@@ -281,31 +226,22 @@ export default function App() {
     setMobileNav(false);
     setModal(null);
   }
-  function exitDemo() { setActiveDemo(null); setMobileNav(false); setPage('portfolio'); }
+  function exitDemo() { setActiveDemo(null); setMobileNav(false); setPage('catalog'); }
   function canUse(module) { return activeDemo?.modules.includes(module); }
   function changeModule(module) {
     setMobileNav(false);
-    if (module === 'launch') { setActiveModule('launch'); return; }
-    if (activeDemo && activeDemo.segment !== 'Vitrine' && module !== 'site') {
-      const targets = getNativeTargets(activeDemo);
-      const url = module === 'booking' ? targets.publicUrl : module === 'orderPublic' ? targets.appUrl : targets.adminUrl;
-      openNativeApp(url, notify);
-      return;
-    }
-    setActiveModule(module);
+    if (activeDemo?.modules.includes(module)) setActiveModule(module);
   }
 
-  if (activeDemo && activeDemo.segment !== 'Vitrine' && activeModule === 'launch') { return <NativeLaunchPage demo={activeDemo} onBack={exitDemo} onOpenSite={() => setActiveModule('site')} notify={notify} />; }
-
   if (!activeDemo && page === 'portfolio') {
-    return <PortfolioHome onOpenDemo={(id) => { const selected = DEMOS.find(item => item.id === id); if (selected) enterDemo(selected); }} onOpenCatalog={() => setPage('catalog')} />;
+    return <PortfolioHome onOpenCatalog={(segment = 'Todos') => { setFilter(segment); setSearch(''); setPage('catalog'); }} />;
   }
 
   if (!activeDemo) {
     return <div className="app-shell hub-shell">
       <header className="topbar hub-topbar">
         <div className="brand-lockup"><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Seu parceiro em Tecnologia</div></div></div>
-        <div className="topbar-right"><span className="demo-pill"><span className="pulse-dot"/> AMBIENTE DE DEMONSTRAÇÃO</span><button className="catalog-back-button" onClick={() => setPage('portfolio')}><ArrowLeft size={15}/><span>Portfólio</span></button><div className="user-avatar">RC</div></div>
+        <div className="topbar-right"><span className="demo-pill"><span className="pulse-dot"/> MODALIDADES 2R</span><button className="catalog-back-button" onClick={() => setPage('portfolio')}><ArrowLeft size={15}/><span>Portfólio</span></button></div>
       </header>
       <main className="hub-main">
         <section className="hero-banner">
@@ -319,21 +255,21 @@ export default function App() {
         </section>
 
         <section className="catalog-section">
-          <div className="section-heading"><div><div className="eyebrow muted-eyebrow">CATÁLOGO DE ACESSOS</div><h2>Qual solução vamos mostrar?</h2><p>As descrições ficam aqui para você localizar o pacote rapidamente durante a apresentação.</p></div><div className="catalog-count"><strong>{visibleDemos.length.toString().padStart(2,'0')}</strong><span>opções</span></div></div>
-          <div className="catalog-toolbar"><label className="search-box"><Search size={18}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar por nome, módulo ou usuário..."/><kbd>⌕</kbd></label><div className="filter-pills" aria-label="Filtrar por segmento">{['Todos','Vitrine','Beauty','Barber','Burger'].map(item=><button key={item} className={`filter-pill ${filter===item?'selected':''}`} onClick={()=>setFilter(item)}>{item}</button>)}</div></div>
+          <div className="section-heading"><div><div className="eyebrow muted-eyebrow">MODALIDADES DE APLICAÇÃO</div><h2>Qual modalidade você quer conhecer?</h2><p>Escolha um pacote para abrir uma prévia visual das telas e dos recursos incluídos.</p></div><div className="catalog-count"><strong>{visibleDemos.length.toString().padStart(2,'0')}</strong><span>opções</span></div></div>
+          <div className="catalog-toolbar"><label className="search-box"><Search size={18}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar modalidade, recurso ou segmento..."/><kbd>⌕</kbd></label><div className="filter-pills" aria-label="Filtrar por segmento">{['Todos','Vitrine','Beauty','Barber','Burger'].map(item=><button key={item} className={`filter-pill ${filter===item?'selected':''}`} onClick={()=>setFilter(item)}>{item}</button>)}</div></div>
           {['Vitrine','Beauty','Barber','Burger'].filter(group=>filter==='Todos'||filter===group).map(group=>{
             const list=visibleDemos.filter(d=>d.segment===group);
             if (!list.length) return null;
-            return <div className="segment-group" key={group}><div className="segment-heading"><div className={`segment-icon ${group.toLowerCase()}`}>{group==='Vitrine'?<MonitorSmartphone size={18}/>:group==='Beauty'?<Sparkles size={18}/>:group==='Barber'?<Scissors size={18}/>:<ShoppingBag size={18}/>}</div><div><h3>{group==='Vitrine'?'Modelos de landing page':group==='Beauty'?'Beauty & estética':group==='Barber'?'Barbearia':'Pedidos & alimentação'}</h3><p>{group==='Vitrine'?'Demonstre diferentes estilos de página':group==='Beauty'?'Agenda, gestão e financeiro para profissionais da beleza':group==='Barber'?'Agenda e gestão para barbearias':'Pedidos, produtos, estoque e financeiro'}</p></div><span className="group-count">{list.length} {list.length===1?'acesso':'acessos'}</span></div>
-              <div className="demo-grid">{list.map((demo,index)=><article className={`demo-card ${demo.color}`} key={demo.id} style={{'--card-index':index}}><div className="demo-card-top"><div className={`demo-card-icon ${demo.color}`}><IconForDemo demo={demo}/></div><span className="demo-segment-tag">{demo.segment==='Vitrine'?'LANDING PAGE':demo.segment.toUpperCase()}</span><button className="icon-quiet" title="Copiar usuário" onClick={()=>copyText(demo.user,demo.id)}>{copied===demo.id?<Check size={16}/>:<Copy size={16}/>}</button></div><h4>{demo.name}</h4><div className="demo-card-title">{demo.title}</div><p>{demo.description}</p><div className="module-chips">{demo.modules.filter(m=>m!=='overview').slice(0,4).map(m=><span key={m}>{MODULES[m].label}</span>)}{demo.modules.filter(m=>m!=='overview').length>4&&<span>+{demo.modules.filter(m=>m!=='overview').length-4}</span>}</div>
-                {showAccessDetails&&<div className="credential-row"><span><LockKeyhole size={13}/> {demo.user}</span><button onClick={()=>copyText(demo.user,demo.id)}>{copied===demo.id?'Copiado':'Copiar usuário'}</button></div>}
-                <button className="enter-demo-button" onClick={()=>enterDemo(demo)}><span>Acessar demonstração</span><ArrowUpRight size={17}/></button></article>)}</div>
+            return <div className="segment-group" key={group}><div className="segment-heading"><div className={`segment-icon ${group.toLowerCase()}`}>{group==='Vitrine'?<MonitorSmartphone size={18}/>:group==='Beauty'?<Sparkles size={18}/>:group==='Barber'?<Scissors size={18}/>:<ShoppingBag size={18}/>}</div><div><h3>{group==='Vitrine'?'Modelos de landing page':group==='Beauty'?'Beauty & estética':group==='Barber'?'Barbearia':'Pedidos & alimentação'}</h3><p>{group==='Vitrine'?'Demonstre diferentes estilos de página':group==='Beauty'?'Agenda, gestão e financeiro para profissionais da beleza':group==='Barber'?'Agenda e gestão para barbearias':'Pedidos, produtos, estoque e financeiro'}</p></div><span className="group-count">{list.length} {list.length===1?'modalidade':'modalidades'}</span></div>
+              <div className="demo-grid">{list.map((demo,index)=><article className={`demo-card ${demo.color}`} key={demo.id} style={{'--card-index':index}}><div className="demo-card-top"><div className={`demo-card-icon ${demo.color}`}><IconForDemo demo={demo}/></div><span className="demo-segment-tag">{demo.segment==='Vitrine'?'LANDING PAGE':demo.segment.toUpperCase()}</span></div><h4>{demo.name}</h4><div className="demo-card-title">{demo.title}</div><p>{demo.description}</p><div className="module-chips">{demo.modules.filter(m=>m!=='overview').slice(0,4).map(m=><span key={m}>{MODULES[m].label}</span>)}{demo.modules.filter(m=>m!=='overview').length>4&&<span>+{demo.modules.filter(m=>m!=='overview').length-4}</span>}</div>
+                {showAccessDetails&&}
+                <button className="enter-demo-button" onClick={()=>enterDemo(demo)}><span>Visualizar modalidade</span><ArrowUpRight size={17}/></button></article>)}</div>
             </div>;
           })}
-          {visibleDemos.length===0&&<div className="empty-state"><Search size={28}/><strong>Nenhum acesso encontrado</strong><span>Tente outro nome ou segmento.</span></div>}
+          {visibleDemos.length===0&&<div className="empty-state"><Search size={28}/><strong>Nenhum modalidade encontrada</strong><span>Tente outro nome, recurso ou segmento.</span></div>}
         </section>
 
-        <section className="access-note"><div className="access-note-icon"><LockKeyhole size={20}/></div><div className="access-note-copy"><strong>Credenciais rápidas para apresentação</strong><p>Todos os perfis usam a mesma senha de demonstração. Os cartões entram direto no ambiente escolhido para agilizar a gravação e as apresentações.</p><div className="shared-password"><span>Senha padrão</span><code>{PASSWORD}</code><button onClick={()=>copyText(PASSWORD,'password')}>{copied==='password'?<Check size={14}/>:<Copy size={14}/>} {copied==='password'?'Copiada':'Copiar senha'}</button></div></div><button className="details-toggle" onClick={()=>setShowAccessDetails(v=>!v)}>{showAccessDetails?'Ocultar usuários':'Mostrar usuários'}<ChevronDown size={16} className={showAccessDetails?'rotated':''}/></button></section>
+        <section className="access-note portfolio-demo-disclaimer"><div className="access-note-icon"><Eye size={20}/></div><div className="access-note-copy"><strong>Prévia visual, sem login e sem cadastro</strong><p>As telas usam informações fictícias. Os botões e formulários servem apenas para demonstrar os fluxos; nada é enviado a clientes ou gravado em banco de dados.</p></div></section>
       </main>
       <footer className="footer"><span>2R INFORMÁTICA · Seu parceiro em Tecnologia</span><span><span className="footer-dot"/> Dados fictícios para demonstração</span></footer>
       {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
@@ -347,13 +283,13 @@ export default function App() {
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
 
   return <div className={`app-shell demo-app ${activeDemo.color}`}>
-    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Central de demonstrações</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span>{activeDemo.segment !== 'Vitrine' && <button className="back-hub-button" onClick={() => changeModule('launch')}><ArrowLeft size={16}/><span>Apresentação</span></button>}<button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Todos os acessos</span></button><div className="user-avatar">2R</div></div></header>
+    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Central de demonstrações</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
     <div className="demo-layout">
-      <aside className={`sidebar ${mobileNav?'show-mobile':''}`}><div className="sidebar-workspace"><div className={`workspace-avatar ${activeDemo.color}`}><IconForDemo demo={activeDemo}/></div><div className="workspace-meta"><strong>{activeDemo.name}</strong><span>Ambiente de demonstração</span></div><button className="icon-quiet sidebar-close" onClick={()=>setMobileNav(false)}><X size={17}/></button></div><div className="sidebar-section-label">MENU DO SISTEMA</div><nav className="side-nav">{currentModules.map(module=>{const item=MODULES[module];const Icon=item.icon;return <button key={module} className={`side-nav-item ${activeModule===module?'active':''}`} onClick={()=>changeModule(module)}><Icon size={18}/><span>{item.label}</span>{activeModule===module&&<span className="nav-active-mark"/>}</button>})}</nav><div className="sidebar-bottom"><div className="demo-data-note"><div><Sparkles size={15}/><strong>Modo demonstração</strong></div><p>Alterações feitas aqui usam dados fictícios e temporários.</p></div><button className="side-nav-item exit-item" onClick={exitDemo}><LogOut size={18}/><span>Trocar de demonstração</span></button></div></aside>
+      <aside className={`sidebar ${mobileNav?'show-mobile':''}`}><div className="sidebar-workspace"><div className={`workspace-avatar ${activeDemo.color}`}><IconForDemo demo={activeDemo}/></div><div className="workspace-meta"><strong>{activeDemo.name}</strong><span>Prévia visual do pacote</span></div><button className="icon-quiet sidebar-close" onClick={()=>setMobileNav(false)}><X size={17}/></button></div><div className="sidebar-section-label">NAVEGAR NA PRÉVIA</div><nav className="side-nav">{currentModules.map(module=>{const item=MODULES[module];const Icon=item.icon;return <button key={module} className={`side-nav-item ${activeModule===module?'active':''}`} onClick={()=>changeModule(module)}><Icon size={18}/><span>{item.label}</span>{activeModule===module&&<span className="nav-active-mark"/>}</button>})}</nav><div className="sidebar-bottom"><div className="demo-data-note"><div><Sparkles size={15}/><strong>Modo demonstração</strong></div><p>Alterações feitas aqui usam dados fictícios e temporários.</p></div><button className="side-nav-item exit-item" onClick={exitDemo}><LogOut size={18}/><span>Trocar de demonstração</span></button></div></aside>
       {mobileNav&&<button className="mobile-scrim" aria-label="Fechar menu" onClick={()=>setMobileNav(false)}/>}
       <main className="demo-main">
         <div className="demo-breadcrumb"><span>Central 2R</span><ArrowRight size={13}/><span>{activeDemo.segment}</span><ArrowRight size={13}/><strong>{MODULES[activeModule]?.label || 'Demonstração'}</strong></div>
-        <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Experiência pública':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Visualize a página que pode ser apresentada ao cliente.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> DEMO ATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
+        <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Experiência pública':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Visualize a página que pode ser apresentada ao cliente.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> PRÉVIA INTERATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
         {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} activeSegment={activeSegment} onCta={()=>{if(activeDemo.segment==='Burger'&&canUse('orderPublic'))changeModule('orderPublic');else if(canUse('booking'))changeModule('booking');else notify('Esta é uma prévia visual. O fluxo interativo está disponível nos pacotes com agendamento ou pedidos.');}} />}
         {activeModule==='overview'&&<OverviewModule demo={activeDemo} appointments={appointments} orders={orders} products={products} transactions={transactions} changeModule={changeModule}/>} 
          {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professional}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />}
@@ -365,7 +301,11 @@ export default function App() {
         {activeModule==='orders'&&<OrdersModule orders={orders} setOrders={setOrders} />}
         {activeModule==='products'&&<ProductsModule products={products} />}
         {activeModule==='inventory'&&<InventoryModule products={products} setProducts={setProducts} />}
-        <div className="demo-footer-note"><LockKeyhole size={14}/><span>Esta tela usa dados fictícios de apresentação. Não representa informações de clientes reais.</span><button onClick={()=>copyText(activeDemo.user,'demoUser')}><Copy size={13}/>{copied==='demoUser'?'Usuário copiado':`Usuário: ${activeDemo.user}`}</button></div>
+        {AUTOMATION_NOTES[activeDemo.segment] && <section className="panel automation-panel preview-automation-panel">
+          <div className="automation-heading"><div className="automation-icon"><Activity size={20}/></div><div><span className="eyebrow muted-eyebrow">COMO AS ÁREAS SE CONECTAM</span><h2>{AUTOMATION_NOTES[activeDemo.segment].title}</h2><p>Resumo ilustrativo do que esta modalidade pode reunir.</p></div></div>
+          <div className="automation-points">{AUTOMATION_NOTES[activeDemo.segment].points.map((point,index)=><div className="automation-point" key={point}><span>{String(index+1).padStart(2,'0')}</span><p>{point}</p></div>)}</div>
+        </section>}
+        <div className="demo-footer-note"><Eye size={14}/><span>Prévia ilustrativa: nenhuma informação é enviada ou salva. As alterações são temporárias e reiniciam ao recarregar a página.</span></div>
       </main>
     </div>
     {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();setAppointments(prev=>[...prev,{id:Date.now(),client:appointmentForm.client||'Cliente demonstrativo',service:appointmentForm.service,time:appointmentForm.time,date:'Hoje',status:'Aguardando',price:services.find(s=>s.name===appointmentForm.service)?.price||40}].sort((a,b)=>a.time.localeCompare(b.time)));setModal(null);notify('Agendamento fictício adicionado.')}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins"/></label><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar exemplo</button></div></form></Modal>}
@@ -374,42 +314,6 @@ export default function App() {
   </div>;
 }
 
-
-function NativeLaunchPage({demo,onBack,onOpenSite,notify}) {
-  const targets = getNativeTargets(demo);
-  const notes = AUTOMATION_NOTES[demo.segment];
-  const hasSite = demo.modules.includes('site');
-  const isBurger = demo.segment === 'Burger';
-  return <div className={'app-shell hub-shell native-launch ' + demo.color}>
-    <header className="topbar hub-topbar">
-      <div className="brand-lockup"><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Seu parceiro em Tecnologia</div></div></div>
-      <div className="topbar-right"><span className="demo-pill"><span className="pulse-dot"/> AMBIENTE LOCAL DE DEMONSTRAÇÃO</span><button className="secondary-button" onClick={onBack}><ArrowLeft size={15}/> Todos os acessos</button></div>
-    </header>
-    <main className="native-launch-main">
-      <div className="native-breadcrumb"><span>Central 2R</span><ArrowRight size={13}/><span>{demo.segment}</span><ArrowRight size={13}/><strong>{demo.name}</strong></div>
-      <section className="native-launch-hero">
-        <div className={'native-app-mark ' + demo.color}>{demo.segment==='Beauty'?<Sparkles size={28}/>:demo.segment==='Barber'?<Scissors size={28}/>:<ShoppingBag size={28}/>}</div>
-        <div className="native-launch-title"><span className="eyebrow muted-eyebrow">PACOTE DE DEMONSTRAÇÃO</span><h1>{demo.name}</h1><p>{demo.description}</p><div className="native-source-note"><CheckCircle2 size={15}/> Esta apresentação abre o código original do produto, com armazenamento local e dados fictícios.</div></div>
-      </section>
-      <section className="native-target-grid">
-        {hasSite && <article className="panel native-target-card"><div className="native-target-icon"><MonitorSmartphone size={20}/></div><div className="native-target-copy"><h2>Landing page</h2><p>Prévia de apresentação com identidade fictícia para explicar como a página se integra aos módulos do sistema.</p></div><button className="secondary-button" onClick={onOpenSite}>Ver prévia <ArrowUpRight size={15}/></button></article>}
-        {targets.publicUrl && <article className="panel native-target-card"><div className="native-target-icon"><CalendarDays size={20}/></div><div className="native-target-copy"><h2>Agendamento público</h2><p>Abra a página original em que o cliente escolhe os serviços e solicita o horário. A reserva aparece na administração.</p></div><button className="primary-button" onClick={()=>openNativeApp(targets.publicUrl,notify)}>{targets.publicLabel}<ArrowUpRight size={15}/></button></article>}
-        <article className="panel native-target-card"><div className="native-target-icon"><LayoutDashboard size={20}/></div><div className="native-target-copy"><h2>{isBurger?'Sistema administrativo original':'Área administrativa original'}</h2><p>Interface, navegação e regras do projeto de origem, sem substituir o painel por uma tela simulada.</p></div><button className="primary-button" onClick={()=>openNativeApp(targets.adminUrl,notify)}>{targets.adminLabel}<ArrowUpRight size={15}/></button></article>
-      </section>
-      <section className="panel automation-panel">
-        <div className="automation-heading"><div className="automation-icon"><Activity size={20}/></div><div><span className="eyebrow muted-eyebrow">LEMBRETE PARA A APRESENTAÇÃO</span><h2>{notes.title}</h2><p>Use estes pontos como roteiro enquanto mostra o fluxo real.</p></div></div>
-        <div className="automation-points">{notes.points.map((point,index)=><div className="automation-point" key={point}><span>{String(index+1).padStart(2,'0')}</span><p>{point}</p></div>)}</div>
-        <div className="automation-reminder"><Sparkles size={17}/><div><strong>O que vale destacar</strong><p>{notes.reminder}</p></div><button className="icon-quiet" title="Copiar lembrete" onClick={()=>{navigator.clipboard.writeText(notes.reminder).then(()=>notify('Lembrete copiado.')).catch(()=>notify(notes.reminder));}}><Copy size={16}/></button></div>
-      </section>
-      <section className="panel native-credentials">
-        <div className="native-credentials-head"><LockKeyhole size={19}/><div><strong>Credenciais do aplicativo original</strong><p>Usadas somente nas cópias locais deste P19; não são credenciais de clientes reais.</p></div></div>
-        <div className="native-credential-pills"><span>Usuário <code>{targets.user}</code></span><span>Senha <code>{targets.password}</code></span><button className="text-action" onClick={()=>{navigator.clipboard.writeText('Usuário: '+targets.user+'\nSenha: '+targets.password).then(()=>notify('Credenciais copiadas.')).catch(()=>notify('Copie o usuário e a senha exibidos.'));}}><Copy size={14}/> Copiar credenciais</button></div>
-        {isBurger && <p className="credentials-help">O P16 já possui dois perfis nativos: financeiro (admin) e completo (admin02). A central direciona para o perfil adequado ao pacote.</p>}
-      </section>
-      <div className="native-launch-footer"><LockKeyhole size={14}/><span>Somente dados fictícios e armazenamento local. Nenhum banco de produção é conectado pelo P19.</span></div>
-    </main>
-  </div>;
-}
 
 function MetricCard({label,value,delta,icon:Icon,kind='blue',footnote}) { return <div className="metric-card"><div className={`metric-icon ${kind}`}><Icon size={19}/></div><span className="metric-label">{label}</span><strong className="metric-value">{value}</strong><div className="metric-foot"><span className={delta?.startsWith('-')?'negative':'positive'}>{delta}</span>{footnote&&<span>{footnote}</span>}</div></div>; }
 function OverviewModule({demo,appointments,orders,products,transactions,changeModule}) {
@@ -514,7 +418,7 @@ function PublicBookingModule({segment,services,onBook}) {
           <div className="booking-service-list">{services.map(service=><button type="button" key={service.name} className={'booking-service-option'+(form.services.includes(service.name)?' selected':'')} aria-pressed={form.services.includes(service.name)} onClick={()=>toggleService(service.name)}><span className="booking-radio"/><span className="booking-service-copy"><strong>{service.name}</strong><small>{service.type} · {service.duration}</small></span><b>{money(service.price)}</b></button>)}</div>
         </section>
         <section className="panel booking-card"><div className="booking-step"><span>02</span><div><h3>Data e horário</h3><p>Selecione uma opção para a demonstração.</p></div></div>
-          <div className="booking-fields"><label>Data<input type="date" min={localDateValue()} value={form.date} onChange={e=>setForm(prev=>({...prev,date:e.target.value}))} required/></label><label>Profissional<select value={form.professional} onChange={e=>setForm(prev=>({...prev,professional:e.target.value}))}><option>Sem preferência</option>{(segment==='Barber'?['Felipe','Vitória']:['Profissional principal']).map(person=><option key={person}>{person}</option>)}</select></label></div>
+          <div className="booking-fields"><label>Data<input type="date" min={localDateValue()} value={form.date} onChange={e=>setForm(prev=>({...prev,date:e.target.value}))} required/></label><label>Profissional<select value={form.professional} onChange={e=>setForm(prev=>({...prev,professional:e.target.value}))}><option>Sem preferência</option>{(segment==='Barber'?['Profissional 1','Profissional 2']:['Profissional principal']).map(person=><option key={person}>{person}</option>)}</select></label></div>
           <div className="booking-time-grid">{timeSlots.map(time=><button type="button" key={time} className={form.time===time?'selected':''} onClick={()=>setForm(prev=>({...prev,time}))}><Clock3 size={14}/>{time}</button>)}</div>
         </section>
       </div>
@@ -558,7 +462,7 @@ function Modal({title,onClose,children}) { return <div className="modal-overlay"
 
 
 
-function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
+function PortfolioHome({ onOpenCatalog }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   function closeMenu() { setMobileMenuOpen(false); }
 
@@ -622,10 +526,10 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
             <a className="portfolio-text-link" href="#projetos">Ver os projetos <ArrowRight size={16}/></a>
           </div>
           <div className="portfolio-service-grid">
-            <a className="portfolio-service-card" href="#projetos"><span className="portfolio-service-icon"><Code2 size={21}/></span><span className="portfolio-service-copy"><strong>Aplicações web</strong><small>Sistemas que organizam processos e informações.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
-            <a className="portfolio-service-card" href="#projeto-beauty"><span className="portfolio-service-icon"><CalendarDays size={21}/></span><span className="portfolio-service-copy"><strong>Agendamento e atendimento</strong><small>Serviços, horários e clientes no mesmo fluxo.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
-            <a className="portfolio-service-card" href="#projeto-burger"><span className="portfolio-service-icon"><CircleDollarSign size={21}/></span><span className="portfolio-service-copy"><strong>Gestão do negócio</strong><small>Pedidos, financeiro, produtos e estoque.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
-            <a className="portfolio-service-card" href="#contato"><span className="portfolio-service-icon"><Network size={21}/></span><span className="portfolio-service-copy"><strong>Suporte e infraestrutura</strong><small>Redes, equipamentos e suporte de TI.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Vitrine')}}><span className="portfolio-service-icon"><Code2 size={21}/></span><span className="portfolio-service-copy"><strong>Landing pages</strong><small>Páginas de apresentação para marcas e negócios.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Beauty')}}><span className="portfolio-service-icon"><CalendarDays size={21}/></span><span className="portfolio-service-copy"><strong>Beauty & estética</strong><small>Agendamento, gestão e financeiro.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Barber')}}><span className="portfolio-service-icon"><Scissors size={21}/></span><span className="portfolio-service-copy"><strong>Barbearias</strong><small>Agendamentos, serviços e gestão.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
+            <a className="portfolio-service-card" href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Burger')}}><span className="portfolio-service-icon"><ShoppingBag size={21}/></span><span className="portfolio-service-copy"><strong>Pedidos & alimentação</strong><small>Pedidos, produtos, estoque e financeiro.</small></span><ArrowUpRight className="portfolio-service-arrow" size={17}/></a>
           </div>
         </div>
       </section>
@@ -633,25 +537,25 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
       <section className="portfolio-section portfolio-projects-section" id="projetos">
         <div className="portfolio-container">
           <div className="portfolio-section-heading portfolio-projects-heading">
-            <div><span className="portfolio-section-kicker">PROJETOS EM DESTAQUE</span><h2>Veja os sistemas funcionando.</h2><p>Explore demonstrações interativas com dados fictícios e navegue pelas funcionalidades de cada solução.</p></div>
-            <span className="portfolio-projects-count"><strong>03</strong><small>sistemas demonstrativos</small></span>
+            <div><span className="portfolio-section-kicker">MODALIDADES POR SEGMENTO</span><h2>Escolha o tipo de solução.</h2><p>Cada segmento tem combinações diferentes de página, agendamento, gestão, pedidos e financeiro.</p></div>
+            <span className="portfolio-projects-count"><strong>13</strong><small>modalidades disponíveis</small></span>
           </div>
           <div className="portfolio-project-grid">
             <article className="portfolio-project-card portfolio-project-beauty" id="projeto-beauty">
               <div className="portfolio-project-art portfolio-beauty-art"><div className="portfolio-art-window"><span></span><span></span><span></span></div><div className="portfolio-art-calendar"><div className="portfolio-calendar-top"><CalendarDays size={18}/><b>Agenda</b><span>DEMO</span></div><div className="portfolio-calendar-row"><i></i><span>09:00</span><b>Atendimento</b></div><div className="portfolio-calendar-row"><i></i><span>10:30</span><b>Procedimento</b></div><div className="portfolio-calendar-row"><i></i><span>13:00</span><b>Atendimento</b></div></div><div className="portfolio-art-bubble"><Sparkles size={18}/></div></div>
-              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDAMENTO & GESTÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>2R Beauty</h3><p>Agendamento de serviços, disponibilidade de horários, administração da agenda, clientes e controle financeiro.</p><div className="portfolio-feature-tags"><span>Agenda online</span><span>Clientes</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenDemo('beauty.completo')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDAMENTO & GESTÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Beauty & estética</h3><p>Agendamento de serviços, disponibilidade de horários, administração da agenda, clientes e controle financeiro.</p><div className="portfolio-feature-tags"><span>Agenda online</span><span>Clientes</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Beauty')}>Ver modalidades <ArrowUpRight size={17}/></button></div>
             </article>
             <article className="portfolio-project-card portfolio-project-barber" id="projeto-barber">
               <div className="portfolio-project-art portfolio-barber-art"><div className="portfolio-barber-window"><div className="portfolio-barber-side"><Scissors size={23}/><span>BARBER STUDIO</span></div><div className="portfolio-barber-content"><div className="portfolio-barber-title"><b>Agenda do dia</b><small>Profissionais e horários</small></div><div className="portfolio-barber-appointment"><span>09:00</span><div><b>Serviço agendado</b><small>40 min · confirmado</small></div><i></i></div><div className="portfolio-barber-appointment"><span>10:00</span><div><b>Serviço agendado</b><small>30 min · confirmado</small></div><i></i></div></div></div><div className="portfolio-art-bubble portfolio-barber-bubble"><CheckCircle2 size={19}/></div></div>
-              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDA & OPERAÇÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>2R Barber</h3><p>Agenda com duração dos serviços, seleção de profissional, disponibilidade e área administrativa com gestão integrada.</p><div className="portfolio-feature-tags"><span>Profissionais</span><span>Disponibilidade</span><span>Gestão</span></div><button className="portfolio-project-button" onClick={() => onOpenDemo('barber.completo')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDA & OPERAÇÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Barbearia</h3><p>Agenda com duração dos serviços, seleção de profissional, disponibilidade e área administrativa com gestão integrada.</p><div className="portfolio-feature-tags"><span>Profissionais</span><span>Disponibilidade</span><span>Gestão</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Barber')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
             </article>
             <article className="portfolio-project-card portfolio-project-burger" id="projeto-burger">
               <div className="portfolio-project-art portfolio-burger-art"><div className="portfolio-burger-dashboard"><div className="portfolio-burger-dashboard-top"><span><ShoppingBag size={17}/><b>Pedidos</b></span><small>EXEMPLO</small></div><div className="portfolio-burger-order"><span>001</span><div><b>Pedido em andamento</b><small>Itens e status do pedido</small></div><i className="burger-state"></i></div><div className="portfolio-burger-order"><span>002</span><div><b>Pedido recebido</b><small>Estoque vinculado ao fluxo</small></div><i className="burger-state burger-state-warm"></i></div><div className="portfolio-burger-mini-stats"><div><small>Produtos</small><b>24</b></div><div><small>Pedidos</small><b>08</b></div><div><small>Estoque</small><b>Ativo</b></div></div></div></div>
-              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>VENDAS & CONTROLE</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>2R Burger</h3><p>Gestão de pedidos, produtos, movimentações de estoque e controles financeiros conectados à operação.</p><div className="portfolio-feature-tags"><span>Pedidos</span><span>Estoque</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenDemo('burger.completo')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>VENDAS & CONTROLE</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Pedidos & alimentação</h3><p>Gestão de pedidos, produtos, movimentações de estoque e controles financeiros conectados à operação.</p><div className="portfolio-feature-tags"><span>Pedidos</span><span>Estoque</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Burger')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
             </article>
           </div>
           <div className="portfolio-demo-note"><ShieldCheck size={18}/><p><strong>Ambiente de demonstração</strong> — os cadastros e movimentações apresentados são fictícios. As demonstrações servem para explorar os fluxos e funcionalidades.</p></div>
-          <div className="portfolio-all-projects"><span>Procurando uma combinação específica de funcionalidades?</span><button onClick={onOpenCatalog}>Ver todos os pacotes demonstrativos <ArrowRight size={16}/></button></div>
+          <div className="portfolio-all-projects"><span>Quer comparar outras combinações de recursos?</span><button onClick={onOpenCatalog}>Ver todas as modalidades <ArrowRight size={16}/></button></div>
         </div>
       </section>
 
@@ -689,7 +593,7 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
       <div className="portfolio-container portfolio-footer-inner">
         <a className="portfolio-brand portfolio-footer-brand" href="#inicio"><img src="/2r-logo.png" alt=""/><span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span></a>
         <span>© {new Date().getFullYear()} 2R Informática. Tecnologia com propósito.</span>
-        <button onClick={onOpenCatalog}>Acesso técnico às demonstrações <ArrowUpRight size={15}/></button>
+        <button onClick={onOpenCatalog}>Ver modalidades de aplicações <ArrowUpRight size={15}/></button>
       </div>
     </footer>
   </div>;
