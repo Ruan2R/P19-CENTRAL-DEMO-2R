@@ -115,9 +115,17 @@ export default function App() {
   }
   function exitDemo() { setActiveDemo(null); setMobileNav(false); setPage('catalog'); }
   function canUse(module) { return activeDemo?.modules.includes(module); }
-  function changeModule(module) {
+  function changeModule(module, bypassGuideCheck = false) {
     setMobileNav(false);
-    if (activeDemo?.modules.includes(module)) setActiveModule(module);
+    if (!activeDemo?.modules.includes(module)) return;
+    if (!bypassGuideCheck && module !== activeModule) {
+      const currentGuideKey=activeDemo.id+':'+activeModule;
+      if (!acknowledgedGuides[currentGuideKey]) {
+        notify('Confirme o guia desta tela antes de avançar. Você também pode escolher “Entendi, explorar esta tela”.');
+        return;
+      }
+    }
+    setActiveModule(module);
   }
   function acknowledgeGuide(key) {
     setAcknowledgedGuides(current => current[key] ? current : ({...current,[key]:true}));
@@ -186,7 +194,7 @@ export default function App() {
     return <BurgerP16Showcase
       module={activeModule}
       notify={notify}
-      onNavigate={changeModule}
+      onNavigate={(module)=>changeModule(module,true)}
       onExit={exitDemo}
       availableModules={currentModules}
       demoId={activeDemo.id}
@@ -210,7 +218,7 @@ export default function App() {
            description={guideContent.description}
            tip={guideContent.tip}
            nextLabel={nextModule ? MODULES[nextModule]?.label : undefined}
-           onNext={nextModule ? ()=>{acknowledgeGuide(guideKey);changeModule(nextModule);} : undefined}
+           onNext={nextModule ? ()=>{acknowledgeGuide(guideKey);changeModule(nextModule,true);} : undefined}
            onExplore={()=>acknowledgeGuide(guideKey)}
          />}
         {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
