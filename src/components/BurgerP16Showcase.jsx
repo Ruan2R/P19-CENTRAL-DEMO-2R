@@ -605,25 +605,127 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
   function OrdersModule() {
     const sessionOrders=orders.filter(order=>order.sessionNumber===sessionNumber);
     const active=sessionOrders.filter(order=>['Recebido','Em preparo','Pronto'].includes(order.status));
-    return <div className="p16-view">
-      <div className="p16-page-heading"><div><span>OPERAÇÃO DO ESTABELECIMENTO</span><h2>Pedidos.</h2><p>Organize o preparo e acompanhe as retiradas durante o expediente. Os pedidos são lançados pela equipe, na área interna.</p></div>{sessionOpen?<P16Button outline onClick={closeSession}><StopCircle size={15}/> Encerrar atendimento</P16Button>:<P16Button onClick={startSession}><PlayCircle size={15}/> Iniciar atendimento</P16Button>}</div>
-      <div className={'p16-session-banner '+(sessionOpen?'open':'closed')}><span>{sessionOpen?<CheckCircle2 size={18}/>:<ShieldCheck size={18}/>}</span><div><strong>{sessionOpen?'Atendimento aberto':'Atendimento encerrado'}</strong><small>{sessionOpen?'Iniciado às '+sessionStartedAt+' · '+dateText(todayKey(0)):'Novos pedidos e mudanças operacionais estão bloqueados até iniciar um novo atendimento.'}</small>{sessionOpen&&active.length>0&&<em>{active.length} pedido(s) ainda precisam ser entregues ou cancelados para permitir o encerramento.</em>}</div>{sessionOpen&&<div className="p16-next-order"><small>PRÓXIMO PEDIDO</small><strong>#{String(nextOrderNumber).padStart(3,'0')}</strong></div>}</div>
-      <P16Card><P16Title eyebrow="ACOMPANHAMENTO" title="Fluxo de pedidos" action={<P16Count>{shownOrders.length}</P16Count>}/><div className="p16-orders-toolbar"><label className="p16-search"><Search size={16}/><input value={orderSearch} onChange={e=>setOrderSearch(e.target.value)} placeholder="Buscar número, cliente ou produto..."/></label><div className="p16-orders-scope"><button className={orderScope==='session'?'active':''} onClick={()=>setOrderScope('session')}>Atendimento atual</button><button className={orderScope==='all'?'active':''} onClick={()=>setOrderScope('all')}>Histórico completo</button></div>{sessionOpen&&<P16Button onClick={openNewOrder}><Plus size={15}/> Novo pedido</P16Button>}</div>
-      {orderForm&&<form className="p16-form p16-order-form" onSubmit={createOrder}><P16Title eyebrow="LANÇAMENTO INTERNO" title="Novo pedido" action={<button type="button" className="p16-icon-button" onClick={()=>setOrderForm(false)}><X size={16}/></button>}/><P16Field label="Cliente / origem"><input value={orderCustomer} onChange={e=>setOrderCustomer(e.target.value)} placeholder="Balcão"/></P16Field><p className="p16-note">Identifique o cliente ou a origem do pedido. Esta operação não utiliza cardápio público nem cadastro de mesas.</p><div className="p16-order-lines">{draftItems.map((row,index)=>{const product=products.find(p=>p.id===row.productId);return <div className="p16-order-line" key={row.id}><P16Field label={'Produto '+(index+1)}><select value={row.productId} onChange={e=>changeDraftLine(row.id,{productId:e.target.value})}><option value="">Selecione um produto</option>{products.filter(p=>p.sellable).map(p=><option key={p.id} value={p.id}>{p.name} · {cash(p.priceCents)}</option>)}</select></P16Field><P16Field label={'Quantidade '+(product?'('+product.unit+')':'')}><input type="number" min={product&&['un','porcao'].includes(product.unit)?1:.001} step={product&&['un','porcao'].includes(product.unit)?1:.001} value={row.quantity} onChange={e=>changeDraftLine(row.id,{quantity:e.target.value})}/></P16Field><button className="p16-icon-button danger" type="button" disabled={draftItems.length===1} onClick={()=>setDraftItems(rows=>rows.filter(item=>item.id!==row.id))}><Trash2 size={14}/></button><small>{product?'Estoque: '+(product.stockTracked?productQuantity(product,product.stock)+' '+product.unit:'Não se aplica — preparado na hora'):'Selecione um item para consultar o saldo.'}</small></div>;})}</div><P16Button outline onClick={()=>setDraftItems(rows=>[...rows,{id:Date.now(),productId:'',quantity:'1'}])}><Plus size={14}/> Adicionar produto</P16Button><div className="p16-order-total"><span>Total do pedido</span><strong>{cash(draftItems.reduce((sum,row)=>sum+(products.find(p=>p.id===row.productId)?.priceCents||0)*Number(row.quantity||0),0))}</strong></div><div className="p16-form-actions"><P16Button outline onClick={()=>setOrderForm(false)}>Cancelar</P16Button><P16Button type="submit">Registrar pedido</P16Button></div></form>}
-      <div className="p16-order-list">{shownOrders.length?shownOrders.map(order=><OrderCard key={order.id} order={order}/>):<div className="p16-empty"><ClipboardList size={24}/><strong>Nenhum pedido encontrado</strong><p>Quando houver lançamentos, eles aparecerão aqui.</p></div>}</div>
-      </P16Card>
+    const done=sessionOrders.filter(order=>order.status==='Entregue').length;
+    const ready=sessionOrders.filter(order=>order.status==='Pronto').length;
+    const orderItemsText=order=>order.items.map(line=>{
+      const product=products.find(item=>item.id===line.productId);
+      return productQuantity(product||{unit:'un'},line.quantity)+'x '+(product?.name||'Produto');
+    }).join(', ');
+    return <section className="page-content">
+      <div className="page-heading-row orders-page-heading">
+        <div><div className="section-kicker">OPERAÇÃO DO ESTABELECIMENTO</div><h1>Pedidos</h1><p>Organize o preparo e acompanhe as retiradas durante o expediente.</p></div>
+        <div className="orders-session-actions">
+          {sessionOpen?<button type="button" className="outline-button session-close-button" onClick={closeSession}><StopCircle size={17}/> Encerrar atendimento</button>:<button type="button" className="primary-button session-start-button" onClick={startSession}><PlayCircle size={17}/> Iniciar atendimento</button>}
+        </div>
+      </div>
+      <div className={'order-session-banner '+(sessionOpen?'is-open':'is-closed')}>
+        <span className="order-session-icon">{sessionOpen?<CheckCircle2 size={19}/>:<ShieldCheck size={19}/>}</span>
+        <div className="order-session-copy">
+          <strong>{sessionOpen?'Atendimento aberto':'Atendimento encerrado'}</strong>
+          <span>{sessionOpen?'Iniciado às '+sessionStartedAt+' · '+dateText(todayKey(0)):'Novos pedidos estão bloqueados. Inicie o atendimento quando a loja abrir.'}</span>
+          {sessionOpen&&active.length>0&&<small>{active.length} pedido(s) ainda precisam ser entregues ou cancelados para permitir o encerramento.</small>}
+        </div>
+        {sessionOpen&&<div className="order-session-next"><span>PRÓXIMO PEDIDO</span><strong>#{String(nextOrderNumber).padStart(3,'0')}</strong></div>}
+      </div>
+      <div className="order-section-label"><span>RESUMO DO ATENDIMENTO</span><small>{sessionOrders.length} {sessionOrders.length===1?'pedido registrado':'pedidos registrados'}</small></div>
+      <div className="metrics-grid order-metrics">
+        <Metric label="Pedidos pendentes" value={String(active.length).padStart(2,'0')} detail="Em preparo ou aguardando retirada" tone="gold"/>
+        <Metric label="Prontos para retirada" value={String(ready).padStart(2,'0')} detail="Aguardando cliente" tone="blue"/>
+        <Metric label="Entregues" value={String(done).padStart(2,'0')} detail="Concluídos neste atendimento" tone="green"/>
+      </div>
+      <section className="panel order-board">
+        <div className="table-toolbar order-board-toolbar">
+          <div className="order-board-heading-copy">
+            <div className="order-board-title-row"><h3>{orderScope==='all'?'Histórico de pedidos':sessionOpen?'Pedidos do atendimento':'Pedidos do último atendimento'}</h3><span className="order-result-count">{shownOrders.length} {shownOrders.length===1?'pedido':'pedidos'}</span></div>
+            <p>Acompanhe o preparo, a retirada e o pagamento de cada pedido.</p>
+            <div className="order-scope-switch">
+              <button type="button" className={orderScope==='session'?'active':''} onClick={()=>setOrderScope('session')}>{sessionOpen?'Atendimento atual':'Último atendimento'}</button>
+              <button type="button" className={orderScope==='all'?'active':''} onClick={()=>setOrderScope('all')}>Todo o histórico</button>
+            </div>
+          </div>
+          <div className="order-board-toolbar-actions">
+            {sessionOpen&&<button type="button" className="primary-button order-new-button" onClick={openNewOrder}><Plus size={17}/> Novo pedido</button>}
+            <div className="filter-control"><Search size={17}/><input value={orderSearch} onChange={e=>setOrderSearch(e.target.value)} placeholder="Buscar número ou cliente..."/></div>
+          </div>
+        </div>
+        {orderForm&&sessionOpen&&<form className="panel order-form" onSubmit={createOrder}>
+          <div className="panel-heading"><div><h3>Novo pedido</h3><p>Adicione todos os produtos antes de registrar.</p></div><button type="button" className="icon-button" aria-label="Fechar formulário" onClick={()=>setOrderForm(false)}><X size={17}/></button></div>
+          <div className="order-form-grid">
+            <label className="order-customer-field">Identificação / cliente<input value={orderCustomer} onChange={e=>setOrderCustomer(e.target.value)} placeholder="Ex.: Balcão"/></label>
+            <section className="order-items-section" aria-label="Itens do pedido">
+              <div className="order-items-heading"><div><h4>Produtos deste pedido</h4><span>{draftItems.length} {draftItems.length===1?'produto':'produtos'} · adicione todos antes de registrar</span></div></div>
+              {draftItems.map((row,index)=>{
+                const product=products.find(item=>item.id===row.productId);
+                const lineTotal=product?Math.round(product.priceCents*Number(row.quantity||0)):0;
+                return <div className="order-item-row" key={row.id}>
+                  <label className="order-item-product">Produto {index+1}<select value={row.productId} onChange={e=>changeDraftLine(row.id,{productId:e.target.value})} required><option value="">Selecione um produto</option>{products.filter(item=>item.sellable).map(item=><option key={item.id} value={item.id}>{item.name} — {cash(item.priceCents)}</option>)}</select></label>
+                  <label className="order-item-quantity">Quantidade<input type="number" min={product&&['un','porcao'].includes(product.unit)?1:.001} step={product&&['un','porcao'].includes(product.unit)?1:.001} value={row.quantity} onChange={e=>changeDraftLine(row.id,{quantity:e.target.value})} required/></label>
+                  <div className={'order-item-subtotal '+(product?'':'is-empty')}><span>Subtotal</span><strong>{product?cash(lineTotal):'—'}</strong><small>{product?.name||'Escolha um produto'}</small></div>
+                  <button type="button" className="order-item-remove" aria-label={'Remover item '+(index+1)} disabled={draftItems.length===1} onClick={()=>setDraftItems(rows=>rows.filter(item=>item.id!==row.id))}><Trash2 size={16}/></button>
+                </div>;
+              })}
+              <button type="button" className="primary-button order-add-item" onClick={()=>setDraftItems(rows=>[...rows,{id:Date.now(),productId:'',quantity:'1'}])}><Plus size={16}/> Adicionar outro produto ao pedido</button>
+            </section>
+            <div className="order-order-total"><span>Total do pedido</span><strong>{cash(draftItems.reduce((sum,row)=>sum+(products.find(item=>item.id===row.productId)?.priceCents||0)*Number(row.quantity||0),0))}</strong></div>
+          </div>
+          <div className="form-actions"><button type="button" className="outline-button" onClick={()=>setOrderForm(false)}>Cancelar</button><button type="submit" className="primary-button">Registrar pedido</button></div>
+        </form>}
+        {shownOrders.length===0?<div className="empty-state order-empty-state"><span className="order-empty-icon"><ClipboardList size={22}/></span><strong>{orderSearch.trim()?'Nenhum pedido encontrado':sessionOpen&&orderScope==='session'?'Nenhum pedido neste atendimento ainda':'Não há pedidos para exibir'}</strong><p>{orderSearch.trim()?'Tente outro número ou nome de cliente.':sessionOpen&&orderScope==='session'?'Registre o primeiro pedido deste expediente para começar a acompanhar o preparo e a retirada.':'Quando houver pedidos neste período, eles aparecerão aqui.'}</p>{!orderSearch.trim()&&sessionOpen&&orderScope==='session'&&<button type="button" className="outline-button" onClick={openNewOrder}><Plus size={15}/> Criar primeiro pedido</button>}</div>:<div className="order-list">{shownOrders.map(order=><OrderCard key={order.id} order={order} itemsText={orderItemsText(order)}/>)}</div>}
+      </section>
       <OrderReport/>
-      <p className="p16-note"><ShieldCheck size={14}/> Pedidos são lançados pela equipe. Não existe cardápio público, envio de pedido pelo cliente, mapa de mesas ou login específico para garçons nesta versão do P16.</p>
-    </div>;
+      <div className="integration-note"><Bell size={18}/><div><strong>Operação demonstrativa</strong><p>Os pedidos são lançados pela equipe nesta área interna. Não existe cardápio público, mapa de mesas ou login específico para garçons nesta demonstração.</p></div></div>
+    </section>;
   }
-  function OrderCard({order}) {
+
+  function OrderCard({order,itemsText}) {
     const statusNext={Recebido:'Em preparo','Em preparo':'Pronto',Pronto:'Entregue'};
-    return <article className="p16-order-card"><div className="p16-order-number"><small>PEDIDO</small><strong>#{String(order.number).padStart(3,'0')}</strong><span>{order.createdAt} · {dateText(order.businessDate)}</span></div><div className="p16-order-body"><div className="p16-order-head"><strong>{order.customer}</strong><span className={'p16-order-status '+order.status.toLowerCase().replace(' ','-')}>{order.status}</span></div><div className="p16-order-items">{order.items.map((line,index)=>{const product=products.find(p=>p.id===line.productId);return <span key={line.productId+'-'+index}>{productQuantity(product||{unit:'un'},line.quantity)}x {product?.name||'Produto'}</span>;})}</div><div className="p16-order-value"><strong>{cash(order.totalCents)}</strong><span className={order.paymentStatus==='paid'?'paid':'pending'}>{order.paymentStatus==='paid'?'Pago · '+order.paymentMethod:'Pagamento pendente'}</span></div><div className="p16-order-actions">{statusNext[order.status]&&<P16Button outline onClick={()=>moveOrderStatus(order,statusNext[order.status])}>{order.status==='Recebido'?'Iniciar preparo':order.status==='Em preparo'?'Marcar pronto':'Confirmar retirada'} <ArrowRight size={13}/></P16Button>}{order.paymentStatus!=='paid'&&order.status!=='Cancelado'&&<P16Button outline onClick={()=>openPayment(order)}><CreditCard size={14}/> Registrar pagamento</P16Button>}{order.paymentStatus!=='paid'&&['Entregue','Cancelado'].includes(order.status)===false&&<button className="p16-danger-link" onClick={()=>cancelOrder(order)}><X size={13}/> Cancelar pedido</button>}</div>{paymentOrderId===order.id&&<form className="p16-payment-form" onSubmit={(event)=>registerOrderPayment(event,order)}><strong>Pagamento do pedido #{String(order.number).padStart(3,'0')}</strong><div className="p16-form-grid"><P16Field label="Data do pagamento"><input type="date" value={paymentDate} onChange={e=>setPaymentDate(e.target.value)} required/></P16Field><P16Field label="Forma de pagamento"><select value={paymentMethod} onChange={e=>setPaymentMethod(e.target.value)}>{paymentOptions.map(x=><option key={x}>{x}</option>)}</select></P16Field></div><div className="p16-form-actions"><P16Button outline onClick={()=>setPaymentOrderId('')}>Cancelar</P16Button><P16Button type="submit"><Check size={14}/> Confirmar pagamento</P16Button></div></form>}</div></article>;
+    const paymentLabel=order.paymentStatus==='paid'?'Pago · '+order.paymentMethod:order.status==='Cancelado'?'Cancelado sem pagamento':'Pagamento pendente';
+    return <article className="order-card">
+      <div className="order-number"><span>PEDIDO</span><strong>#{String(order.number).padStart(3,'0')}</strong><small>{order.createdAt} · {dateText(order.businessDate)}</small></div>
+      <div className="order-description">
+        <strong>{order.customer}</strong><p>{itemsText}</p>
+        <div className="order-meta-row"><span className="order-total">{cash(order.totalCents)}</span>
+          <span className={'order-payment-state '+(order.paymentStatus==='paid'?'is-paid':'is-pending')}><i aria-hidden="true"/>{paymentLabel}</span>
+        </div>
+      </div>
+      <div className="order-status-actions">
+        <div className="order-status-stack"><span className={'status-pill '+(order.status==='Pronto'?'ready':order.status==='Entregue'?'done':order.status==='Cancelado'?'cancelled':'pending')}>{order.status}</span></div>
+        {statusNext[order.status]&&<div className={'order-action-buttons '+(order.paymentStatus!=='paid'?'has-two-actions':'')}>
+          <button type="button" className={'small-action order-operational-action '+(order.status==='Em preparo'?'ready-action':'')} onClick={()=>moveOrderStatus(order,statusNext[order.status])}>{order.status==='Recebido'?'Iniciar preparo':order.status==='Em preparo'?'Marcar pronto':'Confirmar retirada'} <ArrowUpRight size={14}/></button>
+          {order.paymentStatus!=='paid'&&<button type="button" className="small-action danger-action order-cancel-action" onClick={()=>cancelOrder(order)}><X size={14}/> Cancelar pedido</button>}
+          {order.paymentStatus!=='paid'&&<button type="button" className="small-action order-payment-inline-action" onClick={()=>openPayment(order)}><CreditCard size={14}/> Registrar pagamento</button>}
+        </div>}
+      </div>
+      {paymentOrderId===order.id&&<form className="order-payment-form" onSubmit={event=>registerOrderPayment(event,order)}>
+        <div className="order-payment-heading"><strong>Pagamento do pedido #{String(order.number).padStart(3,'0')}</strong><span>Valor integral: {cash(order.totalCents)}</span></div>
+        <label>Data do pagamento<input type="date" value={paymentDate} onChange={e=>setPaymentDate(e.target.value)} required/></label>
+        <label>Forma de pagamento<select value={paymentMethod} onChange={e=>setPaymentMethod(e.target.value)}>{paymentOptions.map(method=><option key={method}>{method}</option>)}</select></label>
+        <div className="form-actions"><button type="button" className="outline-button" onClick={()=>setPaymentOrderId('')}>Cancelar</button><button type="submit" className="primary-button"><Check size={14}/> Confirmar pagamento</button></div>
+      </form>}
+    </article>;
   }
+
   function OrderReport() {
     const items=reportList;
-    const dayGroups=Object.values(items.reduce((acc,order)=>{const key=order.businessDate;acc[key]=acc[key]||{date:key,orders:0,cancelled:0,sold:0,pending:0};acc[key].orders+=1;if(order.status==='Cancelado')acc[key].cancelled+=1;else {acc[key].sold+=order.totalCents;if(order.paymentStatus!=='paid')acc[key].pending+=order.totalCents;}return acc;},{})).sort((a,b)=>a.date.localeCompare(b.date));
-    return <P16Card><P16Title eyebrow="ACOMPANHAMENTO OPERACIONAL" title="Relatório de pedidos"/><p className="p16-note">Relatório separado do caixa. Considera a data em que cada pedido foi criado.</p><div className="p16-report-controls"><div className="p16-orders-scope"><button className={reportPeriod==='day'?'active':''} onClick={()=>setReportPeriod('day')}>Diário</button><button className={reportPeriod==='month'?'active':''} onClick={()=>setReportPeriod('month')}>Mensal</button></div><P16Field label={reportPeriod==='day'?'Dia dos pedidos':'Mês dos pedidos'}><input type={reportPeriod==='day'?'date':'month'} value={reportPeriod==='day'?reportDate:reportDate.slice(0,7)} onChange={e=>setReportDate(reportPeriod==='day'?e.target.value:e.target.value+'-15')}/></P16Field></div><div className="p16-report-metrics"><div><small>Pedidos registrados</small><strong>{items.length}</strong><span>{items.filter(x=>x.status==='Entregue').length} entregues · {items.filter(x=>x.status==='Cancelado').length} cancelados</span></div><div><small>Total vendido</small><strong>{cash(reportSold)}</strong><span>Pedidos não cancelados</span></div><div><small>Falta receber</small><strong>{cash(reportPending)}</strong><span>Pedidos ainda não pagos</span></div></div>{reportPeriod==='month'&&<div className="p16-report-days">{dayGroups.length?dayGroups.map(day=><article key={day.date}><strong>{dateText(day.date)}</strong><span>{day.orders} pedidos · {day.cancelled} cancelados</span><b>{cash(day.sold)}</b><small>Falta receber: {cash(day.pending)}</small></article>):<p>Nenhum pedido criado no mês selecionado.</p>}</div>}</P16Card>;
+    const dayGroups=Object.values(items.reduce((acc,order)=>{const key=order.businessDate;acc[key]=acc[key]||{date:key,orders:0,cancelled:0,sold:0,pending:0};acc[key].orders+=1;if(order.status==='Cancelado')acc[key].cancelled+=1;else{acc[key].sold+=order.totalCents;if(order.paymentStatus!=='paid')acc[key].pending+=order.totalCents;}return acc;},{})).sort((a,b)=>a.date.localeCompare(b.date));
+    const formattedPeriod=reportPeriod==='day'?dateText(reportDate):new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(reportDate.slice(0,7)+'-15T12:00:00'));
+    return <section className="panel orders-report-panel orders-report-panel-order-only">
+      <div className="panel-heading orders-report-heading"><div><div className="section-kicker">ACOMPANHAMENTO OPERACIONAL</div><h3><BarChart3 size={18}/> Relatório de pedidos</h3><p>Pedidos agrupados pela data em que foram criados. Os valores de pagamento são vinculados a esses pedidos.</p></div><div className="orders-report-period"><button type="button" className={reportPeriod==='day'?'active':''} onClick={()=>setReportPeriod('day')}>Diário</button><button type="button" className={reportPeriod==='month'?'active':''} onClick={()=>setReportPeriod('month')}>Mensal</button></div></div>
+      <div className="orders-report-controls"><label>{reportPeriod==='day'?'Dia dos pedidos':'Mês dos pedidos'}<input aria-label={reportPeriod==='day'?'Dia dos pedidos':'Mês dos pedidos'} type={reportPeriod==='day'?'date':'month'} value={reportPeriod==='day'?reportDate:reportDate.slice(0,7)} onChange={e=>setReportDate(reportPeriod==='day'?e.target.value:e.target.value+'-15')}/></label><span>{formattedPeriod}</span></div>
+      <div className="order-report-summary">
+        <div className="order-report-summary-heading"><span className="order-report-eyebrow">{reportPeriod==='day'?'RESUMO DO DIA':'RESUMO DO MÊS'}</span><p>Pedidos criados em {formattedPeriod}.</p></div>
+        <div className="order-report-key-values order-report-key-values-simple">
+          <div className="order-report-summary-count"><span>Pedidos registrados</span><strong>{items.length}</strong><small>{items.filter(x=>x.status==='Entregue').length} entregues · {items.filter(x=>x.status==='Cancelado').length} cancelados</small></div>
+          <div><span>Total vendido</span><strong>{cash(reportSold)}</strong><small>Pedidos não cancelados</small></div>
+          <div className="order-report-value-pending"><span>Falta receber</span><strong>{cash(reportPending)}</strong><small>Valor dos pedidos ainda não pagos</small></div>
+        </div>
+      </div>
+      {reportPeriod==='month'&&<section className="order-report-breakdown order-report-breakdown-month">
+        <div className="order-report-breakdown-heading"><h4>Pedidos por dia</h4></div>
+        <div className="orders-report-table-wrap"><table className="orders-report-table"><thead><tr><th>Dia</th><th>Pedidos</th><th>Cancelados</th><th>Total vendido</th><th>Falta receber</th></tr></thead><tbody>{dayGroups.length?dayGroups.map(day=><tr key={day.date}><td>{dateText(day.date)}</td><td>{day.orders}</td><td>{day.cancelled}</td><td>{cash(day.sold)}</td><td>{cash(day.pending)}</td></tr>):<tr><td colSpan={5}>Nenhum pedido criado neste mês.</td></tr>}</tbody></table></div>
+        <div className="order-report-days-mobile">{dayGroups.length?dayGroups.map(day=><article className="order-report-day-card" key={'mobile-'+day.date}><div className="order-report-day-card-heading"><strong>{dateText(day.date)}</strong><span>{day.orders} pedidos</span></div><div className="order-report-day-card-stats"><div><span>Cancelados</span><strong>{day.cancelled}</strong></div><div><span>Total vendido</span><strong>{cash(day.sold)}</strong></div><div><span>Falta receber</span><strong>{cash(day.pending)}</strong></div></div></article>):<div className="order-report-days-empty">Nenhum pedido criado neste mês.</div>}</div>
+      </section>}
+    </section>;
   }
 }
 function ProductGroup({title,description,products,onMove,onRemove}) {
