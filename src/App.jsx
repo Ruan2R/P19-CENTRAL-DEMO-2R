@@ -462,6 +462,12 @@ function Modal({title,onClose,children}) { return <div className="modal-overlay"
 
 
 
+function WhatsAppIcon({ size = 17 }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.999-3.648-.235-.374a9.822 9.822 0 0 1-1.51-5.258c.002-5.45 4.437-9.884 9.89-9.884 2.64.001 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.002 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.334.157 11.893c-.001 2.096.547 4.142 1.588 5.946L0 24l6.335-1.662a11.882 11.882 0 0 0 5.711 1.455h.005c6.554 0 11.89-5.334 11.893-11.893a11.821 11.821 0 0 0-3.48-8.412A11.815 11.815 0 0 0 12.05 0Z"/>
+  </svg>;
+}
+
 function PortfolioHome({ onOpenCatalog }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   function closeMenu() { setMobileMenuOpen(false); }
@@ -495,7 +501,7 @@ function PortfolioHome({ onOpenCatalog }) {
             <p>Sou Ruan, da 2R Informática. Desenvolvo aplicações web que ajudam negócios a organizar a rotina, conectar informações e trabalhar com mais praticidade.</p>
             <div className="portfolio-hero-actions">
               <a className="portfolio-button portfolio-button-primary" href="#projetos">Explorar projetos <ArrowRight size={17}/></a>
-              <a className="portfolio-button portfolio-button-secondary" href="#contato">Falar comigo <Mail size={16}/></a>
+              <a className="portfolio-button portfolio-button-secondary" href="https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Encontrei%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noreferrer">Falar comigo <WhatsAppIcon size={17}/></a>
             </div>
             <div className="portfolio-quick-access" aria-label="Atalhos diretos para soluções">
               <a href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Todos')}}><span><CalendarDays size={17}/></span><b>Agendamentos</b><ArrowUpRight size={14}/></a>
@@ -582,7 +588,7 @@ function PortfolioHome({ onOpenCatalog }) {
         <div className="portfolio-container portfolio-contact-layout">
           <div><span className="portfolio-section-kicker">VAMOS TIRAR A IDEIA DO PAPEL?</span><h2>Tem uma necessidade?<br/><span>Vamos pensar na solução.</span></h2><p>Converse comigo sobre uma aplicação web, uma melhoria de processo ou uma demanda de tecnologia para seu negócio.</p></div>
           <div className="portfolio-contact-actions">
-            <a className="portfolio-button portfolio-button-primary" href="mailto:r.cintra.r.2002@gmail.com"><Mail size={17}/> Entrar em contato por e-mail <ArrowUpRight size={16}/></a>
+            <a className="portfolio-button portfolio-button-primary portfolio-whatsapp-button" href="https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Encontrei%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noreferrer" aria-label="Conversar com Ruan pelo WhatsApp no número (67) 99804-2465"><WhatsAppIcon size={19}/> Chamar no WhatsApp <span className="portfolio-whatsapp-number">(67) 99804-2465</span><ArrowUpRight size={16}/></a>
             <a className="portfolio-button portfolio-button-secondary" href="https://www.linkedin.com/in/ruanrodrigues2r/" target="_blank" rel="noreferrer"><Linkedin size={17}/> Perfil profissional <ArrowUpRight size={16}/></a>
           </div>
         </div>
