@@ -375,38 +375,69 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
   </div>;
 
   function FinanceOverview() {
-    const monthResult=monthIncome-monthExpenses;
     const attention=[...openPayables,...openReceivables].filter((item)=>dueInfo(item.dueDate).tone!=='normal');
     const methodTotals=Object.fromEntries(paymentOptions.map((method)=>[method,currentMonthEntries.filter((item)=>item.paymentMethod===method).reduce((sum,item)=>sum+(item.direction==='income'?item.amountCents:-item.amountCents),0)]));
-    return <div className="p16-view">
-      <div className="p16-page-heading"><div><span>CONTROLE NA PALMA DA MÃO</span><h2>Resumo.</h2><p>Consulte rapidamente o caixa e acesse as tarefas mais usadas.</p></div><P16Field label="Mês de referência"><input type="month" value={selectedMonth} onChange={(event)=>setSelectedMonth(event.target.value)}/></P16Field></div>
-      <div className="p16-metrics"><Metric label="Resultado do período" value={cash(monthResult)} detail="Entradas recebidas menos saídas pagas" tone="gold"/><Metric label="Entradas recebidas" value={cash(monthIncome)} detail={currentMonthEntries.filter(e=>e.direction==='income').length+' recebimentos'} tone="green"/><Metric label="Saídas pagas" value={cash(monthExpenses)} detail={currentMonthEntries.filter(e=>e.direction==='expense').length+' pagamentos'} tone="red"/></div>
-      <div className="p16-dashboard-grid">
-        <P16Card><P16Title eyebrow="CAIXA" title="Últimas movimentações" action={<button className="p16-link-button" onClick={()=>setFinanceTab('transactions')}>Ver todas <ArrowRight size={14}/></button>}/><MovementList items={currentMonthEntries.slice(0,5)}/></P16Card>
-        <P16Card><P16Title eyebrow="ACESSO RÁPIDO" title="Ações rápidas"/><div className="p16-quick-actions">
-          <button onClick={()=>{goFinance('transactions');setEntryForm(true)}}><span><Plus size={16}/></span><div><strong>Nova movimentação</strong><small>Registrar entrada ou saída</small></div><ArrowRight size={14}/></button>
-          <button onClick={()=>{goFinance('payables');setPayableForm(true)}}><span><CalendarDays size={16}/></span><div><strong>Adicionar conta a pagar</strong><small>Registrar um vencimento</small></div><ArrowRight size={14}/></button>
-          <button onClick={()=>{goFinance('receivables');setReceivableForm(true)}}><span><ArrowDownLeft size={16}/></span><div><strong>Adicionar valor a receber</strong><small>Controlar recebimento futuro</small></div><ArrowRight size={14}/></button>
-          <button onClick={()=>{goFinance('inventory');setProductForm(true)}}><span><Package size={16}/></span><div><strong>Cadastrar produto</strong><small>Adicionar ao catálogo</small></div><ArrowRight size={14}/></button>
-        </div></P16Card>
+    const methodCounts=Object.fromEntries(paymentOptions.map((method)=>[method,currentMonthEntries.filter((item)=>item.paymentMethod===method).length]));
+    return <div className="p16-finance-overview">
+      <div className="metrics-grid summary-metrics-grid">
+        <Metric label="Resultado do período" value={cash(monthIncome-monthExpenses)} detail="Entradas recebidas menos saídas pagas" tone="gold"/>
+        <Metric label="Entradas recebidas" value={cash(monthIncome)} detail={currentMonthEntries.filter(e=>e.direction==='income').length+' recebimentos no mês'} tone="green"/>
+        <Metric label="Saídas pagas" value={cash(monthExpenses)} detail={currentMonthEntries.filter(e=>e.direction==='expense').length+' pagamentos no mês'} tone="red"/>
       </div>
-      {attention.length>0&&<P16Card><P16Title eyebrow="ACOMPANHAMENTO" title="Atenção aos vencimentos" action={<span className="p16-warning-count">{attention.length} itens</span>}/><div className="p16-attention-list">{attention.slice(0,5).map((item)=>{const info=dueInfo(item.dueDate);return <div key={item.id}><strong>{item.description||'Conta'}</strong><span>{cash(item.amountCents)}</span><em className={info.tone}>{info.label}</em></div>})}</div></P16Card>}
-      <P16Card><P16Title eyebrow="ANÁLISE" title="Movimentações por forma de pagamento"/><div className="p16-method-grid">{paymentOptions.map((method)=><div key={method}><span>{method}</span><strong>{cash(methodTotals[method])}</strong></div>)}</div></P16Card>
-      <p className="p16-note"><ShieldCheck size={14}/> Resultado do período significa entradas de caixa menos saídas pagas; não representa lucro líquido. Contas pendentes não entram no caixa efetivado.</p>
+      <div className="overview-grid summary-overview-grid">
+        <P16Card className="transactions-panel">
+          <P16Title eyebrow="CAIXA" title="Últimas movimentações" action={<button className="text-button" onClick={()=>setFinanceTab('transactions')}>Ver todas <ArrowUpRight size={15}/></button>}/>
+          <MovementList items={currentMonthEntries.slice(0,5)}/>
+        </P16Card>
+        <P16Card className="action-panel">
+          <P16Title eyebrow="ACESSO RÁPIDO" title="Ações rápidas"/>
+          <button className="quick-action" onClick={()=>{setFinanceTab('transactions');setEntryForm(true)}}>
+            <span className="quick-icon income-bg"><Plus size={17}/></span><span><strong>Nova movimentação</strong><small>Registrar entrada ou saída</small></span><ArrowUpRight size={16}/>
+          </button>
+          <button className="quick-action" onClick={()=>{setFinanceTab('payables');setPayableForm(true)}}>
+            <span className="quick-icon payable-bg"><CalendarDays size={17}/></span><span><strong>Adicionar conta a pagar</strong><small>Registrar um vencimento</small></span><ArrowUpRight size={16}/>
+          </button>
+          <button className="quick-action" onClick={()=>{setFinanceTab('receivables');setReceivableForm(true)}}>
+            <span className="quick-icon income-bg"><ArrowDownLeft size={17}/></span><span><strong>Adicionar valor a receber</strong><small>Controlar um recebimento futuro</small></span><ArrowUpRight size={16}/>
+          </button>
+          <button className="quick-action" onClick={()=>{setFinanceTab('inventory');setProductForm(true)}}>
+            <span className="quick-icon stock-bg"><Package size={17}/></span><span><strong>Cadastrar produto</strong><small>Adicionar ao catálogo</small></span><ArrowUpRight size={16}/>
+          </button>
+        </P16Card>
+      </div>
+      {attention.length>0&&<P16Card className="finance-attention-panel">
+        <P16Title eyebrow="ACOMPANHAMENTO" title="Atenção aos vencimentos" action={<span className="order-result-count">{attention.length} itens</span>}/>
+        <div className="due-attention-grid">{attention.slice(0,4).map((item)=>{const due=dueInfo(item.dueDate);return <div className={'attention-item '+due.tone} key={item.id}><strong>{cash(item.amountCents)}</strong><span>{item.description}</span><small>{due.label} · {dateText(item.dueDate)}</small></div>;})}</div>
+      </P16Card>}
+      <P16Card className="payment-method-panel">
+        <P16Title eyebrow="ANÁLISE DO CAIXA" title="Movimentações por forma de pagamento"/>
+        {currentMonthEntries.length ? <div className="payment-method-list">{paymentOptions.filter(method=>methodCounts[method]>0).map(method=><article className="payment-method-row" key={method}>
+          <div className="payment-method-name"><strong>{method}</strong><span>{methodCounts[method]} {methodCounts[method]===1?'movimentação':'movimentações'}</span></div>
+          <div className="payment-method-value income-text"><span>Resultado líquido</span><strong>{cash(methodTotals[method])}</strong></div>
+        </article>)}</div> : <div className="empty-state">Ainda não há movimentações para comparar por forma de pagamento.</div>}
+      </P16Card>
+      <p className="table-footnote">Resultado do período significa entradas recebidas menos saídas pagas; não representa lucro líquido. Contas pendentes não entram no caixa efetivado.</p>
     </div>;
   }
+
   function FinanceModule() {
-    const tabs=[['financial','Financeiro'],['transactions','Movimentações'],['payables','Contas a pagar'],['receivables','Contas a receber'],['inventory','Produtos e estoque']];
-    return <div className="p16-view">
-      <div className="p16-page-heading"><div><span>GESTÃO DO ESTABELECIMENTO</span><h2>{tabs.find(t=>t[0]===financeTab)?.[1]||'Financeiro'}.</h2><p>Controle de caixa, obrigações, produtos e histórico de estoque.</p></div><P16Field label="Mês de referência"><input type="month" value={selectedMonth} onChange={(event)=>setSelectedMonth(event.target.value)}/></P16Field></div>
-      <div className="p16-finance-tabs">{[['overview','Resumo'],...tabs].map(([key,label])=><button key={key} className={financeTab===key?'active':''} onClick={()=>setFinanceTab(key)}>{label}</button>)}</div>
+    const tabs=[['overview','Resumo'],['financial','Financeiro'],['transactions','Movimentações'],['payables','Contas a pagar'],['receivables','Contas a receber'],['inventory','Produtos e estoque']];
+    const descriptions={overview:'Consulte rapidamente o caixa e acesse as tarefas mais usadas.',financial:'Veja o caixa do período, contas pendentes e movimentações.',transactions:'Consulte e registre entradas e saídas efetivas do caixa.',payables:'Organize vencimentos e registre pagamentos.',receivables:'Acompanhe valores pendentes e registre recebimentos.',inventory:'Cadastre produtos e controle cada movimentação de estoque.'};
+    return <section className="page-content">
+      <div className="page-heading-row">
+        <div><div className="section-kicker">{financeTab==='overview'?'CONTROLE FINANCEIRO':'GESTÃO DO ESTABELECIMENTO'}</div><h1>{tabs.find(t=>t[0]===financeTab)?.[1]||'Financeiro'}</h1><p>{descriptions[financeTab]}</p></div>
+        <label className="outline-button month-button month-picker-wrap"><CalendarDays size={16}/><span>{new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(selectedMonth+'-15T12:00:00'))}</span><input className="month-picker-input" aria-label="Filtrar mês financeiro" type="month" value={selectedMonth} onChange={event=>{if(event.target.value)setSelectedMonth(event.target.value)}}/><ChevronDown size={15}/></label>
+      </div>
+      <div className="finance-tabs" role="tablist" aria-label="Módulos financeiros">
+        {tabs.map(([key,label])=><button type="button" key={key} className={'finance-tab '+(financeTab===key?'active':'')} role="tab" aria-selected={financeTab===key} onClick={()=>setFinanceTab(key)}>{label}</button>)}
+      </div>
       {financeTab==='overview'&&<FinanceOverview/>}
       {financeTab==='financial'&&<FinancialView/>}
       {financeTab==='transactions'&&<TransactionsView/>}
       {financeTab==='payables'&&<PayablesView/>}
       {financeTab==='receivables'&&<ReceivablesView/>}
       {financeTab==='inventory'&&<InventoryView/>}
-    </div>;
+    </section>;
   }
   function FinancialView() {
     const result=monthIncome-monthExpenses;
