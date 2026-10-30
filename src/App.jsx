@@ -320,7 +320,7 @@ export default function App() {
          {isBurger&&['orders','finance'].includes(activeModule)&&<BurgerP16Showcase module={activeModule} notify={notify}/>}
          {!isBurger&&activeModule==='orders'&&<BurgerOrdersModule attendanceOpen={attendanceOpen} setAttendanceOpen={setAttendanceOpen} attendanceOrders={attendanceOrders} setAttendanceOrders={setAttendanceOrders} products={products} setProducts={setProducts} notify={notify}/>}
         {isBarber&&['appointments','clients','services','professionals','hours','blocks','promotions','finance'].includes(activeModule)&&<BarberAdminShowcase module={activeModule} notify={notify}/>}
-         {!isBeauty&&!isBarber&&!isBurger&&activeModule==='appointments'&&<AppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>setModal('appointment')} isBarber={isBarber} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments}/>} />}
+         {!isBeauty&&!isBarber&&!isBurger&&activeModule==='appointments'&&<AppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>setModal('appointment')} isBarber={isBarber} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)}/>} />}
         {isBeauty&&['appointments','clients','services','promotions','hours','blocks','policies','finance'].includes(activeModule)&&<BeautyAdminShowcase module={activeModule} notify={notify}/>}
         {!isBeauty&&!isBarber&&!isBurger&&activeModule==='clients'&&<ClientsModule clients={clients}/>}
         {!isBeauty&&!isBarber&&!isBurger&&activeModule==='services'&&<ServicesModule services={services}/>}
