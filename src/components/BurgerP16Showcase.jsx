@@ -24,14 +24,14 @@ const stockGroups = {
 };
 const paymentOptions = ['Pix', 'Dinheiro', 'Cartão', 'Transferência', 'Não informado', 'Outro'];
 const initialProducts = [
-  {id:'prod1',name:'Refrigerante lata 350 ml',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,costCents:320,priceCents:600,stock:22,minimum:8,unit:'un'},
+  {id:'prod1',name:'Refrigerante lata 350 ml',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,costCents:320,priceCents:600,stock:21,minimum:8,unit:'un'},
   {id:'prod2',name:'Água mineral 500 ml',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,costCents:150,priceCents:350,stock:36,minimum:10,unit:'un'},
   {id:'prod3',name:'Cerveja long neck',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,costCents:580,priceCents:1000,stock:12,minimum:6,unit:'un'},
   {id:'prod4',name:'Hambúrguer artesanal',category:'Lanches',kind:'prepared',sellable:true,stockTracked:false,costCents:850,priceCents:2000,stock:0,minimum:0,unit:'porcao'},
   {id:'prod5',name:'Batata frita',category:'Porções',kind:'prepared',sellable:true,stockTracked:false,costCents:420,priceCents:1200,stock:0,minimum:0,unit:'porcao'}
 ];
 const initialOrders = [
-  {id:'ord1',number:1,sessionNumber:1,customer:'Balcão',items:[{productId:'prod4',quantity:2},{productId:'prod1',quantity:1}],totalCents:4600,status:'Em preparo',paymentStatus:'unpaid',paymentMethod:'',paymentDate:'',createdAt:'19:12',businessDate:todayKey(0),stockReserved:false},
+  {id:'ord1',number:1,sessionNumber:1,customer:'Balcão',items:[{productId:'prod4',quantity:2},{productId:'prod1',quantity:1}],totalCents:4600,status:'Em preparo',paymentStatus:'unpaid',paymentMethod:'',paymentDate:'',createdAt:'19:12',businessDate:todayKey(0),stockReserved:true},
   {id:'ord2',number:2,sessionNumber:1,customer:'Cliente do balcão',items:[{productId:'prod5',quantity:1},{productId:'prod2',quantity:2}],totalCents:1900,status:'Pronto',paymentStatus:'paid',paymentMethod:'Pix',paymentDate:todayKey(0),createdAt:'19:25',businessDate:todayKey(0),stockReserved:false},
   {id:'ord3',number:3,sessionNumber:1,customer:'Balcão',items:[{productId:'prod3',quantity:3}],totalCents:3000,status:'Recebido',paymentStatus:'unpaid',paymentMethod:'',paymentDate:'',createdAt:'19:40',businessDate:todayKey(0),stockReserved:true}
 ];
@@ -49,7 +49,8 @@ const initialReceivables = [
 ];
 const initialStockMovements = [
   {id:'sm1',productId:'prod1',type:'purchase',quantity:12,before:10,after:22,reason:'Compra do fornecedor',movementDate:todayKey(-2),sourceType:'manual'},
-  {id:'sm2',productId:'prod3',type:'order_consumption',quantity:-3,before:15,after:12,reason:'Pedido #003',movementDate:todayKey(0),sourceType:'order'}
+  {id:'sm2',productId:'prod1',type:'order_consumption',quantity:-1,before:22,after:21,reason:'Pedido #001',movementDate:todayKey(0),sourceType:'order'},
+  {id:'sm3',productId:'prod3',type:'order_consumption',quantity:-3,before:15,after:12,reason:'Pedido #003',movementDate:todayKey(0),sourceType:'order'}
 ];
 function P16Card({ children, className = '' }) { return <section className={'p16-card ' + className}>{children}</section>; }
 function P16Title({ eyebrow, title, action }) { return <div className="p16-card-title"><div><span>{eyebrow}</span><h3>{title}</h3></div>{action}</div>; }
@@ -189,11 +190,12 @@ export default function BurgerP16Showcase({ module, notify = () => {} }) {
     const totalCents=rows.reduce((sum,row)=>sum+Math.round(row.product.priceCents*row.qty),0);
     const orderId='ord'+Date.now();
     const order={id:orderId,number:nextOrderNumber,sessionNumber,customer:orderCustomer.trim()||'Balcão',items:rows.map((row)=>({productId:row.product.id,quantity:row.qty})),totalCents,status:'Recebido',paymentStatus:'unpaid',paymentMethod:'',paymentDate:'',createdAt:shortTime(),businessDate:todayKey(0),stockReserved:rows.some((row)=>row.product.stockTracked)};
+    rows.forEach((row)=>{
+      if(row.product.stockTracked) addStockHistory(row.product,'order_consumption',-row.qty,'Pedido #'+String(nextOrderNumber).padStart(3,'0'),todayKey(0),'order',orderId);
+    });
     setProducts((current)=>current.map((product)=>{
       const row=rows.find((item)=>item.product.id===product.id);
-      if(!row||!product.stockTracked)return product;
-      addStockHistory(product,'order_consumption',-row.qty,'Pedido #'+String(nextOrderNumber).padStart(3,'0'),todayKey(0),'order',orderId);
-      return {...product,stock:product.stock-row.qty};
+      return row&&product.stockTracked?{...product,stock:product.stock-row.qty}:product;
     }));
     setOrders((current)=>[order,...current]);
     setReceivables((current)=>[{id:'rec'+Date.now(),description:'Pedido #'+String(nextOrderNumber).padStart(3,'0'),counterparty:order.customer,amountCents:totalCents,dueDate:todayKey(0),status:'pending',orderId,orderNumber:nextOrderNumber},...current]);
@@ -210,11 +212,13 @@ export default function BurgerP16Showcase({ module, notify = () => {} }) {
   function cancelOrder(order) {
     if(order.paymentStatus==='paid') { notify('Pedido pago não pode ser cancelado sem um fluxo de estorno.'); return; }
     if(['Entregue','Cancelado'].includes(order.status))return;
+    order.items.forEach((line)=>{
+      const product=products.find((item)=>item.id===line.productId);
+      if(product&&product.stockTracked) addStockHistory(product,'return',line.quantity,'Devolução do pedido #'+String(order.number).padStart(3,'0'),todayKey(0),'order-cancel',order.id);
+    });
     setProducts((current)=>current.map((product)=>{
       const line=order.items.find((item)=>item.productId===product.id);
-      if(!line||!product.stockTracked)return product;
-      addStockHistory(product,'return',line.quantity,'Devolução do pedido #'+String(order.number).padStart(3,'0'),todayKey(0),'order-cancel',order.id);
-      return {...product,stock:product.stock+line.quantity};
+      return line&&product.stockTracked?{...product,stock:product.stock+line.quantity}:product;
     }));
     setOrders((current)=>current.map((item)=>item.id===order.id?{...item,status:'Cancelado',stockReserved:false}:item));
     setReceivables((current)=>current.map((item)=>item.orderId===order.id?{...item,status:'cancelled'}:item));
@@ -283,7 +287,7 @@ export default function BurgerP16Showcase({ module, notify = () => {} }) {
     if(!name||!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<=0||stock<0||minimum<0)return;
     const product={id:'prod'+Date.now(),name,category,kind,sellable:true,stockTracked:tracked,costCents:Math.round(cost*100),priceCents:Math.round(price*100),stock,minimum,unit:String(data.get('unit')||'un')};
     setProducts((current)=>[...current,product]);
-    if(tracked&&stock>0)addStockHistory(product,'purchase',stock,'Estoque inicial do cadastro',todayKey(0));
+    if(tracked&&stock>0)setStockMovements((current)=>[{id:'sm'+Date.now(),productId:product.id,type:'purchase',quantity:stock,before:0,after:stock,reason:'Estoque inicial do cadastro',movementDate:todayKey(0),sourceType:'manual'},...current]);
     setProductForm(false);setProductKind('resale');
     notify(kind==='prepared'?'Preparado cadastrado sem estoque próprio.':'Produto cadastrado com histórico de estoque inicial.');
   }
