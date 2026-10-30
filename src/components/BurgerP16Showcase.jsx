@@ -69,7 +69,7 @@ function productQuantity(product, quantity) {
   return Number.isFinite(value) ? value.toLocaleString('pt-BR', { maximumFractionDigits:3 }) : '0';
 }
 
-export default function BurgerP16Showcase({ module, notify = () => {}, onNavigate = () => {} }) {
+export default function BurgerP16Showcase({ module, notify = () => {}, onNavigate = () => {}, availableModules = [] }) {
   const [products,setProducts] = useState(initialProducts);
   const [orders,setOrders] = useState(initialOrders);
   const [entries,setEntries] = useState(initialEntries);
@@ -332,7 +332,11 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
   const visibleMovements=stockHistoryExpanded?filteredStock:filteredStock.slice(0,8);
   const unitOptions=[['un','Unidade'],['kg','Quilograma (kg)'],['g','Grama (g)'],['l','Litro (L)'],['ml','Mililitro (ml)'],['porcao','Porção']];
 
+  const mainTabs=[['overview','Resumo'],['finance','Financeiro'],['orders','Pedidos']].filter(([key])=>key==='overview'||availableModules.includes(key));
   return <div className="p16-showcase">
+    <nav className="p16-main-tabs" aria-label="Navegação Burger">
+      {mainTabs.map(([key,label])=><button type="button" key={key} className={module===key?'active':''} aria-current={module===key?'page':undefined} onClick={()=>onNavigate(key)}>{label}</button>)}
+    </nav>
     {module==='orders'?<OrdersModule/>:module==='overview'?<FinanceOverview/>:<FinanceModule/>}
   </div>;
 
