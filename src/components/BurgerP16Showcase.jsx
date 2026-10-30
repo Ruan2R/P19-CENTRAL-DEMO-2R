@@ -53,11 +53,11 @@ const initialStockMovements = [
   {id:'sm2',productId:'prod1',type:'order_consumption',quantity:-1,before:22,after:21,reason:'Pedido #001',movementDate:todayKey(0),sourceType:'order'},
   {id:'sm3',productId:'prod3',type:'order_consumption',quantity:-3,before:15,after:12,reason:'Pedido #003',movementDate:todayKey(0),sourceType:'order'}
 ];
-function P16Card({ children, className = '' }) { return <section className={'p16-card ' + className}>{children}</section>; }
-function P16Title({ eyebrow, title, action }) { return <div className="p16-card-title"><div><span>{eyebrow}</span><h3>{title}</h3></div>{action}</div>; }
+function P16Card({ children, className = '' }) { return <section className={'panel ' + className}>{children}</section>; }
+function P16Title({ eyebrow, title, action }) { return <div className="panel-heading"><div>{eyebrow&&<div className="section-kicker">{eyebrow}</div>}<h3>{title}</h3></div>{action}</div>; }
 function P16Field({ label, children }) { return <label className="p16-field"><span>{label}</span>{children}</label>; }
-function P16Count({ children }) { return <span className="p16-count">{children}</span>; }
-function P16Button({ children, onClick, outline = false, disabled = false, type = 'button' }) { return <button type={type} disabled={disabled} className={'p16-button ' + (outline ? 'outline' : 'primary')} onClick={onClick}>{children}</button>; }
+function P16Count({ children }) { return <span className="order-result-count">{children}</span>; }
+function P16Button({ children, onClick, outline = false, disabled = false, type = 'button' }) { return <button type={type} disabled={disabled} className={outline ? 'outline-button' : 'primary-button'} onClick={onClick}>{children}</button>; }
 function dueInfo(date) {
   if (!date) return {label:'Sem vencimento',tone:'normal'};
   if (date < todayKey(0)) return {label:'Vencida',tone:'overdue'};
