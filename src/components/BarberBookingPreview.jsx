@@ -23,7 +23,6 @@ const PROMOTIONS = [
   {id:'pr2',name:'Pézinho especial',kind:'service',startsOn:todayKey(-2),endsOn:todayKey(12),active:true,serviceIds:['s6'],promoPriceCents:1500},
   {id:'pr3',name:'Combo completo',kind:'combo',startsOn:todayKey(8),endsOn:todayKey(24),active:true,serviceIds:['s1','s2','s7'],promoPriceCents:9200},
 ];
-const timeOptions = Array.from({length:23},(_,index)=>{const minutes=9*60+index*30;return String(Math.floor(minutes/60)).padStart(2,'0')+':'+String(minutes%60).padStart(2,'0');});
 const toMinutes = (time) => Number(time.slice(0,2))*60+Number(time.slice(3,5));
 const overlaps = (a,da,b,db) => toMinutes(a)<toMinutes(b)+db && toMinutes(a)+da>toMinutes(b);
 
@@ -39,14 +38,22 @@ export default function BarberBookingPreview({ notify=()=>{} }) {
   const chosenPromotion = applicablePromotions.find((item)=>item.id===promotionId);
   const selectedServices = selected.map((item)=>SERVICES.find((service)=>service.id===item.serviceId)).filter(Boolean);
   const regularTotal = selectedServices.reduce((sum,item)=>sum+item.priceCents,0);
-  const promoApplies = chosenPromotion && chosenPromotion.serviceIds.every((id)=>selected.some((item)=>item.serviceId===id)) && date>=chosenPromotion.startsOn && date<=chosenPromotion.endsOn;
-  const promotionTotal = promoApplies ? chosenPromotion.promoPriceCents : regularTotal;
+  const promoApplies = Boolean(chosenPromotion && chosenPromotion.serviceIds.every((id)=>selected.some((item)=>item.serviceId===id)) && date>=chosenPromotion.startsOn && date<=chosenPromotion.endsOn);
+  const promotedPrices = useMemo(()=>{
+    const result = Object.fromEntries(selectedServices.map((service)=>[service.id,service.priceCents]));
+    if(!promoApplies) return result;
+    const offerServices = chosenPromotion.serviceIds.map((id)=>selectedServices.find((service)=>service.id===id)).filter(Boolean);
+    const regular = offerServices.reduce((sum,service)=>sum+service.priceCents,0);
+    const allocated = offerServices.map((service)=>Math.floor(chosenPromotion.promoPriceCents*service.priceCents/regular));
+    let remaining = chosenPromotion.promoPriceCents-allocated.reduce((sum,cents)=>sum+cents,0);
+    const shares = offerServices.map((service,index)=>({index,remainder:(chosenPromotion.promoPriceCents*service.priceCents)%regular})).sort((a,b)=>b.remainder-a.remainder||a.index-b.index);
+    for(let index=0;remaining>0;index+=1,remaining-=1) allocated[shares[index%shares.length].index]+=1;
+    offerServices.forEach((service,index)=>{result[service.id]=allocated[index]});
+    return result;
+  },[selectedServices,chosenPromotion,promoApplies]);
+  const promotionTotal = selectedServices.reduce((sum,service)=>sum+(promotedPrices[service.id]??service.priceCents),0);
   const duration = selectedServices.reduce((sum,item)=>sum+item.durationMinutes,0);
-  const totalSlots = selected.map((item)=>({
-    ...item,
-    service: SERVICES.find((service)=>service.id===item.serviceId),
-    available: timeOptions.filter((slot,index)=>index%4!==3 || item.serviceId==='s6' || item.serviceId==='s7')
-  }));
+  const totalSlots = selected.map((item)=>({...item,service:SERVICES.find((service)=>service.id===item.serviceId)}));
 
   function applyPromotion(promotion) {
     const dateNext = date<promotion.startsOn ? promotion.startsOn : date>promotion.endsOn ? promotion.startsOn : date;
@@ -66,14 +73,36 @@ export default function BarberBookingPreview({ notify=()=>{} }) {
       : [...current,{serviceId:service.id,professionalId:ANY,time:''}]);
   }
   function setProfessional(serviceId, professionalId) {
-    setSelected((current)=>current.map((item)=>({...item,professionalId,time:''})));
+    setSelected((current)=>current.map((item)=>({
+      ...item,
+      professionalId:item.serviceId===serviceId?professionalId:item.professionalId,
+      time:'',
+      assignedProfessional:null
+    })));
   }
   function availableFor(item) {
+    const day = new Date(date+'T12:00:00').getDay();
+    const hours = day===0 ? null : day===1
+      ? {open:'13:30',close:'20:00',breakStart:'',breakEnd:''}
+      : day===6 ? {open:'09:00',close:'17:00',breakStart:'',breakEnd:''}
+      : {open:'09:00',close:'20:00',breakStart:'',breakEnd:''};
+    if(!hours) return [];
+    const professionals = item.professionalId===ANY
+      ? PROFESSIONALS
+      : PROFESSIONALS.filter((person)=>person.id===item.professionalId);
     const others=selected.filter((other)=>other.serviceId!==item.serviceId && other.time);
-    return item.available.filter((slot)=>!others.some((other)=>{
-      const otherService=SERVICES.find((service)=>service.id===other.serviceId);
-      return overlaps(slot,item.service.durationMinutes,other.time,otherService.durationMinutes);
-    }));
+    const result=[];
+    for(let minute=toMinutes(hours.open);minute+item.service.durationMinutes<=toMinutes(hours.close);minute+=30){
+      const slot=String(Math.floor(minute/60)).padStart(2,'0')+':'+String(minute%60).padStart(2,'0');
+      if(hours.breakStart && minute<toMinutes(hours.breakEnd) && minute+item.service.durationMinutes>toMinutes(hours.breakStart)) continue;
+      const conflicts=others.some((other)=>{
+        const otherService=SERVICES.find((service)=>service.id===other.serviceId);
+        return overlaps(slot,item.service.durationMinutes,other.time,otherService.durationMinutes);
+      });
+      if(conflicts) continue;
+      professionals.forEach((professional)=>result.push({time:slot,professional}));
+    }
+    return result;
   }
   function chooseSlot(serviceId,time,professional) {
     setSelected((current)=>current.map((item)=>item.serviceId===serviceId?{...item,time,assignedProfessional:professional}:item));
@@ -86,8 +115,8 @@ export default function BarberBookingPreview({ notify=()=>{} }) {
     }
     const chosen=selected.map((item)=>{
       const service=SERVICES.find((s)=>s.id===item.serviceId);
-      const assigned=PROFESSIONALS.find((p)=>p.id===item.professionalId)||item.assignedProfessional||PROFESSIONALS[0];
-      return {service, time:item.time, professional:assigned.name, priceCents:service.priceCents};
+      const assigned=item.assignedProfessional||PROFESSIONALS.find((p)=>p.id===item.professionalId)||PROFESSIONALS[0];
+      return {service, time:item.time, professional:assigned.name, priceCents:promotedPrices[service.id]??service.priceCents, promotionName:promoApplies&&chosenPromotion.serviceIds.includes(service.id)?chosenPromotion.name:''};
     }).sort((a,b)=>a.time.localeCompare(b.time));
     setBooking({code:'B67-2026-0148',date,name,whatsapp,items:chosen,total:promotionTotal,duration});
   }
@@ -138,10 +167,10 @@ export default function BarberBookingPreview({ notify=()=>{} }) {
       <div className="bb-slot-groups">{totalSlots.map((item,index)=>{
         const slots=availableFor(item);
         const preferred=PROFESSIONALS.find((p)=>p.id===item.professionalId);
-        return <article className="bb-slot-card" key={item.serviceId}><div className="bb-slot-head"><span>{String(index+1).padStart(2,'0')}</span><div><strong>{item.service.name}</strong><small>{item.service.durationMinutes} min · {preferred?.name||'Sem preferência'}</small></div>{item.time&&<b>{item.time}</b>}</div>{slots.length?<div className="bb-slot-grid">{slots.map((slot,index2)=>{
-          const professional= item.professionalId===ANY ? PROFESSIONALS[index2%PROFESSIONALS.length] : preferred||PROFESSIONALS[0];
-          return <button key={slot} className={item.time===slot?'selected':''} onClick={()=>chooseSlot(item.serviceId,slot,professional)}><strong>{slot}</strong>{item.professionalId===ANY&&<small>{professional.name}</small>}</button>;
-        })}</div>:<p className="bb-empty-slot">Não há horários disponíveis para esse procedimento.</p>}</article>;
+        return <article className="bb-slot-card" key={item.serviceId}><div className="bb-slot-head"><span>{String(index+1).padStart(2,'0')}</span><div><strong>{item.service.name}</strong><small>{item.service.durationMinutes} min · {preferred?.name||'Sem preferência'}</small></div>{item.time&&<b>{item.time}</b>}</div>{slots.length?<div className="bb-slot-grid">{slots.map((slot,slotIndex)=>{
+          const chosen=item.time===slot.time&&item.assignedProfessional?.id===slot.professional.id;
+          return <button key={slot.time+'-'+slot.professional.id+'-'+slotIndex} className={chosen?'selected':''} onClick={()=>chooseSlot(item.serviceId,slot.time,slot.professional)}><strong>{slot.time}</strong>{item.professionalId===ANY&&<small>{slot.professional.name}</small>}</button>;
+        })}</div>:<p className="bb-empty-slot">Não há horários disponíveis para esse procedimento nesta data.</p>}</article>;
       })}</div>
       <p className="bb-helper">Cada procedimento tem sua própria escolha de horário. O sistema evita sobreposição entre serviços do mesmo atendimento.</p>
     </section>}
