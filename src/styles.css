@@ -456,3 +456,283 @@
 /* The uploaded 2R mark is transparent; a light tile keeps the navy letter clear on dark headers. */
 .portfolio-brand>img{background:#f6fcff;border:1px solid rgba(166,230,245,.45);border-radius:11px;padding:2px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
 .portfolio-photo-logo{background:#f6fcff}
+
+/* P19 visual refinement — improve reading hierarchy across portfolio and previews. */
+.portfolio-shell {
+  --portfolio-copy: #43546a;
+}
+.portfolio-nav a,
+.portfolio-brand strong,
+.portfolio-button,
+.portfolio-quick-access b,
+.portfolio-floating-card strong {
+  font-size: 12px;
+}
+.portfolio-brand small,
+.portfolio-floating-card small,
+.portfolio-photo-overlay span,
+.portfolio-contact-number {
+  font-size: 11px;
+}
+.portfolio-eyebrow,
+.portfolio-section-kicker {
+  font-size: 10px;
+}
+.portfolio-section-heading p,
+.portfolio-service-copy small,
+.portfolio-project-content > p,
+.portfolio-process-layout > div:first-child > p,
+.portfolio-about-layout > div:nth-child(2) > p,
+.portfolio-contact-layout > div:first-child > p,
+.portfolio-demo-note p,
+.portfolio-principles p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.portfolio-text-link,
+.portfolio-service-copy strong,
+.portfolio-principles strong,
+.portfolio-about-quote strong {
+  font-size: 13px;
+}
+.portfolio-project-meta,
+.portfolio-project-status,
+.portfolio-projects-count small,
+.portfolio-feature-tags span,
+.portfolio-all-projects > span,
+.portfolio-all-projects button {
+  font-size: 10px;
+}
+.portfolio-project-button {
+  font-size: 12px;
+  min-height: 44px;
+}
+.portfolio-calendar-top > span,
+.portfolio-calendar-row span,
+.portfolio-calendar-row b,
+.portfolio-barber-side span,
+.portfolio-barber-title small,
+.portfolio-barber-appointment > span,
+.portfolio-barber-appointment b,
+.portfolio-barber-appointment small,
+.portfolio-burger-dashboard-top small,
+.portfolio-burger-order > span,
+.portfolio-burger-order b,
+.portfolio-burger-order small,
+.portfolio-burger-mini-stats small {
+  font-size: 9px;
+}
+.portfolio-hero-caption,
+.portfolio-about-quote small,
+.portfolio-footer-brand small,
+.portfolio-footer-inner > span,
+.portfolio-footer-inner > button {
+  font-size: 10px;
+}
+.portfolio-whatsapp-button {
+  background: linear-gradient(115deg, #087e65, #20ad68);
+  border-color: #20ad68;
+  box-shadow: 0 9px 22px rgba(18, 140, 92, .2);
+}
+.portfolio-whatsapp-button:hover {
+  background: linear-gradient(115deg, #066d58, #15985a);
+  border-color: #15985a;
+}
+.portfolio-whatsapp-button svg {
+  flex: 0 0 auto;
+}
+.portfolio-whatsapp-number {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: .94;
+}
+.portfolio-hero-actions .portfolio-button-secondary {
+  border-color: rgba(37, 211, 102, .45);
+}
+.portfolio-hero-actions .portfolio-button-secondary svg {
+  color: #32d879;
+}
+
+.demo-main {
+  font-size: 14px;
+}
+.demo-main p {
+  font-size: 13px;
+  line-height: 1.68;
+}
+.demo-main small {
+  font-size: 12px;
+}
+.demo-main h2 {
+  font-size: 23px;
+  line-height: 1.25;
+}
+.demo-main h3 {
+  font-size: 17px;
+  line-height: 1.35;
+}
+.demo-main .main-title-row h1 {
+  font-size: clamp(27px, 2.7vw, 34px);
+  line-height: 1.2;
+}
+.demo-main .main-title-row p,
+.demo-main .panel-heading p,
+.demo-main .welcome-strip p,
+.demo-main .orders-intro p,
+.demo-main .service-helper p,
+.demo-main .tip-card p {
+  font-size: 13px;
+}
+.demo-main .eyebrow,
+.demo-main .muted-eyebrow,
+.demo-main .public-kicker {
+  font-size: 10px;
+}
+.demo-main .sample-tag,
+.demo-main .date-chip,
+.demo-main .fake-live,
+.demo-main .workspace-badge {
+  font-size: 11px;
+}
+.demo-main .metric-label,
+.demo-main .metric-foot,
+.demo-main .table-head,
+.demo-main .table-foot,
+.demo-main .block-muted,
+.demo-main .muted-text,
+.demo-main .service-detail,
+.demo-main .service-enabled,
+.demo-main .booking-step p,
+.demo-main .booking-summary label,
+.demo-main .booking-fields label,
+.demo-main .booking-total > span,
+.demo-main .booking-total > small,
+.demo-main .booking-confirmation-details span,
+.demo-main .menu-product-art span,
+.demo-main .order-cart-lines > div,
+.demo-main .order-cart-lines > p {
+  font-size: 12px;
+}
+.demo-main .table-row,
+.demo-main .appointment-row,
+.demo-main .booking-service-option,
+.demo-main .booking-time-grid button,
+.demo-main .menu-product-body p,
+.demo-main .service-card h3,
+.demo-main .automation-point p,
+.demo-main .automation-reminder p {
+  font-size: 13px;
+}
+.demo-main .table-row small,
+.demo-main .booking-service-copy small,
+.demo-main .demo-data-note p,
+.demo-main .demo-footer-note,
+.demo-main .booking-privacy,
+.demo-main .landing-disclaimer,
+.demo-main .landing-copy p,
+.demo-main .landing-service-item strong,
+.demo-main .landing-service-item b {
+  font-size: 12px;
+}
+.demo-main .module-chips span,
+.demo-main .category-pill,
+.demo-main .status-badge,
+.demo-main .service-category,
+.demo-main .automation-point > span,
+.demo-main .automation-reminder strong,
+.demo-main .booking-step > span,
+.demo-main .booking-service-option > b,
+.demo-main .appt-row-actions .small-outline {
+  font-size: 11px;
+}
+.demo-main button,
+.demo-main input,
+.demo-main select {
+  font-size: 13px;
+}
+.demo-main .side-nav-item {
+  font-size: 13px;
+  min-height: 46px;
+}
+.demo-main .panel {
+  border-radius: 15px;
+}
+.demo-main .panel-heading h3 {
+  font-size: 18px;
+}
+.demo-main .data-table .table-head {
+  font-weight: 800;
+  color: #526579;
+}
+.demo-main .data-table .table-row {
+  min-height: 54px;
+}
+.demo-main .booking-time-grid button,
+.demo-main .appt-row-actions .small-outline {
+  min-height: 38px;
+}
+.demo-main .primary-button,
+.demo-main .secondary-button {
+  min-height: 42px;
+  padding-inline: 15px;
+}
+.demo-main .landing-copy h2 {
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.2;
+}
+.demo-main .landing-preview-nav span,
+.demo-main .landing-preview-nav button,
+.demo-main .landing-switcher button {
+  font-size: 12px;
+}
+.demo-main .landing-service-item small {
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .portfolio-service-copy small,
+  .portfolio-project-content > p,
+  .portfolio-process-layout > div:first-child > p,
+  .portfolio-about-layout > div:nth-child(2) > p,
+  .portfolio-contact-layout > div:first-child > p {
+    font-size: 13px;
+  }
+  .portfolio-whatsapp-number {
+    font-size: 11px;
+  }
+}
+@media (max-width: 680px) {
+  .portfolio-button {
+    font-size: 13px;
+    min-height: 46px;
+  }
+  .portfolio-project-content > p,
+  .portfolio-section-heading p,
+  .portfolio-service-copy small,
+  .portfolio-process-layout > div:first-child > p,
+  .portfolio-about-layout > div:nth-child(2) > p,
+  .portfolio-contact-layout > div:first-child > p,
+  .portfolio-demo-note p,
+  .portfolio-principles p {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .portfolio-whatsapp-button {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .portfolio-whatsapp-number {
+    margin-left: 0;
+  }
+  .demo-main .table-head {
+    font-size: 11px;
+  }
+  .demo-main .table-row {
+    font-size: 12px;
+  }
+  .demo-main .panel-heading h3 {
+    font-size: 17px;
+  }
+}
+
