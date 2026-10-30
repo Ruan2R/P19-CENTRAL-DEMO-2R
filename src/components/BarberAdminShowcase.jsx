@@ -223,25 +223,3 @@ function OrdersView({orders,setOrders,products,setProducts,notify}) {
     <p className="bb-demo-note"><ShieldCheck size={14}/> O pedido é lançado pela equipe. A numeração reinicia em 001 a cada novo atendimento. O preparo e o pagamento possuem estados independentes.</p>
   </div>;
 }
-
-export default function P16DemoShowcase({module,notify=()=>{}}) {
-  const [products,setProducts]=useState([
-    {id:'pr1',name:'Refrigerante lata 350 ml',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,unit:'un',cost:3.2,price:6,stock:22,minimum:8},
-    {id:'pr2',name:'Água mineral 500 ml',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,unit:'un',cost:1.5,price:3.5,stock:36,minimum:10},
-    {id:'pr3',name:'Cerveja long neck',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,unit:'un',cost:5.8,price:10,stock:12,minimum:6},
-    {id:'pr4',name:'Hambúrguer artesanal',category:'Lanches',kind:'prepared',sellable:true,stockTracked:false,unit:'porcao',cost:8.5,price:20,stock:0,minimum:0},
-    {id:'pr5',name:'Batata frita',category:'Porções',kind:'prepared',sellable:true,stockTracked:false,unit:'porcao',cost:4.2,price:12,stock:0,minimum:0},
-  ]);
-  const [orders,setOrders]=useState([{id:'o1',number:1,sessionNo:1,customer:'Mesa 02',items:'2x Hambúrguer artesanal, 1x Refrigerante lata 350 ml',total:46,status:'Em preparo',paymentStatus:'unpaid',created:'19:12',businessDate:dateKey(0),itemRecords:[{productId:'pr4',quantity:2},{productId:'pr1',quantity:1}]},{id:'o2',number:2,sessionNo:1,customer:'Balcão',items:'1x Batata frita, 2x Água mineral 500 ml',total:19,paymentMethod:'Pix',status:'Pronto',paymentStatus:'paid',created:'19:25',businessDate:dateKey(0),itemRecords:[{productId:'pr5',quantity:1},{productId:'pr2',quantity:2}]},{id:'o3',number:3,sessionNo:1,customer:'Mesa 05',items:'3x Cerveja long neck',total:30,status:'Recebido',paymentStatus:'unpaid',created:'19:40',businessDate:dateKey(0),itemRecords:[{productId:'pr3',quantity:3}]}]);
-  const [entries,setEntries]=useState([{id:'e1',direction:'income',description:'Vendas de balcão',category:'Vendas',amountCents:125000,movementDate:dateKey(0),paymentMethod:'Pix'},{id:'e2',direction:'expense',description:'Compra de bebidas',category:'Estoque',amountCents:48000,movementDate:dateKey(-1),paymentMethod:'Cartão'}]);
-  const [payables,setPayables]=useState([{id:'py1',description:'Fornecedor de bebidas',category:'Estoque',amountCents:280000,dueDate:dateKey(4),paid:false},{id:'py2',description:'Aluguel',category:'Estrutura',amountCents:120000,dueDate:dateKey(-2),paid:false}]);
-  const [receivables,setReceivables]=useState([{id:'rc1',title:'Pedido #003',counterparty:'Balcão',amountCents:3000,dueDate:dateKey(0),received:false,orderId:'o3',orderNumber:3}]);
-  const [sessionOpen,setSessionOpen]=useState(true),[sessionNo,setSessionNo]=useState(1),[nextNumber,setNextNumber]=useState(4),[attendanceDate,setAttendanceDate]=useState(dateKey(0));
-  const [movements,setMovements]=useState([]);
-  const [stockMovements,setStockMovements]=useState([{id:'sm1',productId:'pr1',productName:'Refrigerante lata 350 ml',type:'purchase',quantity:12,before:10,after:22,reason:'Compra fornecedor',movementDate:dateKey(-2),sourceType:'manual'},{id:'sm2',productId:'pr3',productName:'Cerveja long neck',type:'order_consumption',quantity:-3,before:15,after:12,reason:'Pedido #001',movementDate:dateKey(0),sourceType:'order'}]);
-  const [financeTab,setFinanceTab]=useState('overview');
-  const [notice,setNotice]=useState('');
-  const [selectedMonth,setSelectedMonth]=useState(dateKey(0).slice(0,7));
-  if(module==='orders')return <OrdersView {...{orders,setOrders,products,setProducts,notify,sessionOpen,setSessionOpen,sessionNo,setSessionNo,nextNumber,setNextNumber,attendanceDate,setAttendanceDate,stockMovements,setStockMovements,entries,setEntries,receivables,setReceivables}}/>;
-  return <FinanceArea {...{financeTab,setFinanceTab,products,setProducts,entries,setEntries,payables,setPayables,receivables,setReceivables,stockMovements,setStockMovements,orders,notify,selectedMonth,setSelectedMonth}}/>;
-}
