@@ -602,7 +602,7 @@ function PortfolioHome({ onOpenDemo, onOpenCatalog }) {
           <div className="portfolio-hero-visual">
             <div className="portfolio-photo-halo" aria-hidden="true"></div>
             <div className="portfolio-photo-frame">
-              <img className="portfolio-profile-photo" src="/ruan-profile.jpg" alt="Ruan Rodrigues, da 2R Informática" fetchPriority="high"/>
+              <img className="portfolio-profile-photo" src="/ruan-profile.webp" alt="Ruan Rodrigues, da 2R Informática" fetchPriority="high"/>
               <div className="portfolio-photo-overlay">
                 <div className="portfolio-photo-logo"><img src="/2r-logo.png" alt=""/></div>
                 <div><strong>Ruan Rodrigues</strong><span>Desenvolvimento web · Tecnologia</span></div>
