@@ -21,10 +21,6 @@ const stockTypes = {
   purchase: 'Entrada por compra', return: 'Devolução / retorno', adjustment_in: 'Ajuste de entrada',
   sale: 'Venda avulsa', adjustment_out: 'Ajuste de saída', waste: 'Perda / desperdício', order_consumption: 'Saída por pedido'
 };
-const stockGroups = {
-  resale: { label:'Produtos para revenda', description:'Itens comprados prontos, com quantidade e estoque mínimo controlados.' },
-  prepared: { label:'Preparados na hora', description:'Itens produzidos no momento da venda. Possuem custo estimado, mas não têm estoque próprio.' }
-};
 const paymentOptions = ['Pix', 'Dinheiro', 'Cartão', 'Transferência', 'Não informado', 'Outro'];
 const initialProducts = [
   {id:'prod1',name:'Refrigerante lata 350 ml',category:'Bebidas',kind:'resale',sellable:true,stockTracked:true,costCents:320,priceCents:600,stock:21,minimum:8,unit:'un'},
@@ -57,8 +53,6 @@ const initialStockMovements = [
 ];
 function P16Card({ children, className = '' }) { return <section className={'panel ' + className}>{children}</section>; }
 function P16Title({ eyebrow, title, action }) { return <div className="panel-heading"><div>{eyebrow&&<div className="section-kicker">{eyebrow}</div>}<h3>{title}</h3></div>{action}</div>; }
-function P16Count({ children }) { return <span className="order-result-count">{children}</span>; }
-function P16Button({ children, onClick, outline = false, disabled = false, type = 'button' }) { return <button type={type} disabled={disabled} className={outline ? 'outline-button' : 'primary-button'} onClick={onClick}>{children}</button>; }
 function dueInfo(date) {
   if (!date) return {label:'Sem vencimento',tone:'normal'};
   if (date < todayKey(0)) return {label:'Vencida',tone:'overdue'};
