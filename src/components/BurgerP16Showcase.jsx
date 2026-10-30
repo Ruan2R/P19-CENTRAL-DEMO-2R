@@ -1,13 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import '../burger-p16-faithful.css';
 import ModuleGuideCard from './ModuleGuideCard';
 import { BURGER_FINANCE_GUIDES, getModuleGuide } from '../demoGuides';
-import {
-  AlertTriangle, ArrowDownLeft, ArrowRight, ArrowUpRight, BarChart3, Bell, Boxes, CalendarDays, Check, CheckCircle2,
-  ChevronDown, ClipboardList, CreditCard, Filter, LayoutDashboard, Package, Plus, RefreshCw,
-  Search, ShieldCheck, ShoppingBag, StopCircle, PlayCircle, Trash2, TrendingDown, TrendingUp,
-  Wallet, X, LogOut, Store
-} from 'lucide-react';
+import { AlertTriangle, ArrowDownLeft, ArrowUpRight, BarChart3, Bell, CalendarDays, Check, CheckCircle2, ChevronDown, ClipboardList, CreditCard, Package, Plus, Search, ShieldCheck, StopCircle, PlayCircle, Trash2, TrendingUp, Wallet, X, LogOut, Store } from 'lucide-react';
 
 const todayKey = (offset = 0) => {
   const date = new Date(); date.setDate(date.getDate() + offset);
