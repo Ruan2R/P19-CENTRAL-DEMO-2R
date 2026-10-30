@@ -147,7 +147,7 @@ export default function BarberBookingPreview({ notify=()=>{} }) {
       })}</div>}
       <div className="bb-service-list">{SERVICES.filter((service)=>service.active).map((service)=>{
         const chosen=selected.some((item)=>item.serviceId===service.id);
-        return <button key={service.id} className={'bb-service-option'+(chosen?' selected':'')} aria-pressed={chosen} onClick={()=>toggleService(service)}><span className="bb-service-check">{chosen?'✓':'+'}</span><span><strong>{service.name}</strong><small>{service.durationMinutes} minutos</small></span><b>{currency(service.priceCents)}</b></button>;
+        return <button key={service.id} className={'bb-service-option'+(chosen?' selected':'')} aria-pressed={chosen} onClick={()=>toggleService(service)}><span className="bb-service-check">{chosen?'✓':'+'}</span><span><strong>{service.name}</strong><small>{service.durationMinutes} minutos</small></span><b>{currency(promotedPrices[service.id]??service.priceCents)}{(promotedPrices[service.id]??service.priceCents)<service.priceCents&&<s>{currency(service.priceCents)}</s>}</b></button>;
       })}</div>
       {selected.length>0&&<div className="bb-total-preview"><span>{selected.length} procedimentos · {duration} min</span>{promoApplies&&<small>{chosenPromotion.name} aplicada</small>}<strong>{currency(promotionTotal)}</strong></div>}
     </section>
