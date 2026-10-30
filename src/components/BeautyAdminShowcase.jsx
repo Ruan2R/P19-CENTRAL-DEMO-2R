@@ -1,10 +1,5 @@
-import { useMemo, useState } from 'react';
-import {
-  AlertCircle, ArrowRight, CalendarCheck2, CalendarDays, Check, CheckCircle2, ChevronDown,
-  Clock3, DoorClosed, FileText, MessageCircle, MoreHorizontal, Pencil, PauseCircle, PlayCircle,
-  Plus, Receipt, Save, Scissors, Search, ShieldCheck, SlidersHorizontal, Tag, Trash2, TrendingDown,
-  TrendingUp, Upload, UserPlus, UserRound, Users, Wallet, X, Phone, RefreshCw
-} from 'lucide-react';
+import { useState } from 'react';
+import { AlertCircle, CalendarCheck2, CalendarDays, Check, CheckCircle2, ChevronDown, Clock3, FileText, MessageCircle, MoreHorizontal, Pencil, PauseCircle, PlayCircle, Plus, Receipt, Save, Scissors, Search, ShieldCheck, SlidersHorizontal, Tag, Trash2, TrendingDown, TrendingUp, Upload, UserPlus, Wallet, X, Phone } from 'lucide-react';
 import BookingTimeWheelPicker from './BookingTimeWheelPicker';
 
 const WEEKDAYS = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
