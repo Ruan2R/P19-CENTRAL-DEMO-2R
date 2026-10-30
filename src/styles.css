@@ -1854,3 +1854,20 @@
   .p16-order-actions > * { width:100%; }
   .p16-form-actions > button { flex:1 1 100%; }
 }
+
+
+/* P15 detail controls — editable team profiles and finance record actions. */
+.bb-professional-detail { display:grid; gap:8px; padding:8px 0; border-top:1px solid #edf0f3; }
+.bb-professional-detail .bb-professional-row { padding:0; border-top:0; }
+.bb-professional-edit { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:8px; align-items:end; padding-left:44px; }
+.bb-professional-edit .bb-admin-field { display:grid; gap:5px; color:#718498; font-size:9px; font-weight:800; }
+.bb-professional-edit input { width:100%; min-width:0; min-height:34px; padding:7px 9px; border:1px solid #e0e6ec; border-radius:7px; background:#fff; color:#30475c; font-size:10px; }
+.bb-payable-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+.bb-payable-actions .bb-text-action { padding:4px 0; }
+.bb-entry-row { grid-template-columns:31px minmax(0,1fr) auto auto; }
+.bb-entry-row > button { white-space:nowrap; }
+@media (max-width:760px) {
+  .bb-professional-edit { grid-template-columns:1fr; padding-left:0; }
+  .bb-professional-edit > button { width:100%; }
+  .bb-payable-actions { grid-column:1/-1; justify-content:flex-start; }
+}
