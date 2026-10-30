@@ -455,7 +455,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
         <P16Card><P16Title eyebrow="OBRIGAÇÕES" title="Contas a pagar" action={<P16Count>{openPayables.length} pendentes</P16Count>}/><strong className="p16-obligation-total">{cash(pendingPayablesTotal)}</strong>{openPayables.slice(0,4).map(x=><div className="p16-obligation-row" key={x.id}><span>{x.description}<small>{x.category} · {dateText(x.dueDate)}</small></span><b>{cash(x.amountCents)}</b></div>)}<P16Button outline onClick={()=>setFinanceTab('payables')}>Ver contas a pagar <ArrowRight size={14}/></P16Button></P16Card>
         <P16Card><P16Title eyebrow="OBRIGAÇÕES" title="Valores a receber" action={<P16Count>{openReceivables.length} pendentes</P16Count>}/><strong className="p16-obligation-total">{cash(pendingReceivablesTotal)}</strong>{openReceivables.slice(0,4).map(x=><div className="p16-obligation-row" key={x.id}><span>{x.description}<small>{x.counterparty} · {dateText(x.dueDate)}</small></span><b>{cash(x.amountCents)}</b></div>)}<P16Button outline onClick={()=>setFinanceTab('receivables')}>Ver valores a receber <ArrowRight size={14}/></P16Button></P16Card>
       </div>
-      <div className="p16-two-columns"><P16Card><P16Title eyebrow="CATEGORIAS" title="Origem das entradas"/><CategoryRows rows={incomeRows}/></P16Card><P16Card><P16Title eyebrow="CATEGORIAS" title="Destino das saídas"/><CategoryRows rows={expenseRows}/></P16Card></div>
+      <div className="p16-two-columns"><P16Card><P16Title eyebrow="CATEGORIAS" title="Origem das entradas"/><CategoryRows rows={incomeRows} tone="income"/></P16Card><P16Card><P16Title eyebrow="CATEGORIAS" title="Destino das saídas"/><CategoryRows rows={expenseRows} tone="expense"/></P16Card></div>
       <P16Card><P16Title eyebrow="CAIXA" title="Movimentações do período" action={<button className="p16-link-button" onClick={()=>setFinanceTab('transactions')}>Abrir todas <ArrowRight size={14}/></button>}/><MovementList items={currentMonthEntries.slice(0,6)}/></P16Card>
     </>;
   }
@@ -506,8 +506,56 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
 }
 function ProductGroup({title,description,products,onMove,onRemove}) {
   const [expanded,setExpanded]=useState(false);
-  return <section className="p16-product-group"><button className="p16-product-group-heading" onClick={()=>setExpanded(value=>!value)} aria-expanded={expanded}><span><strong>{title}</strong><small>{description}</small></span><em>{products.length} itens</em><ChevronDown size={16}/></button>{expanded&&<div className="p16-products-table">{products.length?products.map(product=><article key={product.id}><div><strong>{product.name}</strong><small>{product.category} · {product.kind==='prepared'?'Preparado na hora':'Revenda'}</small></div><div><small>Custo</small><strong>{cash(product.costCents)}</strong></div><div><small>Venda</small><strong>{cash(product.priceCents)}</strong></div><div><small>Margem estimada</small><strong className={product.priceCents>=product.costCents?'positive':'negative'}>{cash(product.priceCents-product.costCents)}</strong></div><div><small>Estoque</small><strong>{product.stockTracked?productQuantity(product,product.stock)+' '+product.unit:'Sem estoque próprio'}</strong></div><div><small>Status</small><em>{product.kind==='prepared'?'Feito na hora':product.stock<=product.minimum?'Repor estoque':'Disponível'}</em></div><div className="p16-product-actions">{product.stockTracked&&<button onClick={()=>onMove(product)}><Package size={13}/> Movimentar</button>}<button className="danger" onClick={()=>onRemove(product)}><Trash2 size={13}/> Arquivar</button></div></article>):<p className="p16-empty">Nenhum produto nesta categoria.</p>}</div>}</section>;
+  return <section className={'product-group '+(expanded?'is-expanded':'is-collapsed')}>
+    <div className="product-group-heading">
+      <div><h4>{title}</h4><p>{description}</p></div>
+      <button type="button" className="product-group-toggle" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>
+        <span>{products.length} {products.length===1?'item':'itens'}</span><ChevronDown size={17}/>
+      </button>
+    </div>
+    {expanded&&(products.length===0?<div className="product-group-empty">Nenhum produto nesta categoria.</div>:<>
+      <div className="data-table-wrap desktop-record-table">
+        <table className="data-table"><thead><tr><th>Produto</th><th>Categoria</th><th>Custo</th><th>Venda</th><th>Margem estimada</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody>{products.map(product=><tr key={product.id}>
+            <td><div className="table-product"><span className="product-avatar"><Package size={16}/></span><strong>{product.name}</strong></div></td>
+            <td>{product.category}</td><td>{cash(product.costCents)}</td><td className="amount-cell">{cash(product.priceCents)}</td>
+            <td className={product.priceCents>=product.costCents?'positive':'negative'}>{cash(product.priceCents-product.costCents)}</td>
+            <td>{product.stockTracked?productQuantity(product,product.stock)+' '+product.unit:'Sem estoque próprio'}</td>
+            <td><span className={'status-pill '+(product.kind==='prepared'?'done':product.stock<=product.minimum?'pending':'done')}>{product.kind==='prepared'?'Feito na hora':product.stock<=product.minimum?'Repor estoque':'Disponível'}</span></td>
+            <td><div className="record-actions">{product.stockTracked&&<button type="button" className="small-action" onClick={()=>onMove(product)}><Package size={14}/> Movimentar</button>}<button type="button" className="small-action danger-action" onClick={()=>onRemove(product)}><Trash2 size={14}/> Arquivar</button></div></td>
+          </tr>)}</tbody>
+        </table>
+      </div>
+      <div className="product-cards-mobile">{products.map(product=><article className="product-card-mobile" key={product.id}>
+        <div className="product-card-top"><span className="product-avatar"><Package size={17}/></span><div><strong>{product.name}</strong><span>{product.category}</span></div><span className={'status-pill '+(product.kind==='prepared'?'done':product.stock<=product.minimum?'pending':'done')}>{product.kind==='prepared'?'Preparado':product.stock<=product.minimum?'Repor':'Disponível'}</span></div>
+        <div className="product-card-values"><div><span>{product.kind==='prepared'?'Custo estimado':'Custo unitário'}</span><strong>{cash(product.costCents)}</strong></div><div><span>Preço de venda</span><strong>{cash(product.priceCents)}</strong></div><div><span>Margem estimada</span><strong className={product.priceCents>=product.costCents?'positive':'negative'}>{cash(product.priceCents-product.costCents)}</strong></div></div>
+        <div className="product-card-stock"><span>{product.stockTracked?'Estoque atual':'Controle de estoque'}</span><strong>{product.stockTracked?productQuantity(product,product.stock)+' '+product.unit+' · mínimo '+product.minimum:'Não se aplica — feito na hora'}</strong></div>
+        <div className="record-actions">{product.stockTracked&&<button type="button" className="small-action" onClick={()=>onMove(product)}><Package size={14}/> Movimentar estoque</button>}<button type="button" className="small-action danger-action" onClick={()=>onRemove(product)}><Trash2 size={14}/> Arquivar</button></div>
+      </article>)}</div>
+    </>)}
+  </section>;
 }
-function Metric({label,value,detail,tone}) { return <article className={'p16-metric '+tone}><span>{label}</span><strong>{value}</strong><small>{detail}</small></article>; }
-function MovementList({items}) { return <div className="p16-movement-list">{items.length?items.map(item=><article key={item.id}><span className={item.direction==='income'?'income':'expense'}>{item.direction==='income'?<ArrowDownLeft size={16}/>:<ArrowUpRight size={16}/>}</span><div><strong>{item.description}</strong><small>{item.category} · {dateText(item.movementDate)} · {item.paymentMethod}</small></div><b className={item.direction}>{item.direction==='income'?'+':'−'} {cash(item.amountCents)}</b></article>):<p className="p16-empty">Nenhuma movimentação neste período.</p>}</div>; }
-function CategoryRows({rows}) { const total=rows.reduce((sum,item)=>sum+item.amount,0);return <div className="p16-category-list">{rows.length?rows.map(row=><div key={row.label}><span><strong>{row.label}</strong><small>{total?Math.round(row.amount/total*100):0}% · {cash(row.amount)}</small></span><i><b style={{width:(total?row.amount/total*100:0)+'%'}}/></i></div>):<p className="p16-empty">Sem movimentações cadastradas.</p>}</div>; }
+function Metric({label,value,detail,tone='blue'}) {
+  const icon=tone==='gold'?<TrendingUp size={17}/>:tone==='green'?<ArrowDownLeft size={17}/>:tone==='red'?<ArrowUpRight size={17}/>:<Package size={17}/>;
+  return <article className={'metric-card '+(tone==='gold'?'prominent':'')}>
+    <div className="metric-top"><span>{label}</span><span className={'metric-icon '+tone}>{icon}</span></div>
+    <strong className="metric-value">{value}</strong><div className="metric-detail">{detail}</div>
+  </article>;
+}
+function MovementList({items}) {
+  return items.length?<div className="movement-list">{items.map(item=><div className="movement-row" key={item.id}>
+    <span className={'movement-icon '+item.direction}>{item.direction==='income'?<ArrowDownLeft size={17}/>:<ArrowUpRight size={17}/>}</span>
+    <div className="movement-info"><strong>{item.description}</strong><span>{item.category} · {dateText(item.movementDate)} · {item.paymentMethod}</span></div>
+    <strong className={'movement-amount '+item.direction}>{item.direction==='income'?'+':'−'} {cash(item.amountCents)}</strong>
+  </div>)}</div>:<div className="empty-state">Nenhuma movimentação encontrada para este período.</div>;
+}
+function CategoryRows({rows,tone='income'}) {
+  const total=rows.reduce((sum,item)=>sum+item.amount,0);
+  return rows.length?<div className="category-breakdown-list">{rows.map(row=>{
+    const percent=total?row.amount/total*100:0;
+    return <div className="category-breakdown-row" key={row.label}>
+      <div className="category-breakdown-heading"><strong>{row.label}</strong><span>{Math.round(percent)}% · {cash(row.amount)}</span></div>
+      <div className="category-breakdown-track"><span className={tone} style={{width:percent+'%'}}/></div>
+    </div>;
+  })}</div>:<div className="empty-state">Sem movimentações cadastradas.</div>;
+}
