@@ -1,10 +1,5 @@
-import { useMemo, useState } from 'react';
-import {
-  Activity, ArrowRight, CalendarDays, Check, CheckCircle2, ChevronDown, Clock3, CreditCard,
-  ExternalLink, FileText, MessageCircle, Plus, Search, Scissors, Settings2, ShieldCheck,
-  Tag, Trash2, UserRound, Users, Wallet, X, Save, DoorClosed, Pencil, Pause, Play,
-  TrendingDown, TrendingUp, Phone, CalendarCheck2, Printer, Filter
-} from 'lucide-react';
+import { useState } from 'react';
+import { Activity, CalendarDays, Check, ChevronDown, Clock3, MessageCircle, Plus, Search, Scissors, ShieldCheck, Save, Pencil, Pause, Play, TrendingDown, TrendingUp, Printer } from 'lucide-react';
 
 const SERVICE_SEED = [
   { id:'s1', name:'Corte', durationMinutes:30, priceCents:5000, active:true },
