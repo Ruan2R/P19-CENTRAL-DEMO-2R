@@ -1,17 +1,14 @@
 {
-  "name": "p19-central-demo-2r",
+  "name": "p19-portfolio-2r",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "Central de demonstrações comerciais da 2R Informática, com perfis por pacote e dados fictícios.",
+  "description": "Portfólio visual da 2R Informática com modalidades de aplicação e prévias interativas totalmente front-end.",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node scripts/start-demo.mjs",
-    "dev:hub": "vite --host 127.0.0.1 --port 5173 --strictPort",
-    "setup:demo": "node scripts/setup-demo.mjs",
-    "build:demo": "node scripts/build-demo.mjs",
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort"
   },
