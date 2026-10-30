@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
+import '../burger-p16-faithful.css';
 import {
-  AlertTriangle, ArrowDownLeft, ArrowRight, ArrowUpRight, BarChart3, Boxes, CalendarDays, Check, CheckCircle2,
+  AlertTriangle, ArrowDownLeft, ArrowRight, ArrowUpRight, BarChart3, Bell, Boxes, CalendarDays, Check, CheckCircle2,
   ChevronDown, ClipboardList, CreditCard, Filter, LayoutDashboard, Package, Plus, RefreshCw,
   Search, ShieldCheck, ShoppingBag, StopCircle, PlayCircle, Trash2, TrendingDown, TrendingUp,
-  Wallet, X
+  Wallet, X, LogOut, Store
 } from 'lucide-react';
 
 const todayKey = (offset = 0) => {
@@ -69,7 +70,7 @@ function productQuantity(product, quantity) {
   return Number.isFinite(value) ? value.toLocaleString('pt-BR', { maximumFractionDigits:3 }) : '0';
 }
 
-export default function BurgerP16Showcase({ module, notify = () => {}, onNavigate = () => {}, availableModules = [] }) {
+export default function BurgerP16Showcase({ module, notify = () => {}, onNavigate = () => {}, onExit = () => {}, availableModules = [] }) {
   const [products,setProducts] = useState(initialProducts);
   const [orders,setOrders] = useState(initialOrders);
   const [entries,setEntries] = useState(initialEntries);
@@ -332,12 +333,45 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
   const visibleMovements=stockHistoryExpanded?filteredStock:filteredStock.slice(0,8);
   const unitOptions=[['un','Unidade'],['kg','Quilograma (kg)'],['g','Grama (g)'],['l','Litro (L)'],['ml','Mililitro (ml)'],['porcao','Porção']];
 
-  const mainTabs=[['overview','Resumo'],['finance','Financeiro'],['orders','Pedidos']].filter(([key])=>key==='overview'||availableModules.includes(key));
-  return <div className="p16-showcase">
-    <nav className="p16-main-tabs" aria-label="Navegação Burger">
-      {mainTabs.map(([key,label])=><button type="button" key={key} className={module===key?'active':''} aria-current={module===key?'page':undefined} onClick={()=>onNavigate(key)}>{label}</button>)}
-    </nav>
-    {module==='orders'?<OrdersModule/>:module==='overview'?<FinanceOverview/>:<FinanceModule/>}
+  const currentFinanceLabel = ({overview:'Resumo',financial:'Financeiro',transactions:'Movimentações',payables:'Contas a pagar',receivables:'Contas a receber',inventory:'Produtos e estoque'})[financeTab] || 'Financeiro';
+  return <div className="p16-faithful-scope">
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand" aria-label="2R Burger — gestão do estabelecimento">
+          <div className="brand-mark"><span>2R</span><i /></div>
+          <div className="brand-copy"><strong>2R <b>BURGER</b></strong><span>GESTÃO DO ESTABELECIMENTO</span></div>
+        </div>
+        <div className="sidebar-caption">MENU PRINCIPAL</div>
+        {availableModules.includes('finance') && <button type="button" className={'nav-item ' + (module==='finance'?'active':'')} onClick={()=>onNavigate('finance')}>
+          <Wallet size={18}/><span>Financeiro</span><span className="nav-active-dot"/>
+        </button>}
+        {availableModules.includes('orders') && <button type="button" className={'nav-item ' + (module==='orders'?'active':'')} onClick={()=>onNavigate('orders')}>
+          <ClipboardList size={18}/><span>Pedidos</span><span className="nav-active-dot"/>
+        </button>}
+        {availableModules.includes('site') && <button type="button" className="nav-item" onClick={()=>onNavigate('site')}>
+          <Store size={18}/><span>Landing page</span>
+        </button>}
+        <div className="sidebar-bottom">
+          <div className="local-state"><span className="local-dot"/><span>Ambiente de demonstração</span></div>
+          <div className="user-chip">
+            <div className="user-avatar">2R</div>
+            <div className="user-meta"><strong>2R Informática</strong><span>Dados fictícios e temporários</span></div>
+            <button type="button" className="icon-button logout-button" aria-label="Sair da demonstração" title="Voltar às modalidades" onClick={onExit}><LogOut size={17}/></button>
+          </div>
+        </div>
+      </aside>
+      <main className="main-area">
+        <header className="topbar">
+          <div className="breadcrumbs"><span>2R Burger</span><span className="crumb-separator">/</span><strong>{module==='orders'?'Pedidos':currentFinanceLabel}</strong></div>
+          <div className="topbar-right">
+            <span className="date-chip"><CalendarDays size={15}/>{dateText(todayKey(0))}</span>
+            <span className="icon-button notification-button" title="Prévia sem notificações"><Bell size={18}/></span>
+          </div>
+        </header>
+        {module==='orders'?<OrdersModule/>:<FinanceModule/>}
+        <footer className="app-footer"><span>2R BURGER</span><span>Prévia visual · Dados fictícios e temporários</span></footer>
+      </main>
+    </div>
   </div>;
 
   function FinanceOverview() {
