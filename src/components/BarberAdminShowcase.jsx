@@ -15,7 +15,7 @@ const SERVICE_SEED = [
   { id:'s6', name:'Pézinho', durationMinutes:15, priceCents:2000, active:true },
   { id:'s7', name:'Sobrancelha', durationMinutes:15, priceCents:2000, active:true },
 ];
-const PRO_SEED = [{id:'p1',name:'Felipe',role:'Barbeiro',active:true},{id:'p2',name:'Vitória',role:'Barbeira',active:true}];
+const PRO_SEED = [{id:'p1',name:'João',role:'Barbeiro',active:true},{id:'p2',name:'Maria',role:'Barbeira',active:true}];
 const DAYS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
 const dateKey = (offset=0) => { const d=new Date(); d.setDate(d.getDate()+offset); return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-'); };
 const money = (cents) => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format((Number(cents)||0)/100);
@@ -28,20 +28,20 @@ const SERVICE_PROMOS = [
   {id:'pr1',name:'Combo corte + barba',kind:'combo',startsOn:dateKey(-3),endsOn:dateKey(14),active:true,serviceIds:['s1','s2'],promoPriceCents:7500},
   {id:'pr2',name:'Pézinho especial',kind:'service',startsOn:dateKey(-1),endsOn:dateKey(10),active:true,serviceIds:['s6'],promoPriceCents:1500},
 ];
-const makeGroup = (id,offset,time,customer,phone,serviceIds,status,pro='Felipe',marked=false) => {
+const makeGroup = (id,offset,time,customer,phone,serviceIds,status,pro='João',marked=false) => {
   const d=dateKey(offset), services=serviceIds.map((sid)=>SERVICE_SEED.find(s=>s.id===sid)).filter(Boolean);
   let cursor=time;
   const items=services.map((s)=>{const item={id:id+'-'+s.id,serviceName:s.name,professionalName:pro,time:cursor,durationMinutes:s.durationMinutes,priceCents:s.priceCents};cursor=endTime(cursor,s.durationMinutes);return item;});
   return {id:String(id),publicCode:'B67-'+String(1100+id),date:d,status,customer:{name:customer,whatsapp:phone},items,totalPriceCents:items.reduce((sum,x)=>sum+x.priceCents,0),whatsappConfirmationMarkedAt:marked?new Date().toISOString():null};
 };
 const APPOINTMENT_SEED = [
-  makeGroup(1,0,'09:00','Mariana Costa','67999120011',['s1','s2'],'confirmed','Felipe',true),
-  makeGroup(2,0,'11:00','Camila Oliveira','67999120022',['s4'],'confirmed','Vitória'),
-  makeGroup(3,1,'10:00','Juliana Martins','67999120033',['s3','s6'],'confirmed','Felipe'),
-  makeGroup(4,2,'14:00','Bianca Souza','67999120044',['s5'],'confirmed','Vitória'),
-  makeGroup(5,-2,'09:30','Paula Nunes','67999120055',['s1'],'completed','Felipe'),
-  makeGroup(6,-1,'15:00','Renata Alves','67999120066',['s2','s7'],'no_show','Vitória'),
-  makeGroup(7,-4,'13:00','Lívia Rocha','67999120077',['s4'],'cancelled','Felipe'),
+  makeGroup(1,0,'09:00','Mariana Costa','67999120011',['s1','s2'],'confirmed','João',true),
+  makeGroup(2,0,'11:00','Camila Oliveira','67999120022',['s4'],'confirmed','Maria'),
+  makeGroup(3,1,'10:00','Juliana Martins','67999120033',['s3','s6'],'confirmed','João'),
+  makeGroup(4,2,'14:00','Bianca Souza','67999120044',['s5'],'confirmed','Maria'),
+  makeGroup(5,-2,'09:30','Paula Nunes','67999120055',['s1'],'completed','João'),
+  makeGroup(6,-1,'15:00','Renata Alves','67999120066',['s2','s7'],'no_show','Maria'),
+  makeGroup(7,-4,'13:00','Lívia Rocha','67999120077',['s4'],'cancelled','João'),
 ];
 const CUSTOMER_SEED = [
   {id:'c1',name:'Mariana Costa',whatsapp:'67999120011',createdAt:dateKey(-90),appointmentCount:8,noShowCount:0,lastAppointmentDate:dateKey(0)},
@@ -63,7 +63,7 @@ export default function BarberAdminShowcase({module,notify=()=>{}}) {
   const [appointments,setAppointments]=useState(APPOINTMENT_SEED);
   const [customers,setCustomers]=useState(CUSTOMER_SEED);
   const [hours,setHours]=useState(HOUR_SEED);
-  const [blocks,setBlocks]=useState([{id:'b1',scope:'professional',professionalId:'p2',professionalName:'Vitória',date:dateKey(3),startTime:'14:00',endTime:'16:00',reason:'Compromisso'},{id:'b2',scope:'business',date:dateKey(6),startTime:'',endTime:'',reason:'Folga da barbearia'}]);
+  const [blocks,setBlocks]=useState([{id:'b1',scope:'professional',professionalId:'p2',professionalName:'Maria',date:dateKey(3),startTime:'14:00',endTime:'16:00',reason:'Compromisso'},{id:'b2',scope:'business',date:dateKey(6),startTime:'',endTime:'',reason:'Folga da barbearia'}]);
   const [promotions,setPromotions]=useState(SERVICE_PROMOS);
   const [entries,setEntries]=useState([
     {id:'f1',direction:'income',description:'Atendimento · Mariana Costa',category:'Serviços',amountCents:8500,movementDate:dateKey(0),paymentMethod:'Pix'},
