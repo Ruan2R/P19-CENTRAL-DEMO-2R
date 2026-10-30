@@ -6,7 +6,7 @@ import {
   Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
   TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
   MoreHorizontal, CheckCircle2, Clock, CircleAlert, RefreshCw,
-  Code2, Wrench, Network, Mail, Linkedin, ShieldCheck
+  Code2, Wrench, Network, Linkedin, ShieldCheck
 } from 'lucide-react';
 
 const DEMOS = [
