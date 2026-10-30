@@ -17,7 +17,7 @@ const SERVICES = [
   {id:'s6',name:'Pézinho',durationMinutes:15,priceCents:2000,active:true},
   {id:'s7',name:'Sobrancelha',durationMinutes:15,priceCents:2000,active:true},
 ];
-const PROFESSIONALS = [{id:'p1',name:'Felipe',role:'Barbeiro'},{id:'p2',name:'Vitória',role:'Barbeira'}];
+const PROFESSIONALS = [{id:'p1',name:'João',role:'Barbeiro'},{id:'p2',name:'Maria',role:'Barbeira'}];
 const PROMOTIONS = [
   {id:'pr1',name:'Combo corte + barba',kind:'combo',startsOn:todayKey(-5),endsOn:todayKey(16),active:true,serviceIds:['s1','s2'],promoPriceCents:7500},
   {id:'pr2',name:'Pézinho especial',kind:'service',startsOn:todayKey(-2),endsOn:todayKey(12),active:true,serviceIds:['s6'],promoPriceCents:1500},
