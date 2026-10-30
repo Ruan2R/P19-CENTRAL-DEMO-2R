@@ -736,3 +736,51 @@
   }
 }
 
+
+
+/* P19 fidelity refinements: internal P16 order workflow and per-service Barber assignment */
+.booking-professional-assignments{display:grid;gap:10px;grid-column:1/-1;padding:14px;border:1px solid var(--line,#e8e8e8);border-radius:14px;background:var(--surface-soft,#fafafa)}
+.booking-professional-assignments>strong{font-size:13px}
+.booking-professional-assignments label{display:grid;grid-template-columns:minmax(0,1fr) minmax(140px,.75fr);gap:12px;align-items:center;font-size:13px}
+.booking-professional-assignments select{width:100%;min-width:0}
+.booking-time-grid-minute{max-height:340px;overflow:auto;padding:2px}
+.booking-availability-note{font-size:12px;line-height:1.55;color:var(--muted,#747474);margin:10px 0 0}
+.burger-operations{display:grid;gap:18px;padding-bottom:24px}
+.attendance-control-card{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;padding:22px}
+.attendance-open-meta{display:flex;flex-wrap:wrap;gap:12px 24px;width:100%;padding-top:14px;border-top:1px solid var(--line,#e8e8e8);font-size:12px;color:var(--muted,#747474)}
+.attendance-open-meta strong{color:var(--text,#252525)}
+.new-internal-order{padding:20px}
+.new-internal-order form{display:grid;gap:16px}
+.internal-order-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.internal-order-product{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border:1px solid var(--line,#e8e8e8);border-radius:12px}
+.internal-order-product>div:first-child{display:grid;gap:4px}
+.internal-order-product strong{font-size:13px}
+.internal-order-product small{color:var(--muted,#747474)}
+.internal-order-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:14px;border-top:1px solid var(--line,#e8e8e8)}
+.internal-order-footer>span{display:grid;gap:4px;font-size:12px;color:var(--muted,#747474)}
+.internal-order-footer>span strong{font-size:20px;color:var(--text,#252525)}
+.order-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.future-feature-card{display:flex;gap:15px;padding:20px}
+.future-feature-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:12px;background:#edf3f8;color:#315f7d}
+.future-feature-card h3{margin:5px 0;font-size:16px}
+.future-feature-card p{margin:0 0 9px;color:var(--muted,#747474);font-size:13px;line-height:1.6}
+.future-status{font-size:11px;font-weight:700;color:#8b683b}
+.promotions-preview{display:grid;gap:16px}
+.promotion-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.promotion-preview-card{padding:18px;display:grid;gap:10px}
+.promotion-preview-top{display:flex;justify-content:space-between;gap:8px}
+.promotion-preview-card h3{margin:0;font-size:17px}
+.promotion-preview-card p{margin:0;color:var(--muted,#747474);font-size:13px}
+.promotion-preview-price{display:flex;align-items:baseline;gap:10px}
+.promotion-preview-price s{color:var(--muted,#747474);font-size:13px}
+.promotion-preview-price strong{font-size:21px}
+.promotion-preview-card>small{color:var(--muted,#747474)}
+@media(max-width:760px){
+ .booking-professional-assignments label{grid-template-columns:1fr;gap:6px}
+ .internal-order-product-grid,.promotion-preview-grid{grid-template-columns:1fr}
+ .internal-order-footer{align-items:stretch;flex-direction:column}
+ .internal-order-footer button{width:100%}
+ .attendance-control-card{align-items:flex-start;flex-direction:column}
+ .attendance-control-card>button{width:100%}
+ .attendance-open-meta{display:grid;grid-template-columns:1fr 1fr}
+}
