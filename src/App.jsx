@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 const DEMOS = [
-  { id:'landing', name:'2R Landing Pages', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de acesso.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
+  { id:'landing', name:'2R Landing Pages', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de página de demonstração.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
   { id:'beauty.agenda', name:'2R Beauty Agenda', segment:'Beauty', title:'Agendamentos e administração básica', description:'Agendamento público para clientes, agenda do dia, serviços e cadastros fictícios para apresentar a rotina de uma profissional.', modules:['overview','booking','appointments','clients','services'], color:'rose', icon:'beauty' },
   { id:'beauty.financeiro', name:'2R Beauty Financeiro', segment:'Beauty', title:'Financeiro', description:'Demonstração isolada de receitas, despesas, movimentações e resumo do período.', modules:['finance'], color:'rose', icon:'finance' },
   { id:'beauty.siteagenda', name:'2R Beauty Web + Agenda', segment:'Beauty', title:'Landing page + agendamentos', description:'Página pública para apresentar serviços e um fluxo de agendamento demonstrativo.', modules:['site','booking','appointments','clients','services'], color:'rose', icon:'site' },
@@ -149,29 +149,29 @@ const AUTOMATION_NOTES = {
   Beauty: {
     title: 'Agendamento, cadastro e financeiro conectados',
     points: [
-      'A disponibilidade pública é calculada pelo sistema antes de aceitar a reserva.',
-      'Quando o cliente confirma o agendamento, os dados entram na agenda e no cadastro do cliente.',
-      'O painel financeiro mantém recebimentos e lançamentos no mesmo sistema, seguindo as regras do P18.',
+      'O fluxo de agendamento mostra a verificação de disponibilidade antes de apresentar a confirmação.',
+      'Ao confirmar o exemplo de agendamento, a informação aparece na agenda e no cadastro ilustrativo do cliente.',
+      'A prévia financeira representa recebimentos e lançamentos em uma área própria.',
     ],
-    reminder: 'Mostre primeiro o agendamento público. Depois abra a agenda administrativa e destaque como o mesmo atendimento aparece para a profissional.',
+    reminder: 'Mostre primeiro a prévia de agendamento. Depois abra a agenda e mostre como o mesmo atendimento aparece na visão administrativa.',
   },
   Barber: {
     title: 'Disponibilidade e gestão da barbearia no mesmo fluxo',
     points: [
-      'O agendamento considera serviços, duração, profissionais e horários disponíveis.',
-      'Combos e promoções seguem as regras de preço do sistema original.',
-      'A reserva pode ser acompanhada e ter seu status atualizado no painel administrativo.',
+      'A prévia mostra como a disponibilidade pode considerar serviço, duração, profissional e horário.',
+      'Combos e promoções podem seguir regras de preço configuradas para cada modalidade.',
+      'A reserva ilustrativa pode ser acompanhada e ter seu status atualizado na prévia administrativa.',
     ],
-    reminder: 'Mostre a seleção de serviços/horários e depois a mesma reserva na administração. Destaque que a disponibilidade e as validações são calculadas pelo sistema.',
+    reminder: 'Mostre a seleção de serviços e horários e depois a mesma reserva na agenda da prévia. Destaque como as áreas podem trabalhar em conjunto.',
   },
   Burger: {
     title: 'Pedidos, estoque e financeiro integrados',
     points: [
-      'O ciclo do pedido registra status e itens no fluxo administrativo existente.',
-      'A regra de estoque registra as baixas e devoluções vinculadas aos pedidos, sem precisar repetir a movimentação manual.',
-      'O controle de pagamentos/recebíveis e os relatórios de pedidos seguem o modelo de dados do P16.',
+      'A prévia apresenta o pedido com itens e status em uma área de operação.',
+      'O exemplo mostra como as baixas e devoluções de estoque podem acompanhar o ciclo do pedido.',
+      'As telas de financeiro e relatórios ilustram como os valores da operação podem ser organizados.',
     ],
-    reminder: 'Crie ou avance um pedido, depois mostre o histórico do pedido, a movimentação de estoque e o reflexo financeiro/relatórios. Destaque quais ações são automáticas e quais dependem de registrar o pagamento.',
+    reminder: 'Monte um pedido de exemplo, avance seu status e mostre as telas ilustrativas de estoque e financeiro. Explique quais etapas podem ser conectadas e quais dependem de uma confirmação.',
   },
 };
 
@@ -352,7 +352,7 @@ function OverviewModule({demo,appointments,orders,products,transactions,changeMo
         <div className="panel-heading"><div><h3>{overviewTitle}</h3><p>{overviewDescription}</p></div><button className="text-action" onClick={()=>changeModule(viewAllModule)}>{burger&&!hasOrders?'Ver estoque':'Ver todos'} <ArrowRight size={15}/></button></div>
         {burger&&hasOrders?<OrderRows orders={orders.slice(0,3)}/>:burger?<ProductTable products={products}/>:<AppointmentRows appointments={appointments.slice(0,4)}/>}
       </section>
-      <section className="panel quick-panel"><div className="panel-heading"><div><h3>Acesso rápido</h3><p>Explore as áreas deste pacote.</p></div><MoreHorizontal size={18} className="muted-icon"/></div><div className="quick-links">{quickModules.map(m=>{const I=MODULES[m].icon;return <button key={m} onClick={()=>changeModule(m)}><span className={`quick-icon ${m}`}><I size={17}/></span><span><strong>{MODULES[m].label}</strong><small>{MODULES[m].description}</small></span><ArrowUpRight size={16}/></button>})}</div><div className="tip-card"><Sparkles size={18}/><div><strong>Dica para a apresentação</strong><p>{burger?'Mostre como o cliente monta o pedido e depois acompanhe o preparo no painel.': 'Mostre primeiro a experiência do cliente e depois como a área administrativa facilita a operação.'}</p></div></div></section>
+      <section className="panel quick-panel"><div className="panel-heading"><div><h3>Atalhos do pacote</h3><p>Explore as áreas deste pacote.</p></div><MoreHorizontal size={18} className="muted-icon"/></div><div className="quick-links">{quickModules.map(m=>{const I=MODULES[m].icon;return <button key={m} onClick={()=>changeModule(m)}><span className={`quick-icon ${m}`}><I size={17}/></span><span><strong>{MODULES[m].label}</strong><small>{MODULES[m].description}</small></span><ArrowUpRight size={16}/></button>})}</div><div className="tip-card"><Sparkles size={18}/><div><strong>Dica para a apresentação</strong><p>{burger?'Mostre como o cliente monta o pedido e depois acompanhe o preparo no painel.': 'Mostre primeiro a experiência do cliente e depois como a área administrativa facilita a operação.'}</p></div></div></section>
     </div>
   </>;
 }
@@ -498,9 +498,9 @@ function PortfolioHome({ onOpenCatalog }) {
               <a className="portfolio-button portfolio-button-secondary" href="#contato">Falar comigo <Mail size={16}/></a>
             </div>
             <div className="portfolio-quick-access" aria-label="Atalhos diretos para soluções">
-              <a href="#projeto-beauty"><span><CalendarDays size={17}/></span><b>Agendamentos</b><ArrowUpRight size={14}/></a>
-              <a href="#projeto-burger"><span><Wallet size={17}/></span><b>Gestão e financeiro</b><ArrowUpRight size={14}/></a>
-              <a href="#projeto-burger"><span><ShoppingBag size={17}/></span><b>Pedidos e estoque</b><ArrowUpRight size={14}/></a>
+              <a href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Todos')}}><span><CalendarDays size={17}/></span><b>Agendamentos</b><ArrowUpRight size={14}/></a>
+              <a href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Todos')}}><span><Wallet size={17}/></span><b>Gestão e financeiro</b><ArrowUpRight size={14}/></a>
+              <a href="#projetos" onClick={(e)=>{e.preventDefault();onOpenCatalog('Burger')}}><span><ShoppingBag size={17}/></span><b>Pedidos e estoque</b><ArrowUpRight size={14}/></a>
             </div>
           </div>
           <div className="portfolio-hero-visual">
@@ -547,11 +547,11 @@ function PortfolioHome({ onOpenCatalog }) {
             </article>
             <article className="portfolio-project-card portfolio-project-barber" id="projeto-barber">
               <div className="portfolio-project-art portfolio-barber-art"><div className="portfolio-barber-window"><div className="portfolio-barber-side"><Scissors size={23}/><span>BARBER STUDIO</span></div><div className="portfolio-barber-content"><div className="portfolio-barber-title"><b>Agenda do dia</b><small>Profissionais e horários</small></div><div className="portfolio-barber-appointment"><span>09:00</span><div><b>Serviço agendado</b><small>40 min · confirmado</small></div><i></i></div><div className="portfolio-barber-appointment"><span>10:00</span><div><b>Serviço agendado</b><small>30 min · confirmado</small></div><i></i></div></div></div><div className="portfolio-art-bubble portfolio-barber-bubble"><CheckCircle2 size={19}/></div></div>
-              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDA & OPERAÇÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Barbearia</h3><p>Agenda com duração dos serviços, seleção de profissional, disponibilidade e área administrativa com gestão integrada.</p><div className="portfolio-feature-tags"><span>Profissionais</span><span>Disponibilidade</span><span>Gestão</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Barber')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>AGENDA & OPERAÇÃO</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Barbearia</h3><p>Agenda com duração dos serviços, seleção de profissional, disponibilidade e área administrativa com gestão integrada.</p><div className="portfolio-feature-tags"><span>Profissionais</span><span>Disponibilidade</span><span>Gestão</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Barber')}>Ver modalidades <ArrowUpRight size={17}/></button></div>
             </article>
             <article className="portfolio-project-card portfolio-project-burger" id="projeto-burger">
               <div className="portfolio-project-art portfolio-burger-art"><div className="portfolio-burger-dashboard"><div className="portfolio-burger-dashboard-top"><span><ShoppingBag size={17}/><b>Pedidos</b></span><small>EXEMPLO</small></div><div className="portfolio-burger-order"><span>001</span><div><b>Pedido em andamento</b><small>Itens e status do pedido</small></div><i className="burger-state"></i></div><div className="portfolio-burger-order"><span>002</span><div><b>Pedido recebido</b><small>Estoque vinculado ao fluxo</small></div><i className="burger-state burger-state-warm"></i></div><div className="portfolio-burger-mini-stats"><div><small>Produtos</small><b>24</b></div><div><small>Pedidos</small><b>08</b></div><div><small>Estoque</small><b>Ativo</b></div></div></div></div>
-              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>VENDAS & CONTROLE</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Pedidos & alimentação</h3><p>Gestão de pedidos, produtos, movimentações de estoque e controles financeiros conectados à operação.</p><div className="portfolio-feature-tags"><span>Pedidos</span><span>Estoque</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Burger')}>Explorar demonstração <ArrowUpRight size={17}/></button></div>
+              <div className="portfolio-project-content"><div className="portfolio-project-meta"><span>VENDAS & CONTROLE</span><span className="portfolio-project-status"><i></i> DEMONSTRAÇÃO</span></div><h3>Pedidos & alimentação</h3><p>Gestão de pedidos, produtos, movimentações de estoque e controles financeiros conectados à operação.</p><div className="portfolio-feature-tags"><span>Pedidos</span><span>Estoque</span><span>Financeiro</span></div><button className="portfolio-project-button" onClick={() => onOpenCatalog('Burger')}>Ver modalidades <ArrowUpRight size={17}/></button></div>
             </article>
           </div>
           <div className="portfolio-demo-note"><ShieldCheck size={18}/><p><strong>Ambiente de demonstração</strong> — os cadastros e movimentações apresentados são fictícios. As demonstrações servem para explorar os fluxos e funcionalidades.</p></div>
