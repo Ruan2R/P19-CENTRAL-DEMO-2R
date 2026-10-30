@@ -427,7 +427,7 @@ function SiteModule({activeDemo,siteSegment,setSiteSegment,onCta}) {
         <div className="landing-real-mark"><Sparkles size={20}/></div>
         <h3>Danielly Oliveira Beauty Studio</h3>
         <p>Um exemplo real desenvolvido pela 2R Informática. A página apresenta a marca, os serviços e os canais de contato da profissional.</p>
-        <a href="https://ruan2r.github.io/P11-LANDING-PAGE-DANY/" target="_blank" rel="noopener noreferrer">Ver landing page funcional <ExternalLink size={16}/></a>
+        <a href="https://lavender-elephant-526438.hostingersite.com" target="_blank" rel="noopener noreferrer">Ver landing page funcional <ExternalLink size={16}/></a>
         <small>Abre em uma nova aba.</small>
       </aside>
     </section>
