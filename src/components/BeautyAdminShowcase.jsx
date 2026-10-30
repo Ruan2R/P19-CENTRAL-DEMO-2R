@@ -223,25 +223,25 @@ function AppointmentsView({ appointments, setAppointments, customers, setCustome
   const regularTotal = selectedServices.reduce((sum, service) => sum + service.price_cents, 0);
   const total = selectedServices.reduce((sum, service) => sum + (promotionByService.get(service.id)?.price ?? service.price_cents), 0);
   const suggestions = customers.filter((customer) => customer.name.toLowerCase().includes(customerName.trim().toLowerCase()) || (customerName.replace(/\D/g, '').length >= 3 && customer.phone.replace(/\D/g, '').includes(customerName.replace(/\D/g, '')))).slice(0, 6);
+  const [viewFilter, setViewFilter] = useState('upcoming');
   const filtered = appointments.filter((item) => {
     const value = search.trim().toLowerCase();
     const matchesSearch = !value || (item.customer_name + ' ' + item.customer_phone + ' ' + item.service.name).toLowerCase().includes(value);
-    const date = item.starts_at.slice(0, 10);
+    const appointmentDate = item.starts_at.slice(0, 10);
     const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    const matchesMode = periodFilter === 'custom'
-      ? (!dateFrom || date >= dateFrom) && (!dateTo || date <= dateTo)
-      : periodFilter === 'today' ? date === dateValue(0)
-      : periodFilter === 'next7' ? date >= dateValue(0) && date <= dateValue(7)
-      : periodFilter === 'month' ? date.slice(0, 7) === dateValue(0).slice(0, 7)
+    const matchesPeriod = periodFilter === 'custom'
+      ? (!dateFrom || appointmentDate >= dateFrom) && (!dateTo || appointmentDate <= dateTo)
+      : periodFilter === 'today' ? appointmentDate === dateValue(0)
+      : periodFilter === 'next7' ? appointmentDate >= dateValue(0) && appointmentDate <= dateValue(7)
+      : periodFilter === 'month' ? appointmentDate.slice(0, 7) === dateValue(0).slice(0, 7)
       : true;
-    const mode = periodFilter === 'any' ? true : matchesMode;
-    const segment = search.trim() ? true : true;
-    return matchesSearch && matchesStatus && mode && segment;
-  }).filter((item) => periodFilter === 'any' ? true : true)
-    .filter((item) => item && (periodFilter !== 'upcoming' || !['cancelled', 'no_show'].includes(item.status)))
-    .filter((item) => item && (periodFilter !== 'pending' || ['pending_confirmation', 'awaiting_deposit'].includes(item.status)))
-    .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
-  const [viewFilter, setViewFilter] = useState('upcoming');
+    const matchesView = viewFilter === 'upcoming'
+      ? !['cancelled', 'no_show'].includes(item.status)
+      : viewFilter === 'pending'
+        ? ['pending_confirmation', 'awaiting_deposit'].includes(item.status)
+        : true;
+    return matchesSearch && matchesStatus && matchesPeriod && matchesView;
+  }).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
 
   function createManualAppointment(event) {
     event.preventDefault();
