@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
-  AlertTriangle, ArrowDownLeft, ArrowUpRight, BarChart3, Boxes, CalendarDays, Check, CheckCircle2,
+  AlertTriangle, ArrowDownLeft, ArrowRight, ArrowUpRight, BarChart3, Boxes, CalendarDays, Check, CheckCircle2,
   ChevronDown, ClipboardList, CreditCard, Filter, LayoutDashboard, Package, Plus, RefreshCw,
   Search, ShieldCheck, ShoppingBag, StopCircle, PlayCircle, Trash2, TrendingDown, TrendingUp,
   Wallet, X
