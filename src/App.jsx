@@ -5,15 +5,8 @@ import BarberBookingPreview from './components/BarberBookingPreview';
 import BarberAdminShowcase from './components/BarberAdminShowcase';
 import BurgerP16Showcase from './components/BurgerP16Showcase';
 import ModuleGuideCard from './components/ModuleGuideCard';
-import { getModuleGuide } from './demoGuides';
 import {
-  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, ChevronDown,
-  CircleDollarSign, ClipboardList, Clock3, Copy, CreditCard, ExternalLink, Eye,
-  FileText, Filter, Grid2X2, LayoutDashboard, Menu, Package, Plus, Scissors,
-  Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
-  TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
-  MoreHorizontal, CheckCircle2, Clock, CircleAlert, RefreshCw,
-  Code2, Wrench, Network, Linkedin, ShieldCheck, DoorClosed, Tag
+  ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, ClipboardList, Clock3, CreditCard, ExternalLink, Eye, Grid2X2, LayoutDashboard, Menu, Scissors, Search, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, Code2, Linkedin, ShieldCheck, DoorClosed, Tag
 } from 'lucide-react';
 
 const DEMOS = [
@@ -72,6 +65,23 @@ function IconForDemo({ demo }) {
   return <Icon size={20} strokeWidth={1.8} />;
 }
 function getStartModule(demo) { return demo.modules[0]; }
+function getDemoGuideMetrics(demo,module) {
+  if (demo.segment !== 'Burger') {
+    return {step:Math.max(1,demo.modules.indexOf(module)+1),total:demo.modules.length};
+  }
+  const hasSite=demo.modules.includes('site');
+  const hasFinance=demo.modules.includes('finance');
+  const hasOrders=demo.modules.includes('orders');
+  const total=(hasSite?1:0)+(hasFinance?6:0)+(hasOrders?1:0);
+  const step=module==='site'
+    ? 1
+    : module==='finance'
+      ? (hasSite?1:0)+1
+      : module==='orders'
+        ? (hasSite?1:0)+(hasFinance?6:0)+1
+        : Math.max(1,demo.modules.indexOf(module)+1);
+  return {step,total};
+}
 
 export default function App() {
   const [activeDemo, setActiveDemo] = useState(null);
@@ -193,7 +203,6 @@ export default function App() {
       <main className="demo-main">
         <div className="demo-breadcrumb"><span>Central 2R</span><ArrowRight size={13}/><span>{activeDemo.segment}</span><ArrowRight size={13}/><strong>{MODULES[activeModule]?.label || 'Demonstração'}</strong></div>
         <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Landing pages na prática':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Entenda o papel de uma página de apresentação e explore um exemplo visual.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> PRÉVIA INTERATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
-        {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
         {!acknowledgedGuides[guideKey]&&<ModuleGuideCard
            stepNumber={guideMetrics.step}
            totalSteps={guideMetrics.total}
@@ -204,6 +213,7 @@ export default function App() {
            onNext={nextModule ? ()=>{acknowledgeGuide(guideKey);changeModule(nextModule);} : undefined}
            onExplore={()=>acknowledgeGuide(guideKey)}
          />}
+        {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
          {activeModule==='overview'&&!isBurger&&(isBarber
            ? <BarberAdminShowcase module="overview" notify={notify}/>
            : <OverviewModule demo={activeDemo} appointments={appointments} transactions={transactions} changeModule={changeModule}/>
