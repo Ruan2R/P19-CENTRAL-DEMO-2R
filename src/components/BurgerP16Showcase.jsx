@@ -13,7 +13,7 @@ const todayKey = (offset = 0) => {
 };
 const monthKey = () => todayKey(0).slice(0, 7);
 const cash = (cents) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((Number(cents) || 0) / 100);
-const dateText = (value) => value ? new Intl.DateTimeFormat('pt-BR', { day:'2-digit', month:'short', year:'numeric' }).format(new Date(value + 'T12:00:00')) : '—';
+const dateText = (value) => value ? String(value).slice(0,10).split('-').reverse().join('/') : '—';
 const shortTime = () => new Intl.DateTimeFormat('pt-BR', { hour:'2-digit', minute:'2-digit' }).format(new Date());
 const stockTypes = {
   purchase: 'Entrada por compra', return: 'Devolução / retorno', adjustment_in: 'Ajuste de entrada',
