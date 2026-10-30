@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, CalendarDays, Check, CheckCircle2, Clock3, Gift, Scissors, ShieldCheck, UserRound } from 'lucide-react';
+import { ArrowRight, CalendarDays, Check, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 const currency = (cents) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cents / 100);
 const ANY = 'sem-preferencia';
