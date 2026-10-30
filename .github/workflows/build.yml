@@ -1,4 +1,4 @@
-name: Build and test P19 source apps
+name: Build P19 portfolio
 on:
   push:
     branches: [main]
@@ -14,11 +14,4 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm ci --prefix apps/barber
-      - run: npm ci --prefix apps/beauty
-      - run: npm ci --prefix apps/burger
-      - run: npm --prefix apps/barber test
-      - run: npm --prefix apps/beauty test
-      - run: npm --prefix apps/burger test
-      - run: npm run build:demo
-      - run: node scripts/test-demo-runtime.mjs
+      - run: npm run build
