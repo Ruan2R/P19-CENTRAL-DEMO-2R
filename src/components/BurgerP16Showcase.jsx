@@ -678,6 +678,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
 
   function OrderCard({order,itemsText}) {
     const statusNext={Recebido:'Em preparo','Em preparo':'Pronto',Pronto:'Entregue'};
+    const canOperate=sessionOpen&&order.sessionNumber===sessionNumber&&!['Entregue','Cancelado'].includes(order.status);
     const paymentLabel=order.paymentStatus==='paid'?'Pago · '+order.paymentMethod:order.status==='Cancelado'?'Cancelado sem pagamento':'Pagamento pendente';
     return <article className="order-card">
       <div className="order-number"><span>PEDIDO</span><strong>#{String(order.number).padStart(3,'0')}</strong><small>{order.createdAt} · {dateText(order.businessDate)}</small></div>
@@ -689,9 +690,9 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
       </div>
       <div className="order-status-actions">
         <div className="order-status-stack"><span className={'status-pill '+(order.status==='Pronto'?'ready':order.status==='Entregue'?'done':order.status==='Cancelado'?'cancelled':'pending')}>{order.status}</span></div>
-        {(statusNext[order.status]||(order.paymentStatus!=='paid'&&order.status==='Entregue'))&&<div className={'order-action-buttons '+(order.paymentStatus!=='paid'?'has-two-actions':'')}>
-          {statusNext[order.status]&&<button type="button" className={'small-action order-operational-action '+(order.status==='Em preparo'?'ready-action':'')} onClick={()=>moveOrderStatus(order,statusNext[order.status])}>{order.status==='Recebido'?'Iniciar preparo':order.status==='Em preparo'?'Marcar pronto':'Confirmar retirada'} <ArrowUpRight size={14}/></button>}
-          {order.paymentStatus!=='paid'&&!['Entregue','Cancelado'].includes(order.status)&&<button type="button" className="small-action danger-action order-cancel-action" onClick={()=>cancelOrder(order)}><X size={14}/> Cancelar pedido</button>}
+        {(canOperate&&statusNext[order.status]||(order.paymentStatus!=='paid'&&order.status==='Entregue'))&&<div className={'order-action-buttons '+(order.paymentStatus!=='paid'?'has-two-actions':'')}>
+          {canOperate&&statusNext[order.status]&&<button type="button" className={'small-action order-operational-action '+(order.status==='Em preparo'?'ready-action':'')} onClick={()=>moveOrderStatus(order,statusNext[order.status])}>{order.status==='Recebido'?'Iniciar preparo':order.status==='Em preparo'?'Marcar pronto':'Confirmar retirada'} <ArrowUpRight size={14}/></button>}
+          {canOperate&&order.paymentStatus!=='paid'&&<button type="button" className="small-action danger-action order-cancel-action" onClick={()=>cancelOrder(order)}><X size={14}/> Cancelar pedido</button>}
           {order.paymentStatus!=='paid'&&order.status!=='Cancelado'&&<button type="button" className="small-action order-payment-inline-action" onClick={()=>openPayment(order)}><CreditCard size={14}/> Registrar pagamento</button>}
         </div>}
       </div>
