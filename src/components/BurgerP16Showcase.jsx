@@ -55,7 +55,6 @@ const initialStockMovements = [
 ];
 function P16Card({ children, className = '' }) { return <section className={'panel ' + className}>{children}</section>; }
 function P16Title({ eyebrow, title, action }) { return <div className="panel-heading"><div>{eyebrow&&<div className="section-kicker">{eyebrow}</div>}<h3>{title}</h3></div>{action}</div>; }
-function P16Field({ label, children }) { return <label className="p16-field"><span>{label}</span>{children}</label>; }
 function P16Count({ children }) { return <span className="order-result-count">{children}</span>; }
 function P16Button({ children, onClick, outline = false, disabled = false, type = 'button' }) { return <button type={type} disabled={disabled} className={outline ? 'outline-button' : 'primary-button'} onClick={onClick}>{children}</button>; }
 function dueInfo(date) {
@@ -378,7 +377,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
     const attention=[...openPayables,...openReceivables].filter((item)=>dueInfo(item.dueDate).tone!=='normal');
     const methodTotals=Object.fromEntries(paymentOptions.map((method)=>[method,currentMonthEntries.filter((item)=>item.paymentMethod===method).reduce((sum,item)=>sum+(item.direction==='income'?item.amountCents:-item.amountCents),0)]));
     const methodCounts=Object.fromEntries(paymentOptions.map((method)=>[method,currentMonthEntries.filter((item)=>item.paymentMethod===method).length]));
-    return <div className="p16-finance-overview">
+    return <>
       <div className="metrics-grid summary-metrics-grid">
         <Metric label="Resultado do período" value={cash(monthIncome-monthExpenses)} detail="Entradas recebidas menos saídas pagas" tone="gold"/>
         <Metric label="Entradas recebidas" value={cash(monthIncome)} detail={currentMonthEntries.filter(e=>e.direction==='income').length+' recebimentos no mês'} tone="green"/>
@@ -416,8 +415,8 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
           <div className="payment-method-value income-text"><span>Resultado líquido</span><strong>{cash(methodTotals[method])}</strong></div>
         </article>)}</div> : <div className="empty-state">Ainda não há movimentações para comparar por forma de pagamento.</div>}
       </P16Card>
-      <p className="table-footnote">Resultado do período significa entradas recebidas menos saídas pagas; não representa lucro líquido. Contas pendentes não entram no caixa efetivado.</p>
-    </div>;
+      <p className="table-footnote">Resultado do período significa entradas de caixa menos saídas pagas; não representa lucro líquido. Contas pendentes não entram no caixa efetivado.</p>
+    </>;
   }
 
   function FinanceModule() {
@@ -690,10 +689,10 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
       </div>
       <div className="order-status-actions">
         <div className="order-status-stack"><span className={'status-pill '+(order.status==='Pronto'?'ready':order.status==='Entregue'?'done':order.status==='Cancelado'?'cancelled':'pending')}>{order.status}</span></div>
-        {statusNext[order.status]&&<div className={'order-action-buttons '+(order.paymentStatus!=='paid'?'has-two-actions':'')}>
-          <button type="button" className={'small-action order-operational-action '+(order.status==='Em preparo'?'ready-action':'')} onClick={()=>moveOrderStatus(order,statusNext[order.status])}>{order.status==='Recebido'?'Iniciar preparo':order.status==='Em preparo'?'Marcar pronto':'Confirmar retirada'} <ArrowUpRight size={14}/></button>
-          {order.paymentStatus!=='paid'&&<button type="button" className="small-action danger-action order-cancel-action" onClick={()=>cancelOrder(order)}><X size={14}/> Cancelar pedido</button>}
-          {order.paymentStatus!=='paid'&&<button type="button" className="small-action order-payment-inline-action" onClick={()=>openPayment(order)}><CreditCard size={14}/> Registrar pagamento</button>}
+        {(statusNext[order.status]||(order.paymentStatus!=='paid'&&order.status==='Entregue'))&&<div className={'order-action-buttons '+(order.paymentStatus!=='paid'?'has-two-actions':'')}>
+          {statusNext[order.status]&&<button type="button" className={'small-action order-operational-action '+(order.status==='Em preparo'?'ready-action':'')} onClick={()=>moveOrderStatus(order,statusNext[order.status])}>{order.status==='Recebido'?'Iniciar preparo':order.status==='Em preparo'?'Marcar pronto':'Confirmar retirada'} <ArrowUpRight size={14}/></button>}
+          {order.paymentStatus!=='paid'&&!['Entregue','Cancelado'].includes(order.status)&&<button type="button" className="small-action danger-action order-cancel-action" onClick={()=>cancelOrder(order)}><X size={14}/> Cancelar pedido</button>}
+          {order.paymentStatus!=='paid'&&order.status!=='Cancelado'&&<button type="button" className="small-action order-payment-inline-action" onClick={()=>openPayment(order)}><CreditCard size={14}/> Registrar pagamento</button>}
         </div>}
       </div>
       {paymentOrderId===order.id&&<form className="order-payment-form" onSubmit={event=>registerOrderPayment(event,order)}>
