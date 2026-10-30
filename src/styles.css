@@ -1908,3 +1908,162 @@
   .p16-main-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; }
   .p16-main-tabs button { padding:8px 6px; }
 }
+
+
+/* Guided walkthrough cards: one acknowledgment per screen and browser session. */
+.module-guide-card {
+  --guide-accent: #0392b2;
+  --guide-soft: #eaf5f8;
+  display: grid;
+  grid-template-columns: minmax(130px, 160px) minmax(0, 1fr) minmax(190px, auto);
+  align-items: center;
+  gap: 17px;
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  border: 1px solid #dce9ed;
+  border-radius: 13px;
+  background: linear-gradient(115deg, #ffffff 0%, #f7fbfc 100%);
+  box-shadow: 0 5px 16px rgba(24, 38, 56, .045);
+  color: #182638;
+}
+.module-guide-identity {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+}
+.module-guide-icon {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 9px;
+  background: var(--guide-soft);
+  color: var(--guide-accent);
+}
+.module-guide-label,
+.module-guide-kicker {
+  color: var(--guide-accent);
+  font-size: 8px;
+  line-height: 1.35;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+.module-guide-identity strong {
+  color: #657486;
+  font-size: 9px;
+  font-weight: 700;
+}
+.module-guide-content { min-width: 0; }
+.module-guide-content h2 {
+  margin: 5px 0 5px;
+  color: #182638;
+  font: 800 16px/1.3 Manrope, sans-serif;
+  letter-spacing: -.02em;
+}
+.module-guide-content > p {
+  margin: 0;
+  color: #68788a;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.module-guide-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  color: #64758a;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.module-guide-tip svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--guide-accent);
+}
+.module-guide-actions {
+  display: grid;
+  justify-items: stretch;
+  gap: 7px;
+  min-width: 178px;
+}
+.module-guide-next,
+.module-guide-explore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 35px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font: 800 9px/1.35 'DM Sans', sans-serif;
+  text-align: center;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.module-guide-next {
+  border: 1px solid var(--guide-accent);
+  background: var(--guide-accent);
+  color: #fff;
+}
+.module-guide-next:hover { filter: brightness(.94); }
+.module-guide-explore {
+  border: 1px solid #e0e7ec;
+  background: #fff;
+  color: #53677c;
+}
+.module-guide-explore:hover {
+  border-color: var(--guide-accent);
+  background: var(--guide-soft);
+  color: #263d52;
+}
+.demo-app.rose .module-guide-card { --guide-accent: #a8587b; --guide-soft: #fcf1f6; }
+.demo-app.amber .module-guide-card { --guide-accent: #a07832; --guide-soft: #faf3e6; }
+.demo-app.orange .module-guide-card { --guide-accent: #d8753d; --guide-soft: #fff0e5; }
+
+/* The Burger admin keeps the Brasa identity: white, gray and warm orange. */
+.p16-faithful-scope .module-guide-card {
+  --guide-accent: #d8753d;
+  --guide-soft: #fff0e5;
+  border-color: #f0d8ca;
+  background: linear-gradient(115deg, #ffffff 0%, #fffaf7 100%);
+  box-shadow: 0 5px 16px rgba(91, 55, 34, .045);
+  color: #252525;
+}
+.p16-faithful-scope .module-guide-content h2 { color: #252525; }
+.p16-faithful-scope .module-guide-content > p,
+.p16-faithful-scope .module-guide-tip { color: #747b83; }
+.p16-faithful-scope .module-guide-identity strong { color: #747b83; }
+.p16-faithful-scope .module-guide-explore { border-color: #e6e7e9; color: #565d64; }
+.p16-faithful-scope .module-guide-explore:hover { border-color: #f0c4a9; background: #fff7f1; color: #8f4927; }
+
+@media (max-width: 1000px) {
+  .module-guide-card {
+    grid-template-columns: minmax(0, 1fr) minmax(175px, 220px);
+    gap: 11px 16px;
+  }
+  .module-guide-identity {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .module-guide-icon { width: 30px; height: 30px; }
+  .module-guide-actions { grid-column: 2; grid-row: 2; }
+}
+@media (max-width: 640px) {
+  .module-guide-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 13px;
+  }
+  .module-guide-identity { grid-column: 1; }
+  .module-guide-actions {
+    grid-column: 1;
+    grid-row: auto;
+    min-width: 0;
+    grid-template-columns: 1fr;
+  }
+  .module-guide-content h2 { font-size: 15px; }
+  .module-guide-next,
+  .module-guide-explore { min-height: 40px; font-size: 10px; }
+}
