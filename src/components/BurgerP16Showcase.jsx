@@ -139,9 +139,22 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
   function addCashEntry(item) {
     setEntries((current)=>[item,...current]);
   }
-  function goFinance(tab) {
+  function navigateFinanceTab(tab) {
+    const currentGuideKey=demoId+':finance:'+financeTab;
+    if(tab!==financeTab&&!seenGuides[currentGuideKey]) {
+      notify('Confirme o guia desta etapa antes de avançar para outra aba do Financeiro.');
+      return false;
+    }
     setFinanceTab(tab);
-    if(module!=='finance') onNavigate('finance');
+    return true;
+  }
+  function navigateModule(target) {
+    const currentGuideKey=module==='finance'?demoId+':finance:'+financeTab:demoId+':'+module;
+    if(target!==module&&!seenGuides[currentGuideKey]) {
+      notify('Confirme o guia desta tela antes de mudar de área.');
+      return;
+    }
+    onNavigate(target);
   }
   function addStockHistory(product,type,quantity,reason,date,sourceType='manual',sourceId='') {
     setStockMovements((current)=>[{id:'sm'+Date.now()+Math.random(),productId:product.id,type,quantity,before:product.stock,after:product.stock+quantity,reason,movementDate:date,sourceType,sourceId},...current]);
@@ -332,13 +345,13 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
           <div className="brand-copy"><strong>2R <b>BURGER</b></strong><span>GESTÃO DO ESTABELECIMENTO</span></div>
         </div>
         <div className="sidebar-caption">MENU PRINCIPAL</div>
-        {availableModules.includes('finance') && <button type="button" className={'nav-item ' + (module==='finance'?'active':'')} onClick={()=>onNavigate('finance')}>
+        {availableModules.includes('finance') && <button type="button" className={'nav-item ' + (module==='finance'?'active':'')} onClick={()=>navigateModule('finance')}>
           <Wallet size={18}/><span>Financeiro</span><span className="nav-active-dot"/>
         </button>}
-        {availableModules.includes('orders') && <button type="button" className={'nav-item ' + (module==='orders'?'active':'')} onClick={()=>onNavigate('orders')}>
+        {availableModules.includes('orders') && <button type="button" className={'nav-item ' + (module==='orders'?'active':'')} onClick={()=>navigateModule('orders')}>
           <ClipboardList size={18}/><span>Pedidos</span><span className="nav-active-dot"/>
         </button>}
-        {availableModules.includes('site') && <button type="button" className="nav-item" onClick={()=>onNavigate('site')}>
+        {availableModules.includes('site') && <button type="button" className="nav-item" onClick={()=>navigateModule('site')}>
           <Store size={18}/><span>Landing page</span>
         </button>}
         <div className="sidebar-bottom">
@@ -376,21 +389,21 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
       </div>
       <div className="overview-grid summary-overview-grid">
         <P16Card className="transactions-panel">
-          <P16Title eyebrow="CAIXA" title="Últimas movimentações" action={<button className="text-button" onClick={()=>setFinanceTab('transactions')}>Ver todas <ArrowUpRight size={15}/></button>}/>
+          <P16Title eyebrow="CAIXA" title="Últimas movimentações" action={<button className="text-button" onClick={()=>navigateFinanceTab('transactions')}>Ver todas <ArrowUpRight size={15}/></button>}/>
           <MovementList items={currentMonthEntries.slice(0,5)}/>
         </P16Card>
         <P16Card className="action-panel">
           <P16Title eyebrow="ACESSO RÁPIDO" title="Ações rápidas"/>
-          <button className="quick-action" onClick={()=>{setFinanceTab('transactions');setEntryForm(true)}}>
+          <button className="quick-action" onClick={()=>{if(navigateFinanceTab('transactions'))setEntryForm(true)}}>
             <span className="quick-icon income-bg"><Plus size={17}/></span><span><strong>Nova movimentação</strong><small>Registrar entrada ou saída</small></span><ArrowUpRight size={16}/>
           </button>
-          <button className="quick-action" onClick={()=>{setFinanceTab('payables');setPayableForm(true)}}>
+          <button className="quick-action" onClick={()=>{if(navigateFinanceTab('payables'))setPayableForm(true)}}>
             <span className="quick-icon payable-bg"><CalendarDays size={17}/></span><span><strong>Adicionar conta a pagar</strong><small>Registrar um vencimento</small></span><ArrowUpRight size={16}/>
           </button>
-          <button className="quick-action" onClick={()=>{setFinanceTab('receivables');setReceivableForm(true)}}>
+          <button className="quick-action" onClick={()=>{if(navigateFinanceTab('receivables'))setReceivableForm(true)}}>
             <span className="quick-icon income-bg"><ArrowDownLeft size={17}/></span><span><strong>Adicionar valor a receber</strong><small>Controlar um recebimento futuro</small></span><ArrowUpRight size={16}/>
           </button>
-          <button className="quick-action" onClick={()=>{setFinanceTab('inventory');setProductForm(true)}}>
+          <button className="quick-action" onClick={()=>{if(navigateFinanceTab('inventory'))setProductForm(true)}}>
             <span className="quick-icon stock-bg"><Package size={17}/></span><span><strong>Cadastrar produto</strong><small>Adicionar ao catálogo</small></span><ArrowUpRight size={16}/>
           </button>
         </P16Card>
@@ -432,7 +445,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
         <label className="outline-button month-button month-picker-wrap"><CalendarDays size={16}/><span>{new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(selectedMonth+'-15T12:00:00'))}</span><input className="month-picker-input" aria-label="Filtrar mês financeiro" type="month" value={selectedMonth} onChange={event=>{if(event.target.value)setSelectedMonth(event.target.value)}}/><ChevronDown size={15}/></label>
       </div>
       <div className="finance-tabs" role="tablist" aria-label="Módulos financeiros">
-        {tabs.map(([key,label])=><button type="button" key={key} className={'finance-tab '+(financeTab===key?'active':'')} role="tab" aria-selected={financeTab===key} onClick={()=>setFinanceTab(key)}>{label}</button>)}
+        {tabs.map(([key,label])=><button type="button" key={key} className={'finance-tab '+(financeTab===key?'active':'')} role="tab" aria-selected={financeTab===key} onClick={()=>navigateFinanceTab(key)}>{label}</button>)}
       </div>
       {!seenGuides[guideKey]&&financeGuide&&<ModuleGuideCard stepNumber={guideStep} totalSteps={guideTotal} title={financeGuide.title} description={financeGuide.description} tip={financeGuide.tip} nextLabel={nextTab?.[1]||(hasOrders?'Pedidos':undefined)} onNext={(nextTab||hasOrders)?continueGuide:undefined} onExplore={()=>onAcknowledgeGuide(guideKey)}/>}
       {financeTab==='overview'&&<FinanceOverview/>}
@@ -475,12 +488,12 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
         <P16Card>
           <div className="panel-heading"><div><h3>Contas a pagar</h3><p>{openPayables.length} pendentes</p></div><strong className="obligation-total expense-text">{cash(pendingPayablesTotal)}</strong></div>
           {openPayables.length?<div className="financial-obligation-list">{openPayables.slice(0,4).map(item=>{const due=dueInfo(item.dueDate);return <div className="financial-obligation-row" key={item.id}><span><strong>{item.description}</strong><small>{item.category} · Vence em {dateText(item.dueDate)}</small><em className={'due-chip '+due.tone}>{due.label}</em></span><b className="expense-text">{cash(item.amountCents)}</b></div>;})}</div>:<div className="empty-state financial-obligation-empty">Nenhuma conta pendente.</div>}
-          <button type="button" className="secondary-full-button" onClick={()=>setFinanceTab('payables')}>Ver contas a pagar <ArrowUpRight size={15}/></button>
+          <button type="button" className="secondary-full-button" onClick={()=>navigateFinanceTab('payables')}>Ver contas a pagar <ArrowUpRight size={15}/></button>
         </P16Card>
         <P16Card>
           <div className="panel-heading"><div><h3>Valores a receber</h3><p>{openReceivables.length} pendentes</p></div><strong className="obligation-total income-text">{cash(pendingReceivablesTotal)}</strong></div>
           {openReceivables.length?<div className="financial-obligation-list">{openReceivables.slice(0,4).map(item=>{const due=dueInfo(item.dueDate);return <div className="financial-obligation-row" key={item.id}><span><strong>{item.description}</strong><small>{item.counterparty+' · Previsto para '+dateText(item.dueDate)}</small><em className={'due-chip '+due.tone}>{due.label}</em></span><b className="income-text">{cash(item.amountCents)}</b></div>;})}</div>:<div className="empty-state financial-obligation-empty">Nenhum valor pendente de recebimento.</div>}
-          <button type="button" className="secondary-full-button" onClick={()=>setFinanceTab('receivables')}>Ver valores a receber <ArrowUpRight size={15}/></button>
+          <button type="button" className="secondary-full-button" onClick={()=>navigateFinanceTab('receivables')}>Ver valores a receber <ArrowUpRight size={15}/></button>
         </P16Card>
       </div>
       <div className="finance-analysis-grid">
@@ -492,7 +505,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
         {currentMonthEntries.length?<div className="payment-method-list">{paymentOptions.filter(method=>methodCounts[method]>0).map(method=><article className="payment-method-row" key={method}><div className="payment-method-name"><strong>{method}</strong><span>{methodCounts[method]} {methodCounts[method]===1?'movimentação':'movimentações'}</span></div><div className="payment-method-value income-text"><span>Resultado líquido</span><strong>{cash(methodTotals[method])}</strong></div></article>)}</div>:<div className="empty-state">Ainda não há movimentações para comparar por forma de pagamento.</div>}
       </P16Card>
       <P16Card className="financial-recent-panel">
-        <div className="panel-heading"><div><h3>Movimentações do período</h3><p>Recebimentos e pagamentos já registrados no caixa</p></div><button type="button" className="text-button" onClick={()=>setFinanceTab('transactions')}>Abrir todas <ArrowUpRight size={15}/></button></div>
+        <div className="panel-heading"><div><h3>Movimentações do período</h3><p>Recebimentos e pagamentos já registrados no caixa</p></div><button type="button" className="text-button" onClick={()=>navigateFinanceTab('transactions')}>Abrir todas <ArrowUpRight size={15}/></button></div>
         <MovementList items={currentMonthEntries.slice(0,8)}/>
       </P16Card>
     </>;
