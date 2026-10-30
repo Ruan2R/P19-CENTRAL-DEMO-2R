@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import '../burger-p16-faithful.css';
+import ModuleGuideCard from './ModuleGuideCard';
+import { BURGER_FINANCE_GUIDES, getModuleGuide } from '../demoGuides';
 import {
   AlertTriangle, ArrowDownLeft, ArrowRight, ArrowUpRight, BarChart3, Bell, Boxes, CalendarDays, Check, CheckCircle2,
   ChevronDown, ClipboardList, CreditCard, Filter, LayoutDashboard, Package, Plus, RefreshCw,
@@ -69,7 +71,7 @@ function productQuantity(product, quantity) {
   return Number.isFinite(value) ? value.toLocaleString('pt-BR', { maximumFractionDigits:3 }) : '0';
 }
 
-export default function BurgerP16Showcase({ module, notify = () => {}, onNavigate = () => {}, onExit = () => {}, availableModules = [] }) {
+export default function BurgerP16Showcase({ module, notify = () => {}, onNavigate = () => {}, onExit = () => {}, availableModules = [], demoId = 'burger.completo', seenGuides = {}, onAcknowledgeGuide = () => {} }) {
   const [products,setProducts] = useState(initialProducts);
   const [orders,setOrders] = useState(initialOrders);
   const [entries,setEntries] = useState(initialEntries);
@@ -422,6 +424,19 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
   function FinanceModule() {
     const tabs=[['overview','Resumo'],['financial','Financeiro'],['transactions','Movimentações'],['payables','Contas a pagar'],['receivables','Contas a receber'],['inventory','Produtos e estoque']];
     const descriptions={overview:'Consulte rapidamente o caixa e acesse as tarefas mais usadas.',financial:'Veja o caixa do período, contas pendentes e movimentações.',transactions:'Consulte e registre entradas e saídas efetivas do caixa.',payables:'Organize vencimentos e registre pagamentos.',receivables:'Acompanhe valores pendentes e registre recebimentos.',inventory:'Cadastre produtos e controle cada movimentação de estoque.'};
+    const financeGuideIndex=tabs.findIndex(([key])=>key===financeTab);
+    const nextTab=tabs[financeGuideIndex+1];
+    const hasSite=availableModules.includes('site');
+    const hasOrders=availableModules.includes('orders');
+    const guideKey=demoId+':finance:'+financeTab;
+    const guideStep=(hasSite?1:0)+financeGuideIndex+1;
+    const guideTotal=(hasSite?1:0)+tabs.length+(hasOrders?1:0);
+    const financeGuide=BURGER_FINANCE_GUIDES[financeTab];
+    const continueGuide=()=>{
+      onAcknowledgeGuide(guideKey);
+      if(nextTab) setFinanceTab(nextTab[0]);
+      else if(hasOrders) onNavigate('orders');
+    };
     return <section className="page-content">
       <div className="page-heading-row">
         <div><div className="section-kicker">{financeTab==='overview'?'CONTROLE FINANCEIRO':'GESTÃO DO ESTABELECIMENTO'}</div><h1>{tabs.find(t=>t[0]===financeTab)?.[1]||'Financeiro'}</h1><p>{descriptions[financeTab]}</p></div>
@@ -430,6 +445,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
       <div className="finance-tabs" role="tablist" aria-label="Módulos financeiros">
         {tabs.map(([key,label])=><button type="button" key={key} className={'finance-tab '+(financeTab===key?'active':'')} role="tab" aria-selected={financeTab===key} onClick={()=>setFinanceTab(key)}>{label}</button>)}
       </div>
+      {!seenGuides[guideKey]&&financeGuide&&<ModuleGuideCard stepNumber={guideStep} totalSteps={guideTotal} title={financeGuide.title} description={financeGuide.description} tip={financeGuide.tip} nextLabel={nextTab?.[1]||(hasOrders?'Pedidos':undefined)} onNext={(nextTab||hasOrders)?continueGuide:undefined} onExplore={()=>onAcknowledgeGuide(guideKey)}/>}
       {financeTab==='overview'&&<FinanceOverview/>}
       {financeTab==='financial'&&<FinancialView/>}
       {financeTab==='transactions'&&<TransactionsView/>}
@@ -610,7 +626,14 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
       const product=products.find(item=>item.id===line.productId);
       return productQuantity(product||{unit:'un'},line.quantity)+'x '+(product?.name||'Produto');
     }).join(', ');
+    const orderGuideKey=demoId+':orders';
+    const hasSite=availableModules.includes('site');
+    const hasFinance=availableModules.includes('finance');
+    const orderGuideStep=(hasSite?1:0)+(hasFinance?6:0)+1;
+    const orderGuideTotal=(hasSite?1:0)+(hasFinance?6:0)+1;
+    const orderGuide=getModuleGuide('orders','Burger');
     return <section className="page-content">
+      {!seenGuides[orderGuideKey]&&<ModuleGuideCard stepNumber={orderGuideStep} totalSteps={orderGuideTotal} title={orderGuide.title} description={orderGuide.description} tip={orderGuide.tip} onExplore={()=>onAcknowledgeGuide(orderGuideKey)}/>}
       <div className="page-heading-row orders-page-heading">
         <div><div className="section-kicker">OPERAÇÃO DO ESTABELECIMENTO</div><h1>Pedidos</h1><p>Organize o preparo e acompanhe as retiradas durante o expediente.</p></div>
         <div className="orders-session-actions">
