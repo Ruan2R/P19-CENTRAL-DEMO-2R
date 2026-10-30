@@ -293,6 +293,7 @@ export default function BurgerP16Showcase({ module, notify = () => {}, onNavigat
     const kind=String(data.get('kind')||productKind), cost=Number(data.get('cost')), price=Number(data.get('price'));
     const tracked=kind==='resale',stock=tracked?Number(data.get('stock')):0,minimum=tracked?Number(data.get('minimum')):0;
     if(!name||!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<=0||stock<0||minimum<0)return;
+    if(products.some((item)=>item.name.trim().toLowerCase()===name.toLowerCase())){notify('Já existe um produto com esse nome no catálogo.');return;}
     const product={id:'prod'+Date.now(),name,category,kind,sellable:true,stockTracked:tracked,costCents:Math.round(cost*100),priceCents:Math.round(price*100),stock,minimum,unit:String(data.get('unit')||'un')};
     setProducts((current)=>[...current,product]);
     if(tracked&&stock>0)setStockMovements((current)=>[{id:'sm'+Date.now(),productId:product.id,type:'purchase',quantity:stock,before:0,after:stock,reason:'Estoque inicial do cadastro',movementDate:todayKey(0),sourceType:'manual'},...current]);
