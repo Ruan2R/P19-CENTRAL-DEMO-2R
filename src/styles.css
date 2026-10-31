@@ -1310,3 +1310,429 @@
   .module-guide-next,
   .module-guide-explore { min-height: 40px; font-size: 10px; }
 }
+
+
+/* P19 responsive audit: shared shell + Beauty/Barber reference breakpoints. */
+/* Reference viewport bands: 1240 / 1050 / 900 / 760 / 640 / 520 / 420 / 390 / 380 / 360 px. */
+.demo-layout,
+.demo-main,
+.beauty-admin,
+.beauty-public-preview,
+.beauty-booking-layout,
+.barber-booking-preview,
+.bb-admin {
+  min-width:0;
+  max-width:100%;
+}
+.demo-main,
+.demo-main > *,
+.beauty-admin > *,
+.beauty-booking-main > *,
+.bb-admin > * {
+  min-width:0;
+}
+.demo-app,
+.hub-shell {
+  width:100%;
+  max-width:100%;
+  overflow-x:clip;
+}
+.demo-main img,
+.landing-preview img,
+.beauty-public-preview img,
+.barber-booking-preview img {
+  max-width:100%;
+  height:auto;
+}
+
+/* Notebook and small desktop: preserve the desktop navigation while reducing inner grids. */
+@media (max-width:1240px) {
+  .demo-main { padding-left:clamp(16px,2.2vw,28px); padding-right:clamp(16px,2.2vw,28px); }
+  .main-title-row { gap:14px; }
+  .main-title-row h1 { overflow-wrap:anywhere; }
+  .ba-appointment-card { gap:9px; }
+  .ba-hours-row { gap:8px; }
+}
+@media (max-width:1050px) {
+  .ba-metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ba-finance-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .ba-customer-layout,
+  .ba-blocks-layout,
+  .ba-finance-forms,
+  .ba-overview-bottom { grid-template-columns:1fr; }
+  .ba-appointment-card { grid-template-columns:56px minmax(0,1fr) 34px; gap:8px; }
+  .ba-appointment-date { grid-row:1 / span 3; grid-column:1; }
+  .ba-appointment-info { grid-column:2; }
+  .ba-appointment-money,
+  .ba-appointment-status { grid-column:2; }
+  .ba-appointment-card > .ba-icon-button { grid-column:3; grid-row:1; }
+  .ba-service-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ba-hours-row { grid-template-columns:minmax(100px,1fr) minmax(65px,.7fr) repeat(4,minmax(82px,.9fr)); gap:7px; }
+  .ba-hours-card { overflow:hidden; }
+  .ba-hours-list { min-width:0; }
+}
+
+/* Public Beauty booking becomes a single-column guided flow on tablet and below. */
+@media (max-width:900px) {
+  .beauty-booking-layout { grid-template-columns:minmax(0,1fr); }
+  .beauty-booking-aside .ba-card { position:static; top:auto; }
+  .beauty-booking-main,
+  .beauty-booking-aside { width:100%; }
+  .beauty-booking-extras { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+/* Tablet portrait and phone: the P19 workspace uses the same compact drawer pattern as P15/P17. */
+@media (max-width:760px) {
+  .demo-topbar {
+    height:68px;
+    min-height:68px;
+    padding:0 14px;
+  }
+  .demo-topbar .brand-lockup { gap:8px; min-width:0; }
+  .demo-topbar .mobile-menu {
+    display:grid;
+    place-items:center;
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+    border:1px solid #e5eaf0;
+    border-radius:10px;
+    background:#fff;
+  }
+  .demo-topbar .brand-mark { flex:0 0 36px; }
+  .demo-topbar-right { min-width:0; gap:7px; }
+  .workspace-badge { display:none; }
+  .back-hub-button { min-height:40px; padding:8px 10px; }
+  .sidebar {
+    position:fixed;
+    left:0;
+    top:68px;
+    bottom:0;
+    z-index:51;
+    width:min(305px,87vw);
+    height:auto;
+    max-height:calc(100dvh - 68px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    transform:translateX(-105%);
+    transition:transform .22s ease;
+    box-shadow:12px 0 35px rgba(20,40,60,.13);
+  }
+  .sidebar.show-mobile { transform:translateX(0); }
+  .sidebar-close { display:grid; }
+  .mobile-scrim {
+    display:block;
+    position:fixed;
+    inset:68px 0 0;
+    z-index:50;
+    width:100%;
+    height:calc(100dvh - 68px);
+    border:0;
+    background:rgba(17,34,50,.36);
+  }
+  .demo-main {
+    width:100%;
+    max-width:none;
+    min-width:0;
+    padding:18px 15px calc(24px + env(safe-area-inset-bottom));
+  }
+  .demo-breadcrumb {
+    min-width:0;
+    flex-wrap:wrap;
+    gap:5px;
+    line-height:1.5;
+  }
+  .main-title-row {
+    align-items:flex-start;
+    flex-direction:column;
+    gap:10px;
+    margin:18px 0 18px;
+  }
+  .main-title-row h1 { font-size:clamp(22px,5vw,28px); overflow-wrap:anywhere; }
+  .main-title-row p { max-width:100%; }
+  .main-title-actions {
+    width:100%;
+    align-items:center;
+    justify-content:space-between;
+    flex-direction:row;
+    flex-wrap:wrap;
+  }
+  .main-title-actions .secondary-button { display:inline-flex; min-height:42px; }
+  .fake-live { font-size:8px; }
+  .demo-footer-note { align-items:flex-start; line-height:1.55; }
+  .demo-main .panel,
+  .demo-main .ba-card,
+  .demo-main .bb-admin-card { max-width:100%; }
+  .ba-page-heading {
+    align-items:flex-start;
+    flex-direction:column;
+    gap:9px;
+  }
+  .ba-page-heading > .ba-count-pill,
+  .ba-page-heading > .ba-field { align-self:stretch; }
+  .ba-page-heading h2 { font-size:clamp(22px,5vw,28px); overflow-wrap:anywhere; }
+  .ba-heading-actions { width:100%; flex-wrap:wrap; }
+  .ba-heading-actions .ba-button { flex:1 1 auto; }
+  .ba-card { padding:14px; }
+  .ba-section-heading h2 { font-size:17px; }
+  .ba-form-grid,
+  .ba-form-grid-three,
+  .ba-policy-grid,
+  .ba-two-column,
+  .ba-finance-forms,
+  .ba-overview-bottom,
+  .ba-customer-layout,
+  .ba-blocks-layout { grid-template-columns:minmax(0,1fr); }
+  .ba-advanced-filters { grid-template-columns:minmax(0,1fr); }
+  .ba-date-range { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ba-filter-footer { align-items:flex-start; flex-direction:column; }
+  .ba-appointment-tools { grid-template-columns:minmax(0,1fr); }
+  .ba-search { width:100%; }
+  .ba-appointment-card {
+    grid-template-columns:52px minmax(0,1fr) 32px;
+    gap:8px;
+    align-items:start;
+  }
+  .ba-appointment-date { grid-row:1 / span 3; grid-column:1; }
+  .ba-appointment-info { grid-column:2; min-width:0; }
+  .ba-appointment-money { grid-column:2; display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+  .ba-appointment-status { grid-column:2; justify-self:start; }
+  .ba-appointment-card > .ba-icon-button { grid-column:3; grid-row:1; }
+  .ba-upcoming-row { grid-template-columns:48px minmax(0,1fr); }
+  .ba-upcoming-row > .ba-status { grid-column:2; justify-self:start; }
+  .ba-customer-summary { grid-template-columns:34px minmax(0,1fr) 16px; }
+  .ba-customer-meta { grid-column:2; justify-items:start; }
+  .ba-customer-summary > svg:last-child { grid-column:3; grid-row:1; }
+  .ba-service-list { grid-template-columns:minmax(0,1fr); }
+  .ba-service-card-heading { grid-template-columns:34px minmax(0,1fr); }
+  .ba-service-card-heading > .ba-toggle { grid-column:2; justify-self:start; }
+  .ba-service-card-footer { align-items:flex-start; flex-direction:column; }
+  .ba-promotion-service-grid article { grid-template-columns:minmax(0,1fr); }
+  .ba-promotion-title > div { min-width:0; }
+  .ba-hours-table-head { display:none; }
+  .ba-hours-row {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+    padding:13px 0;
+  }
+  .ba-hours-row > strong,
+  .ba-hours-row > .ba-toggle { grid-column:1 / -1; }
+  .ba-hours-row > label:not(.ba-toggle) { display:grid; min-width:0; }
+  .ba-hours-row > label:not(.ba-toggle) span { display:block; }
+  .ba-hours-row input[type="time"] { min-height:42px; font-size:12px; }
+  .ba-hours-footer { align-items:stretch; flex-direction:column; }
+  .ba-hours-footer .ba-button { width:100%; justify-content:center; }
+  .ba-finance-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ba-finance-metrics .balance { grid-column:1 / -1; }
+  .ba-receivable-breakdown { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ba-receivable-breakdown .remaining { grid-column:1 / -1; }
+  .ba-finance-entry-list > article { grid-template-columns:30px minmax(0,1fr) auto; gap:8px; }
+  .ba-finance-entry-list > article > .ba-icon-button { grid-column:3; justify-self:end; }
+  .ba-receivable-heading { align-items:flex-start; flex-wrap:wrap; }
+  .ba-payables-list > article { grid-template-columns:minmax(0,1fr); }
+  .ba-form-actions { align-items:stretch; }
+  .ba-form-actions > .ba-button { flex:1 1 100%; min-height:44px; justify-content:center; }
+  .ba-form-actions > .ba-helper { flex:1 1 100%; }
+  .ba-promotion-filters { display:flex; width:100%; overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px; }
+  .ba-promotion-filters button { flex:0 0 auto; white-space:nowrap; min-height:38px; }
+  .ba-promotion-actions { flex-wrap:wrap; }
+  .ba-promotion-actions .ba-button { flex:1 1 auto; min-height:42px; }
+  .ba-icon-button { min-width:40px; min-height:40px; }
+  .ba-button { min-height:42px; }
+  .ba-modal-backdrop { padding:12px; }
+  .ba-receipt-modal { width:min(100%,520px); max-height:calc(100dvh - 24px); overflow-y:auto; }
+  .beauty-public-heading { align-items:flex-start; flex-direction:column; }
+  .beauty-public-heading h2 { font-size:23px; }
+  .beauty-booking-layout { grid-template-columns:minmax(0,1fr); gap:12px; }
+  .beauty-booking-aside .ba-card { position:static; top:auto; }
+  .beauty-booking-aside { min-width:0; }
+  .beauty-date-row { grid-template-columns:minmax(0,1fr); }
+  .beauty-date-readable { padding-bottom:0; }
+  .beauty-booking-extras { grid-template-columns:minmax(0,1fr); }
+  .beauty-service-option { grid-template-columns:17px minmax(0,1fr) auto; gap:7px; }
+  .beauty-service-option > span { min-width:0; }
+  .beauty-service-option strong { font-size:10px; }
+  .beauty-service-option small { overflow-wrap:anywhere; }
+  .beauty-service-option > b { font-size:10px; white-space:nowrap; }
+  .beauty-selection-total { flex-wrap:wrap; }
+  .beauty-booking-summary { min-width:0; }
+  .beauty-book-submit { width:100%; min-height:46px; justify-content:center; }
+  .beauty-booking-success { padding:16px; }
+  .beauty-confirmation-details > div { align-items:flex-start; }
+  .time-wheel-trigger { min-height:48px; padding:12px; font-size:14px; }
+  .time-wheel-panel { padding:10px; }
+  .time-wheel-columns { max-width:280px; }
+  .time-wheel-list { max-height:260px; }
+  .bb-booking-section,
+  .bb-admin-card { padding:13px; }
+  .bb-admin-page-title { align-items:flex-start; flex-direction:column; }
+  .bb-admin-page-title > .bb-date-chip { align-self:flex-start; }
+  .bb-admin-card-title { align-items:flex-start; gap:8px; }
+  .bb-admin-metrics,
+  .bb-finance-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bb-two-columns,
+  .bb-overview-grid,
+  .bb-hours-grid { grid-template-columns:minmax(0,1fr); }
+  .bb-agenda-toolbar { grid-template-columns:minmax(0,1fr); }
+  .bb-appointment-admin-card { grid-template-columns:minmax(0,1fr); }
+  .bb-finance-receipt { grid-template-columns:minmax(0,1fr); }
+  .bb-finance-receipt > .bb-button { width:100%; }
+  .bb-filter-select { grid-template-columns:minmax(0,1fr); }
+  .bb-public-heading { align-items:flex-start; flex-direction:column; }
+  .bb-slot-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .bb-customer-form { grid-template-columns:minmax(0,1fr); }
+  .bb-customer-form > button { width:100%; min-height:44px; }
+}
+
+/* Compact phones: avoid squeezed labels and ensure forms and dialogs remain usable. */
+@media (max-width:520px) {
+  .demo-main { padding-left:12px; padding-right:12px; }
+  .demo-breadcrumb { font-size:9px; }
+  .main-title-row h1 { font-size:23px; }
+  .main-title-actions { gap:7px; }
+  .secondary-button,
+  .main-title-actions .secondary-button { min-height:42px; }
+  .ba-page-heading p,
+  .beauty-public-heading p { font-size:11px; }
+  .ba-date-range { grid-template-columns:minmax(0,1fr); }
+  .ba-form-grid,
+  .ba-form-grid-three { grid-template-columns:minmax(0,1fr); }
+  .ba-form-stack > label,
+  .ba-field,
+  .ba-form-grid > label { min-width:0; }
+  .ba-form-stack input,
+  .ba-form-stack select,
+  .ba-form-stack textarea,
+  .ba-field input,
+  .ba-field select,
+  .ba-field textarea { width:100%; min-width:0; min-height:44px; font-size:16px; }
+  .ba-form-stack textarea,
+  .ba-field textarea { min-height:88px; }
+  .ba-toggle { min-height:46px; }
+  .ba-appointment-date { padding:7px 3px; }
+  .ba-appointment-info > span { overflow-wrap:anywhere; }
+  .ba-appointment-money { flex-wrap:wrap; }
+  .ba-customer-details,
+  .ba-customer-history,
+  .ba-customer-detail-bottom { grid-template-columns:minmax(0,1fr); }
+  .ba-receivable-breakdown { gap:7px; }
+  .ba-receivable-breakdown > div { padding:9px; }
+  .ba-receivable-breakdown strong { font-size:11px; overflow-wrap:anywhere; }
+  .ba-finance-entry-list > article { grid-template-columns:28px minmax(0,1fr) auto; }
+  .ba-finance-entry-list > article > div:nth-child(2) { min-width:0; }
+  .ba-finance-entry-list > article > div:nth-child(2) strong { overflow-wrap:anywhere; }
+  .ba-finance-entry-list > article > strong { font-size:11px; overflow-wrap:anywhere; }
+  .ba-receipt-modal { padding:15px; }
+  .ba-receipt-modal .ba-form-actions { display:grid; grid-template-columns:minmax(0,1fr); }
+  .ba-receipt-modal .ba-form-actions > .ba-button { width:100%; }
+  .beauty-service-option { padding:10px 5px; }
+  .beauty-service-option > b { font-size:9px; }
+  .beauty-date-readable { font-size:10px; }
+  .beauty-booking-summary { padding:12px; }
+  .beauty-booking-success { padding:14px; }
+  .beauty-success-actions .ba-button { flex-basis:100%; width:100%; }
+  .time-wheel-columns { max-width:250px; }
+  .bb-slot-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bb-slot-grid button { min-height:42px; }
+  .bb-confirmation { padding:16px; }
+  .bb-confirmation-meta { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bb-selected-list > div { grid-template-columns:45px minmax(0,1fr) auto; gap:7px; }
+  .bb-selected-list > div > span:nth-child(2) { min-width:0; overflow-wrap:anywhere; }
+  .bb-admin-metrics,
+  .bb-finance-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bb-admin-metrics article > strong,
+  .bb-finance-metrics article > strong { font-size:18px; }
+}
+
+/* Very small phones (including the 360–380 px reference widths). */
+@media (max-width:420px) {
+  .ba-metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .ba-metric-grid article { padding:11px; }
+  .ba-metric-grid article > strong { font-size:20px; }
+  .ba-finance-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+  .ba-finance-metrics article { padding:10px; }
+  .ba-finance-metrics article > strong { font-size:16px; }
+  .ba-finance-metrics .balance { grid-column:1/-1; }
+  .ba-appointment-card { grid-template-columns:46px minmax(0,1fr) 30px; gap:6px; }
+  .ba-appointment-date strong { font-size:10px; }
+  .ba-appointment-info > strong { font-size:11px; }
+  .ba-appointment-info > span { font-size:9px; }
+  .ba-appointment-money { font-size:10px; }
+  .ba-service-card { padding:12px; }
+  .ba-service-card-heading h3 { font-size:14px; }
+  .ba-promotion-title { align-items:flex-start; }
+  .beauty-public-heading h2 { font-size:21px; }
+  .beauty-service-option { grid-template-columns:16px minmax(0,1fr) auto; gap:6px; }
+  .beauty-service-option strong { font-size:9px; }
+  .beauty-service-option small { font-size:8px; line-height:1.4; }
+  .beauty-service-option > b { font-size:9px; }
+  .beauty-booking-aside .ba-card { padding:12px; }
+  .time-wheel-columns { max-width:230px; }
+  .bb-slot-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bb-slot-card { padding:10px; }
+  .bb-slot-head { gap:7px; }
+  .bb-slot-head > div { min-width:0; }
+  .bb-slot-head strong,
+  .bb-slot-head small { overflow-wrap:anywhere; }
+  .bb-confirmation { padding:13px; }
+  .bb-confirmation-meta { gap:7px; }
+  .bb-selected-list > div { grid-template-columns:40px minmax(0,1fr); }
+  .bb-selected-list > div > b { grid-column:2; justify-self:start; }
+}
+@media (max-width:380px) {
+  .demo-topbar .brand-tagline { display:none; }
+  .demo-topbar .brand-name { font-size:9px; letter-spacing:.06em; }
+  .back-hub-button { width:39px; min-width:39px; justify-content:center; padding:0; }
+  .back-hub-button span { display:none; }
+  .main-title-actions { align-items:stretch; }
+  .main-title-actions .secondary-button { width:100%; }
+  .ba-metric-grid { grid-template-columns:minmax(0,1fr); }
+  .ba-finance-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ba-hours-row { grid-template-columns:minmax(0,1fr); }
+  .ba-hours-row > strong,
+  .ba-hours-row > .ba-toggle { grid-column:1; }
+  .ba-receivable-breakdown { grid-template-columns:minmax(0,1fr); }
+  .ba-receivable-breakdown .remaining { grid-column:1; }
+  .ba-appointment-card { grid-template-columns:42px minmax(0,1fr) 28px; }
+  .beauty-service-option { grid-template-columns:16px minmax(0,1fr); }
+  .beauty-service-option > b { grid-column:2; justify-self:start; }
+  .bb-slot-grid { grid-template-columns:minmax(0,1fr); }
+  .bb-admin-metrics,
+  .bb-finance-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:360px) {
+  .hub-main { padding-left:10px; padding-right:10px; }
+  .demo-main { padding-left:10px; padding-right:10px; }
+  .demo-topbar { padding-left:9px; padding-right:9px; }
+  .demo-topbar .brand-mark { width:32px; height:32px; flex-basis:32px; }
+  .ba-page-heading h2 { font-size:21px; }
+  .ba-card { padding:11px; }
+  .ba-metric-grid,
+  .ba-finance-metrics { grid-template-columns:minmax(0,1fr); }
+  .ba-finance-metrics .balance { grid-column:1; }
+  .ba-appointment-card { grid-template-columns:38px minmax(0,1fr) 28px; }
+  .ba-appointment-info > span { overflow-wrap:anywhere; }
+  .beauty-service-option > b { font-size:8px; }
+  .bb-admin-metrics,
+  .bb-finance-metrics { grid-template-columns:minmax(0,1fr); }
+  .bb-slot-grid { grid-template-columns:minmax(0,1fr); }
+}
+
+/* Touch targets and safe-area support on mobile devices. */
+@media (max-width:760px) {
+  .demo-app button,
+  .demo-app a,
+  .beauty-public-preview button,
+  .barber-booking-preview button { touch-action:manipulation; }
+  .demo-app input,
+  .demo-app select,
+  .demo-app textarea,
+  .beauty-public-preview input,
+  .beauty-public-preview select,
+  .beauty-public-preview textarea,
+  .barber-booking-preview input,
+  .barber-booking-preview select { max-width:100%; }
+  .demo-app .ba-button,
+  .demo-app .bb-button { min-height:42px; }
+  .demo-app .ba-icon-button { min-width:40px; min-height:40px; }
+}
