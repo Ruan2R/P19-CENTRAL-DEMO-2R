@@ -2262,3 +2262,91 @@
 .p16-faithful-scope .brand-mark { background:#d8753d; color:#fff; }
 .p16-faithful-scope .brand-copy strong b { color:#d8753d; }
 .p16-faithful-scope :focus-visible { outline-color:rgba(216,117,61,.28); }
+
+
+/* P19 Burger responsive completion: fit two- and three-module packages. */
+@media (max-width:760px) {
+  .p16-faithful-scope .sidebar {
+    grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+    grid-template-rows:auto auto;
+  }
+  .p16-faithful-scope .sidebar .nav-item {
+    min-width:0;
+    width:100%;
+    padding:0 6px;
+    gap:6px;
+    overflow:hidden;
+    white-space:nowrap;
+    font-size:clamp(8px,2vw,10px);
+  }
+  .p16-faithful-scope .sidebar .nav-item span:not(.nav-active-dot) {
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .p16-faithful-scope .page-content {
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+  .p16-faithful-scope .orders-session-actions,
+  .p16-faithful-scope .order-board-toolbar-actions {
+    min-width:0;
+  }
+  .p16-faithful-scope .order-board-toolbar-actions .filter-control input,
+  .p16-faithful-scope .stock-history-search input {
+    min-width:0;
+    width:100%;
+  }
+}
+@media (max-width:390px) {
+  .p16-faithful-scope .sidebar {
+    gap:7px;
+    padding-left:10px;
+    padding-right:10px;
+  }
+  .p16-faithful-scope .sidebar .nav-item {
+    min-height:34px;
+    font-size:8px;
+  }
+  .p16-faithful-scope .sidebar .nav-item svg {
+    width:14px;
+    height:14px;
+    flex:0 0 14px;
+  }
+  .p16-faithful-scope .topbar .breadcrumbs {
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .p16-faithful-scope .topbar-right {
+    flex:0 0 auto;
+  }
+  .p16-faithful-scope .notification-button {
+    width:28px;
+    min-width:28px;
+  }
+}
+@media (max-width:360px) {
+  .p16-faithful-scope .sidebar .nav-item {
+    padding:0 4px;
+    gap:4px;
+    font-size:7.5px;
+  }
+  .p16-faithful-scope .sidebar .nav-item svg {
+    width:13px;
+    height:13px;
+    flex-basis:13px;
+  }
+  .p16-faithful-scope .page-content {
+    padding-left:9px;
+    padding-right:9px;
+  }
+  .p16-faithful-scope .panel {
+    padding:11px;
+  }
+  .p16-faithful-scope .finance-tab {
+    padding-left:8px;
+    padding-right:8px;
+  }
+}
