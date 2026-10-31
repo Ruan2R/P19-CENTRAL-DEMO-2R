@@ -6,7 +6,7 @@ import BarberAdminShowcase from './components/BarberAdminShowcase';
 import BurgerP16Showcase from './components/BurgerP16Showcase';
 import ModuleGuideCard from './components/ModuleGuideCard';
 import {
-  ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, ClipboardList, Clock3, CreditCard, ExternalLink, Eye, Grid2X2, LayoutDashboard, Menu, Scissors, Search, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, Code2, Linkedin, ShieldCheck, DoorClosed, Tag
+  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, ClipboardList, Clock3, CreditCard, ExternalLink, Eye, Grid2X2, LayoutDashboard, Menu, Scissors, Search, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, Code2, Linkedin, ShieldCheck, DoorClosed, Tag
 } from 'lucide-react';
 
 const DEMOS = [
