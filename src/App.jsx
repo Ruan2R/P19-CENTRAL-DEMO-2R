@@ -5,7 +5,7 @@ import {
   FileText, Filter, Grid2X2, LayoutDashboard, Menu, Package, Plus, Scissors,
   Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
   TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
-  MoreHorizontal, CheckCircle2, Clock, CircleAlert, RefreshCw,
+  MoreHorizontal, CheckCircle2, CircleHelp, Clock, CircleAlert, RefreshCw,
   Code2, Wrench, Network, Linkedin, ShieldCheck
 } from 'lucide-react';
 
@@ -190,6 +190,7 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('Todos');
   const [mobileNav, setMobileNav] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [appointments, setAppointments] = useState(INITIAL_APPOINTMENTS);
   const [orders, setOrders] = useState(INITIAL_ORDERS);
   const [attendanceOpen, setAttendanceOpen] = useState(false);
@@ -233,8 +234,9 @@ export default function App() {
     setTransactionForm({description:'',category:'Receita',value:''});
     setMobileNav(false);
     setModal(null);
+    setGuideOpen(window.matchMedia('(max-width: 760px)').matches);
   }
-  function exitDemo() { setActiveDemo(null); setMobileNav(false); setPage('catalog'); }
+  function exitDemo() { setActiveDemo(null); setMobileNav(false); setGuideOpen(false); setPage('catalog'); }
   function canUse(module) { return activeDemo?.modules.includes(module); }
   function changeModule(module) {
     setMobileNav(false);
@@ -271,6 +273,11 @@ export default function App() {
             <article><span>02</span><div><strong>Abra uma modalidade</strong><p>Confira os recursos que fazem parte daquele pacote.</p></div></article>
             <article><span>03</span><div><strong>Teste a demonstração</strong><p>Use o menu lateral e experimente os botões e formulários.</p></div></article>
           </div>
+          <button className="mobile-guide-card" type="button" onClick={()=>setGuideOpen(true)}>
+            <span className="mobile-guide-card-icon"><CircleHelp size={20}/></span>
+            <span className="mobile-guide-card-copy"><strong>Está no celular? Veja como explorar.</strong><small>Um guia rápido, pensado para navegação por toque.</small></span>
+            <span className="mobile-guide-card-action">Abrir guia <ArrowRight size={15}/></span>
+          </button>
 
           {['Vitrine','Beauty','Barber','Burger'].filter(group=>filter==='Todos'||filter===group).map(group=>{
             const list=visibleDemos.filter(d=>d.segment===group);
@@ -288,6 +295,7 @@ export default function App() {
       </main>
       <footer className="footer"><span>2R INFORMÁTICA · Seu parceiro em Tecnologia</span><span><span className="footer-dot"/> Dados fictícios para demonstração</span></footer>
       {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
+      {guideOpen&&<MobileGuide mode="catalog" onClose={()=>setGuideOpen(false)}/>}
     </div>;
   }
 
@@ -298,7 +306,7 @@ export default function App() {
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
 
   return <div className={`app-shell demo-app ${activeDemo.color}`}>
-    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
+    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="mobile-guide-trigger" type="button" onClick={()=>setGuideOpen(true)} aria-label="Abrir guia de navegação"><CircleHelp size={18}/></button><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
     <div className="demo-layout">
       <aside className={`sidebar ${mobileNav?'show-mobile':''}`}><div className="sidebar-workspace"><div className={`workspace-avatar ${activeDemo.color}`}><IconForDemo demo={activeDemo}/></div><div className="workspace-meta"><strong>{activeDemo.name}</strong><span>Prévia visual do pacote</span></div><button className="icon-quiet sidebar-close" onClick={()=>setMobileNav(false)}><X size={17}/></button></div><div className="sidebar-section-label">NAVEGAR NA PRÉVIA</div><nav className="side-nav">{currentModules.map(module=>{const item=MODULES[module];const Icon=item.icon;return <button key={module} className={`side-nav-item ${activeModule===module?'active':''}`} onClick={()=>changeModule(module)}><Icon size={18}/><span>{item.label}</span>{activeModule===module&&<span className="nav-active-mark"/>}</button>})}</nav><div className="sidebar-bottom"><div className="demo-data-note"><div><Sparkles size={15}/><strong>Modo demonstração</strong></div><p>Use o menu para alternar entre telas e experimente os botões. As alterações são temporárias e reiniciam ao recarregar.</p></div><button className="side-nav-item exit-item" onClick={exitDemo}><LogOut size={18}/><span>Voltar às modalidades</span></button></div></aside>
       {mobileNav&&<button className="mobile-scrim" aria-label="Fechar menu" onClick={()=>setMobileNav(false)}/>}
@@ -326,6 +334,97 @@ export default function App() {
     {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();setAppointments(prev=>[...prev,{id:Date.now(),client:appointmentForm.client||'Cliente demonstrativo',service:appointmentForm.service,time:appointmentForm.time,date:'Hoje',status:'Aguardando',price:services.find(s=>s.name===appointmentForm.service)?.price||40}].sort((a,b)=>a.time.localeCompare(b.time)));setModal(null);notify('Agendamento fictício adicionado.')}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins"/></label><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar exemplo</button></div></form></Modal>}
     {modal==='transaction'&&<Modal title="Novo lançamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const value=Number(String(transactionForm.value).replace(',','.'));if(!transactionForm.description||!Number.isFinite(value)||value<=0){notify('Preencha a descrição e um valor válido.');return;}setTransactions(prev=>[{id:Date.now(),description:transactionForm.description,category:transactionForm.category,date:'Hoje',value},...prev]);setModal(null);setTransactionForm({description:'',category:'Receita',value:''});notify('Lançamento fictício adicionado.')}}><label>Descrição<input value={transactionForm.description} onChange={e=>setTransactionForm({...transactionForm,description:e.target.value})} placeholder="Ex.: Venda de serviço" required/></label><div className="form-grid"><label>Tipo<select value={transactionForm.category} onChange={e=>setTransactionForm({...transactionForm,category:e.target.value})}><option>Receita</option><option>Despesa</option></select></label><label>Valor (R$)<input inputMode="decimal" value={transactionForm.value} onChange={e=>setTransactionForm({...transactionForm,value:e.target.value})} placeholder="0,00" required/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar lançamento</button></div></form></Modal>}
     {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
+    {guideOpen&&<MobileGuide mode="demo" demo={activeDemo} onClose={()=>setGuideOpen(false)}/>}
+  </div>;
+}
+
+
+function MobileGuide({mode,demo,onClose}) {
+  const isCatalog = mode === 'catalog';
+  const isVitrine = demo?.segment === 'Vitrine';
+  const isBurger = demo?.segment === 'Burger';
+  const isBarber = demo?.segment === 'Barber';
+  const hasBooking = demo?.modules.includes('booking');
+  const hasOrders = demo?.modules.includes('orders');
+  const hasInventory = demo?.modules.includes('inventory') || demo?.modules.includes('products');
+  const hasFinance = demo?.modules.includes('finance');
+
+  let title = 'Como explorar no celular';
+  let subtitle = 'O passo a passo foi pensado para telas pequenas e navegação por toque.';
+  let steps = [];
+  let note = 'Esta é uma demonstração: cadastros e alterações são fictícios e não são enviados para clientes.';
+
+  if (isCatalog) {
+    steps = [
+      {title:'Escolha um segmento',body:'Use os filtros Todos, Vitrine, Beauty, Barber e Burger. No celular, deslize os filtros para os lados para ver todas as opções.'},
+      {title:'Abra uma modalidade',body:'Role a lista e toque em “Visualizar modalidade” no cartão que deseja conhecer.'},
+      {title:'Navegue pelo menu',body:'Dentro da demonstração, toque no botão ☰ no topo para abrir as telas disponíveis naquele pacote.'},
+      {title:'Explore os fluxos',body:'Role a tela para baixo. Nas tabelas mais largas, deslize para o lado para consultar as outras colunas.'}
+    ];
+  } else if (isVitrine) {
+    title = 'Explore a landing page';
+    subtitle = 'No celular, a página de exemplo funciona como uma vitrine vertical.';
+    steps = [
+      {title:'Alterne o modelo',body:'Use os botões Beauty, Barber e Burger no seletor acima da prévia para trocar o exemplo.'},
+      {title:'Desça pela página',body:'Deslize para baixo para conhecer a apresentação, os serviços e as informações de cada modelo.'},
+      {title:'Teste o botão principal',body:'Toque na chamada da página para ver o destino demonstrativo. Nenhuma mensagem ou pedido real é enviado.'}
+    ];
+  } else if (isBurger && hasOrders) {
+    title = 'Teste pedidos e estoque';
+    subtitle = 'O fluxo Burger foi organizado para você operar em etapas curtas pelo celular.';
+    steps = [
+      {title:'Abra Pedidos e operação',body:'Toque em ☰ no topo e escolha a área de pedidos no menu lateral.'},
+      {title:'Confira o atendimento',body:'Com o atendimento aberto, toque em “Lançar pedido”. Se estiver encerrado, inicie um novo atendimento primeiro.'},
+      {title:'Monte e registre o pedido',body:'Use os botões − e + para ajustar as quantidades e toque em “Registrar pedido”. A baixa de estoque demonstrativa acontece nesse momento.'},
+      {title:'Acompanhe as etapas',body:'Atualize o status do pedido e depois abra Produtos ou Estoque no menu para conferir as quantidades.'}
+    ];
+  } else if (isBurger) {
+    title = 'Explore gestão e estoque';
+    subtitle = 'As telas ficam em sequência vertical e podem ser acessadas pelo menu.';
+    steps = [
+      {title:'Abra o menu',body:'Toque em ☰ no topo para ver os módulos incluídos neste pacote.'},
+      {title:'Confira os produtos',body:'Entre em Produtos ou Estoque para consultar os itens, preços e quantidades da demonstração.'},
+      {title:'Veja o financeiro',body:hasFinance?'Abra Financeiro pelo menu e confira receitas, despesas e saldo ilustrativo.':'Este pacote não inclui o módulo Financeiro; volte ao catálogo para comparar outra modalidade.'},
+      {title:'Deslize quando necessário',body:'Role a tela para baixo e, nas tabelas, deslize horizontalmente para acessar todas as colunas.'}
+    ];
+  } else if (hasBooking) {
+    title = isBarber ? 'Teste a agenda da barbearia' : 'Teste o agendamento';
+    subtitle = 'No celular, o agendamento é apresentado em uma sequência vertical, etapa por etapa.';
+    steps = [
+      {title:'Abra Agendamento público',body:'Toque em ☰ no topo e selecione Agendamento público no menu lateral.'},
+      {title:'Escolha serviços e horário',body:isBarber?'Selecione os serviços, escolha a data e o profissional de cada procedimento. Os horários aparecem em intervalos de 30 minutos.':'Selecione um ou mais serviços, escolha a data, depois a hora e o minuto.'},
+      {title:'Preencha seus dados',body:'Informe um nome e um WhatsApp fictícios e toque em “Confirmar agendamento”.'},
+      {title:'Confira na agenda',body:'Abra novamente o menu e entre em Agendamentos. O registro que acabou de criar aparece na agenda administrativa.'}
+    ];
+  } else if (hasFinance) {
+    title = 'Explore o financeiro';
+    subtitle = 'Use o menu para acessar os lançamentos e confira os detalhes rolando a tela.';
+    steps = [
+      {title:'Abra Financeiro',body:'Toque em ☰ e escolha Financeiro no menu lateral.'},
+      {title:'Confira o resumo',body:'Veja receitas, despesas e saldo ilustrativo nos cartões do início da tela.'},
+      {title:'Teste um lançamento',body:'Toque em “Novo lançamento”, preencha os dados de exemplo e confirme para atualizar os números.'},
+      {title:'Volte ao menu',body:'Use ☰ para comparar com outros módulos disponíveis neste pacote.'}
+    ];
+  } else {
+    title = 'Como navegar nesta demonstração';
+    steps = [
+      {title:'Abra o menu',body:'Toque em ☰ no topo para consultar as telas disponíveis neste pacote.'},
+      {title:'Escolha um módulo',body:'Toque em uma opção para abrir a área correspondente.'},
+      {title:'Explore os detalhes',body:'Role a tela verticalmente. Nas tabelas, deslize para os lados para consultar mais informações.'}
+    ];
+  }
+
+  return <div className="mobile-guide-overlay" onMouseDown={event=>{if(event.target===event.currentTarget)onClose();}}>
+    <section className="mobile-guide-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-guide-title">
+      <div className="mobile-guide-grabber" aria-hidden="true"></div>
+      <header className="mobile-guide-header">
+        <div><span className="mobile-guide-kicker">GUIA RÁPIDO · MOBILE</span><h2 id="mobile-guide-title">{title}</h2><p>{subtitle}</p></div>
+        <button type="button" className="mobile-guide-close" onClick={onClose} aria-label="Fechar guia"><X size={19}/></button>
+      </header>
+      <ol className="mobile-guide-steps">{steps.map((step,index)=><li key={step.title}><span className="mobile-guide-step-number">{String(index+1).padStart(2,'0')}</span><div><strong>{step.title}</strong><p>{step.body}</p></div></li>)}</ol>
+      <div className="mobile-guide-note"><Eye size={16}/><p>{note}</p></div>
+      <footer className="mobile-guide-footer"><button type="button" onClick={onClose}>Entendi, vamos testar <ArrowRight size={16}/></button></footer>
+    </section>
   </div>;
 }
 
