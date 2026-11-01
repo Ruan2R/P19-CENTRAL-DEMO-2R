@@ -9,6 +9,8 @@ import {
   Code2, Wrench, Network, Linkedin, ShieldCheck
 } from 'lucide-react';
 
+const publicAsset = (filename) => `${import.meta.env.BASE_URL}${filename}`;
+
 const DEMOS = [
   { id:'landing', name:'2R Landing Pages', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de página de demonstração.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
   { id:'beauty.agenda', name:'2R Beauty Agenda', segment:'Beauty', title:'Agendamentos e administração básica', description:'Agendamento público para clientes, agenda do dia, serviços e cadastros fictícios para apresentar a rotina de uma profissional.', modules:['overview','booking','appointments','clients','services'], color:'rose', icon:'beauty' },
@@ -454,6 +456,8 @@ function PublicBookingModule({segment,services,onBook}) {
   const total = selectedServices.reduce((sum,service)=>sum+service.price,0);
   const totalDuration = selectedServices.map(service=>service.duration).join(' + ');
   const timeSlots = segment==='Barber' ? Array.from({length:20},(_,index)=>`${String(9+Math.floor(index/2)).padStart(2,'0')}:${String((index%2)*30).padStart(2,'0')}`) : Array.from({length:540},(_,index)=>`${String(8+Math.floor(index/60)).padStart(2,'0')}:${String(index%60).padStart(2,'0')}`);
+  const hourOptions = Array.from({length:9},(_,index)=>String(index+8).padStart(2,'0'));
+  const minuteOptions = Array.from({length:60},(_,index)=>String(index).padStart(2,'0'));
   function toggleService(name) {
     setForm(prev=>{
       if(prev.services.includes(name)) return prev.services.length===1?prev:{...prev,services:prev.services.filter(item=>item!==name)};
@@ -481,7 +485,10 @@ function PublicBookingModule({segment,services,onBook}) {
         </section>
         <section className="panel booking-card"><div className="booking-step"><span>02</span><div><h3>Data e horário</h3><p>Selecione uma opção para a demonstração.</p></div></div>
           <div className="booking-fields"><label>Data<input type="date" min={localDateValue()} value={form.date} onChange={e=>setForm(prev=>({...prev,date:e.target.value}))} required/></label>{segment==='Barber'?<div className="booking-professional-assignments"><strong>Profissional por procedimento</strong>{selectedServices.map(service=><label key={service.name}>{service.name}<select value={form.professionalByService[service.name]||'Sem preferência'} onChange={e=>setForm(prev=>({...prev,professionalByService:{...prev.professionalByService,[service.name]:e.target.value}}))}><option>Sem preferência</option><option>Profissional 1</option><option>Profissional 2</option></select></label>)}</div>:<label>Profissional<select disabled value="Profissional principal"><option>Profissional principal</option></select></label>}</div>
-          <div className="booking-time-grid booking-time-grid-minute">{timeSlots.map(time=><button type="button" key={time} className={form.time===time?'selected':''} onClick={()=>setForm(prev=>({...prev,time}))}>{time}</button>)}</div><p className="booking-availability-note">{segment==='Barber'?'Grade demonstrativa em intervalos de 30 minutos. A disponibilidade real considera duração, profissional e bloqueios.':'Seletor demonstrativo minuto a minuto. A disponibilidade real considera duração, horários ocupados e bloqueios.'}</p>
+          {segment==='Barber' ? <div className="booking-time-grid">{timeSlots.map(time=><button type="button" key={time} aria-pressed={form.time===time} className={form.time===time?'selected':''} onClick={()=>setForm(prev=>({...prev,time}))}>{time}</button>)}</div> : <div className="booking-time-picker">
+            <div className="booking-time-picker-group"><span className="booking-time-picker-label">Escolha a hora</span><div className="booking-hour-grid">{hourOptions.map(hour=><button type="button" key={hour} aria-pressed={form.time.slice(0,2)===hour} className={form.time.slice(0,2)===hour?'selected':''} onClick={()=>setForm(prev=>({...prev,time:`${hour}:${prev.time.slice(3)}`}))}>{hour}:00</button>)}</div></div>
+            <div className="booking-time-picker-group"><span className="booking-time-picker-label">Escolha o minuto</span><div className="booking-minute-grid">{minuteOptions.map(minute=><button type="button" key={minute} aria-pressed={form.time.slice(3)===minute} className={form.time.slice(3)===minute?'selected':''} onClick={()=>setForm(prev=>({...prev,time:`${prev.time.slice(0,2)}:${minute}`}))}>{minute}</button>)}</div></div>
+          </div>}<p className="booking-availability-note">{segment==='Barber'?'Grade demonstrativa em intervalos de 30 minutos. A disponibilidade real considera duração, profissional e bloqueios.':'Seletor demonstrativo minuto a minuto. A disponibilidade real considera duração, horários ocupados e bloqueios.'}</p>
         </section>
       </div>
       <aside className="panel booking-summary"><div className="booking-step"><span>03</span><div><h3>Seus dados</h3><p>Contato fictício para finalizar.</p></div></div>
@@ -558,7 +565,7 @@ function PortfolioHome({ onOpenCatalog }) {
     <header className="portfolio-header">
       <div className="portfolio-header-inner">
         <a className="portfolio-brand" href="#inicio" onClick={closeMenu} aria-label="2R Informática — início">
-          <img src="/2r-logo.png" alt="" />
+          <img src={publicAsset('2r-logo.png')} alt="" />
           <span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span>
         </a>
         <button className="portfolio-menu-toggle" type="button" onClick={() => setMobileMenuOpen(v => !v)} aria-expanded={mobileMenuOpen} aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}>
@@ -594,9 +601,9 @@ function PortfolioHome({ onOpenCatalog }) {
           <div className="portfolio-hero-visual">
             <div className="portfolio-photo-halo" aria-hidden="true"></div>
             <div className="portfolio-photo-frame">
-              <img className="portfolio-profile-photo" src="/ruan-profile.webp" alt="Ruan Rodrigues, da 2R Informática" fetchPriority="high"/>
+              <img className="portfolio-profile-photo" src={publicAsset('ruan-profile.webp')} alt="Ruan Rodrigues, da 2R Informática" fetchPriority="high"/>
               <div className="portfolio-photo-overlay">
-                <div className="portfolio-photo-logo"><img src="/2r-logo.png" alt=""/></div>
+                <div className="portfolio-photo-logo"><img src={publicAsset('2r-logo.png')} alt=""/></div>
                 <div><strong>Ruan Rodrigues</strong><span>Desenvolvimento web · Tecnologia</span></div>
               </div>
             </div>
@@ -657,7 +664,7 @@ function PortfolioHome({ onOpenCatalog }) {
 
       <section className="portfolio-section portfolio-about-section" id="sobre">
         <div className="portfolio-container portfolio-about-layout">
-          <div className="portfolio-about-mark"><img src="/2r-logo.png" alt="Logotipo da 2R Informática"/></div>
+          <div className="portfolio-about-mark"><img src={publicAsset('2r-logo.png')} alt="Logotipo da 2R Informática"/></div>
           <div><span className="portfolio-section-kicker">SOBRE A 2R INFORMÁTICA</span><h2>Tecnologia próxima, prática e feita para pessoas.</h2><p>Minha experiência une suporte técnico, redes, infraestrutura e desenvolvimento de aplicações web. Isso ajuda a enxergar tanto a parte técnica quanto o uso real das ferramentas no dia a dia do negócio.</p><p>O objetivo é construir soluções fáceis de entender, com funcionalidades úteis e espaço para evoluir conforme a necessidade.</p></div>
           <div className="portfolio-about-quote"><span>“</span><strong>Seu parceiro em Tecnologia.</strong><small>2R Informática</small></div>
         </div>
@@ -676,7 +683,7 @@ function PortfolioHome({ onOpenCatalog }) {
 
     <footer className="portfolio-footer">
       <div className="portfolio-container portfolio-footer-inner">
-        <a className="portfolio-brand portfolio-footer-brand" href="#inicio"><img src="/2r-logo.png" alt=""/><span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span></a>
+        <a className="portfolio-brand portfolio-footer-brand" href="#inicio"><img src={publicAsset('2r-logo.png')} alt=""/><span><strong>2R INFORMÁTICA</strong><small>Seu parceiro em Tecnologia</small></span></a>
         <span>© {new Date().getFullYear()} 2R Informática. Tecnologia com propósito.</span>
         <button onClick={onOpenCatalog}>Ver modalidades de aplicações <ArrowUpRight size={15}/></button>
       </div>
