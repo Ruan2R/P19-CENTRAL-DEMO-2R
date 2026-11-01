@@ -863,3 +863,69 @@
   .landing-preview-heading h3 { font-size: 17px; }
   .landing-preview-tag { font-size: 8px; }
 }
+
+
+/* P19 mobile usability pass — project-base assets, touch targets and reachable flows. */
+.portfolio-shell main section[id] { scroll-margin-top: 86px; }
+.data-table { min-width: 0; }
+.booking-time-picker { display: grid; gap: 16px; min-width: 0; }
+.booking-time-picker-group { display: grid; gap: 9px; min-width: 0; }
+.booking-time-picker-label { color: var(--ink, #16334d); font-size: 12px; font-weight: 800; }
+.booking-hour-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+.booking-minute-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.booking-hour-grid button,
+.booking-minute-grid button {
+  min-width: 0; min-height: 42px; padding: 8px 3px;
+  border: 1px solid var(--border, #e2e9f0); border-radius: 9px;
+  background: #fff; color: var(--ink, #16334d); font-size: 12px;
+  font-weight: 700; touch-action: manipulation;
+}
+.booking-hour-grid button.selected,
+.booking-minute-grid button.selected {
+  border-color: var(--accent, #087fa7); background: var(--tint, #eaf6fa);
+  color: var(--accent, #087fa7); box-shadow: inset 0 0 0 1px var(--accent, #087fa7);
+}
+@media (max-width: 760px) {
+  .mobile-menu { display: grid; width: 44px; height: 44px; min-width: 44px; }
+  .back-hub-button { width: 44px; height: 44px; min-width: 44px; padding: 0; justify-content: center; }
+  .sidebar {
+    overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+  .side-nav-item { min-height: 46px; }
+  .demo-main { overflow-wrap: anywhere; }
+  .main-title-row { gap: 10px; }
+  .main-title-row > div:first-child { min-width: 0; }
+  .main-title-row p { max-width: none; }
+  .data-table {
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+  }
+  .modal-overlay {
+    display: flex; align-items: flex-start; justify-content: center;
+    overflow-y: auto; overscroll-behavior: contain;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  }
+  .modal-card {
+    margin: auto 0; max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .booking-layout { min-width: 0; }
+  .booking-card, .booking-summary { min-width: 0; }
+  .booking-hour-grid button,
+  .booking-minute-grid button { min-height: 44px; }
+}
+@media (max-width: 420px) {
+  .portfolio-hero-actions .portfolio-button { min-height: 48px; }
+  .portfolio-header-inner { gap: 8px; }
+  .portfolio-brand { min-width: 0; }
+  .portfolio-brand > span { min-width: 0; }
+  .portfolio-brand small { white-space: nowrap; }
+  .booking-minute-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
+}
+@media (max-width: 360px) {
+  .booking-minute-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .booking-hour-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
