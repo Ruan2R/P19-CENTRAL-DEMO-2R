@@ -1,7 +1,9 @@
 name: Deploy P19 to GitHub Pages
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build P19 portfolio"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -16,10 +18,13 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -37,6 +42,7 @@ jobs:
           path: ./dist
 
   deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
