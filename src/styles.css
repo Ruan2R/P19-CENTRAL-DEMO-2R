@@ -2281,3 +2281,94 @@
   .p16-report-metrics article { padding:10px; }
   .p16-report-metrics article>strong { font-size:14px; }
 }
+
+
+/* Beauty / Barber finance summary — direct layout port from P18. */
+.p18-finance-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.p18-finance-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line, #e5d7c8);
+  border-radius: 9px;
+  background: var(--paper, #fffdfa);
+  box-shadow: 0 4px 14px rgba(65, 42, 25, .025);
+}
+.p18-finance-card > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.p18-finance-card > strong {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: clamp(24px, 4vw, 31px);
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.p18-finance-card > small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.p18-finance-card.income > span svg,
+.p18-finance-card.income > strong { color: #66866b; }
+.p18-finance-card.expense > span svg,
+.p18-finance-card.expense > strong { color: #b4776a; }
+.p18-finance-card.balance > span svg,
+.p18-finance-card.due > span svg { color: #9b7d4b; }
+.p18-finance-card.balance.negative > strong { color: #b4776a; }
+.p18-finance-card.receivable > span svg,
+.p18-finance-card.receivable > strong { color: #9a794d; }
+
+@media (min-width: 640px) {
+  .p18-finance-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+@media (min-width: 1050px) {
+  .p18-finance-summary-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  /* P18 mobile order: four compact indicators first, monthly result full width last. */
+  .p18-finance-summary-grid {
+    gap: 8px;
+  }
+  .p18-finance-card.income { order: 1; }
+  .p18-finance-card.expense { order: 2; }
+  .p18-finance-card.receivable { order: 3; }
+  .p18-finance-card.due { order: 4; }
+  .p18-finance-card.balance {
+    order: 5;
+    grid-column: 1 / -1;
+    padding: 15px 16px;
+  }
+  .p18-finance-card {
+    padding: 13px 11px;
+    gap: 8px;
+  }
+  .p18-finance-card > span {
+    align-items: flex-start;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .p18-finance-card > strong {
+    font-size: clamp(22px, 6vw, 28px);
+  }
+  .p18-finance-card.balance > strong {
+    font-size: clamp(28px, 7vw, 34px);
+  }
+}

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
   AlertTriangle, ArrowDownLeft, ArrowUpRight, CalendarDays,
-  ChevronDown, CreditCard, LayoutDashboard, Plus, Receipt, RefreshCw,
+  ChevronDown, Clock3, CreditCard, LayoutDashboard, Plus, Receipt, RefreshCw,
   Search, TrendingDown, TrendingUp, Wallet
 } from 'lucide-react';
 
@@ -422,9 +422,9 @@ export default function EnhancedFinanceModule({
       <div className="p18-finance-summary-grid">
         <article className="p18-finance-card income"><span><TrendingUp size={16}/> Entradas do mês</span><strong>{money(incoming)}</strong><small>{monthTransactions.filter(item=>item.category==='Receita').length} movimentações</small></article>
         <article className="p18-finance-card expense"><span><TrendingDown size={16}/> Saídas do mês</span><strong>{money(outgoing)}</strong><small>{monthTransactions.filter(item=>item.category==='Despesa').length} movimentações</small></article>
-        <article className={'p18-finance-card balance ' + (result<0?'negative':'')}><span><Wallet size={16}/> Resultado do mês</span><strong>{money(result)}</strong><small>Entradas menos saídas registradas</small></article>
-        <article className="p18-finance-card receivable"><span><Receipt size={16}/> Valores a receber</span><strong>{money(pendingReceivables)}</strong><small>{openReceivables.length} atendimentos pendentes</small></article>
-        <article className="p18-finance-card due"><span><CreditCard size={16}/> Contas a pagar</span><strong>{money(pendingPayables)}</strong><small>{openPayables.length} contas em aberto</small></article>
+        <article className={'p18-finance-card balance ' + (result<0?'negative':'')}><span><Wallet size={16}/> Resultado do mês</span><strong>{money(result)}</strong><small>Entradas menos saídas registradas em {month.split('-').reverse().join('/')}</small></article>
+        <article className="p18-finance-card receivable"><span><Clock3 size={16}/> Valores a receber</span><strong>{money(pendingReceivables)}</strong><small>{openReceivables.length} atendimentos com saldo pendente</small></article>
+        <article className="p18-finance-card due"><span><Receipt size={16}/> Contas a pagar</span><strong>{money(pendingPayables)}</strong><small>{openPayables.length} contas pendentes</small></article>
       </div>
 
       <section className="panel table-panel p18-finance-section">
