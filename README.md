@@ -78,8 +78,11 @@ O GitHub Actions executa a instalação, compilação e verificação dos arquiv
 - Open Graph e Twitter Card para compartilhamento.
 - Favicon SVG e ícone para dispositivos Apple.
 - Dados estruturados `Organization` e `WebSite`.
-- `robots.txt` e `sitemap.xml` para descoberta da página pública.
-- Checagem automatizada no fluxo de build.
+- `sitemap.xml` com a URL canônica da página pública.
+- `robots.txt` mantido no repositório como referência para uma futura publicação na raiz de um domínio próprio.
+- Checagem automatizada dos metadados e arquivos gerados no fluxo de build.
+
+**Limite atual do GitHub Pages:** este projeto é servido em um subdiretório de `ruan2r.github.io`. O arquivo `robots.txt` só tem efeito quando publicado na raiz do host; um arquivo dentro do subdiretório do projeto não controla o rastreamento do host. Ao adotar um domínio próprio ou uma publicação na raiz, o arquivo poderá ser disponibilizado no endereço correto. O sitemap deste projeto continua disponível no caminho do próprio projeto e pode ser informado no Google Search Console.
 
 O portfólio é uma aplicação de página única. As abas e módulos das demonstrações não têm URLs públicas individuais; o sitemap lista apenas a página principal.
 
