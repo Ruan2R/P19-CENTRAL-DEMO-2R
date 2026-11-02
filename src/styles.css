@@ -3057,3 +3057,18 @@
     font-size: 11px;
   }
 }
+
+
+/* P19 mobile navigation transform fix — cancel the legacy off-canvas drawer behavior. */
+@media (max-width: 760px) {
+  .demo-app .sidebar {
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transition: none !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    flex: 0 0 auto;
+  }
+}
