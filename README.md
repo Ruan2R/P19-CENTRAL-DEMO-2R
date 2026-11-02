@@ -1,104 +1,95 @@
 # P19 — Portfólio 2R Informática
 
-O P19 é o portfólio digital da **2R Informática — Seu parceiro em Tecnologia**. A proposta é apresentar as modalidades de aplicações oferecidas e permitir que o visitante visualize prévias ilustrativas de cada pacote.
+**Versão:** 1.0.0  
+**Marca:** 2R Informática — Seu parceiro em Tecnologia  
+**Objetivo:** apresentar modalidades de aplicações web e permitir que potenciais clientes explorem prévias interativas.
 
-## Como funciona
+## Experiência do visitante
 
-1. O visitante conhece a 2R Informática e as áreas de atuação.
-2. Escolhe um segmento: Landing Pages, Beauty, Barber ou Burger.
-3. Compara as modalidades disponíveis naquele segmento.
-4. Abre uma prévia visual do pacote escolhido e navega somente pelos módulos incluídos.
+1. Conhece a 2R Informática e os serviços oferecidos.
+2. Explora os segmentos Landing Pages, Beauty, Barber e Burger.
+3. Compara modalidades e abre uma demonstração do pacote.
+4. Navega pelas áreas disponíveis naquele pacote e consulta o guia contextual.
+5. Entra em contato com a 2R para conversar sobre uma solução.
 
-**Não existe login, senha, cadastro ou acesso aos sistemas originais.** Cada modalidade abre uma representação visual no próprio portfólio.
+As demonstrações não exigem login ou cadastro. Os dados são fictícios, as interações acontecem localmente no navegador e nada é enviado ou salvo em um banco de dados.
 
-## Modalidades disponíveis
+## Segmentos e demonstrações
 
-| Segmento | Modalidade |
-|---|---|
-| Landing pages | 2R Landing Pages |
-| Beauty | Agendamentos e administração básica |
-| Beauty | Financeiro |
-| Beauty | Landing page + agendamentos |
-| Beauty | Agendamentos + gestão + financeiro |
-| Beauty | Solução completa |
-| Barber | Agendamentos e administração |
-| Barber | Landing page + agendamentos |
-| Barber | Agendamentos + gestão + financeiro |
-| Barber | Solução completa |
-| Burger | 2R Burger Pedidos | Pedidos e operação |
-| Burger | 2R Burger Gestão | Financeiro, produtos e estoque |
-| Burger | 2R Burger Gestão + Pedidos | Pedidos, gestão, financeiro, produtos e estoque |
-| Burger | 2R Burger Completo | Landing page, pedidos e gestão completa |
+- **Landing Pages:** exemplos de páginas de apresentação.
+- **Beauty:** agendamentos, clientes, serviços, promoções, bloqueios, políticas e financeiro, conforme a modalidade.
+- **Barber:** agendamentos, profissionais, clientes, serviços, promoções, bloqueios, políticas e financeiro, conforme a modalidade.
+- **Burger:** pedidos, produtos, estoque e financeiro, conforme a modalidade.
+- **Aplicações sob medida:** exemplos de segmentos e contato para planejar soluções personalizadas.
 
-As modalidades são combinações comerciais de recursos para apresentação. A seleção de um pacote não abre um sistema real nem exige credenciais.
+As modalidades são combinações comerciais de recursos para apresentação. A demonstração não é uma reprodução funcional completa dos sistemas de origem nem um ambiente de operação real.
 
-As modalidades e segmentos exibidos são exemplos de referência, não um limite de atuação. A 2R também pode planejar aplicações personalizadas para pet shops, salões, lojas, alimentação, assistências, distribuidoras e outras operações, conforme os processos e objetivos de cada cliente. Para conversar sobre um segmento ainda não demonstrado, os canais apresentados no portfólio são o WhatsApp e o Instagram **@2r.ruanrodrigues**.
+## Navegação e responsividade
 
-## Prévia visual
+- No celular, as áreas da demonstração ficam visíveis em abas logo abaixo do cabeçalho.
+- No desktop, a navegação permanece na barra lateral.
+- Beauty, Barber e Burger mostram somente os módulos que pertencem à modalidade selecionada.
+- O guia contextual acompanha os módulos disponíveis e explica como explorar cada tela.
+- Layout, tipografia e componentes foram revisados para telas móveis e desktop.
 
-O projeto reaproveita referências de layout e fluxo dos projetos P15 (Barber), P16 (Burger) e P18 (Beauty). As cópias-fonte estão guardadas em `apps/barber`, `apps/burger` e `apps/beauty` como referência de desenvolvimento; **não são iniciadas nem consultadas pelo portfólio em execução**.
+## Referências de desenvolvimento
 
-As prévias atuais são front-end:
-- dados ilustrativos definidos no próprio código;
-- interações locais para mostrar agendamentos, pedidos, produtos, estoque e financeiro;
-- alterações mantidas apenas em memória durante a navegação;
-- recarregar ou fechar a página restaura os dados de exemplo;
-- nenhum banco, API, servidor dos projetos originais, envio de WhatsApp ou integração externa é usado.
-
-Essas telas servem para demonstrar como uma solução pode ser organizada. Não são uma reprodução funcional completa dos produtos de origem.
-
-## Requisitos
-
-- Node.js 22.12 ou superior
-- npm
+O projeto reaproveita decisões e fluxos visuais dos projetos P15 (Barber), P16 (Burger) e P18 (Beauty). As cópias-fonte ficam em `apps/barber`, `apps/burger` e `apps/beauty` apenas como referência. Elas não são iniciadas nem consultadas pelo portfólio em execução.
 
 ## Executar localmente
 
-Na primeira execução, dentro da pasta do repositório:
+**Requisito:** Node.js 22.12 ou superior e npm.
+
+Na primeira execução:
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Abra:
+Acesse `http://127.0.0.1:5173`.
 
-`http://127.0.0.1:5173`
-
-Nas próximas execuções, basta:
-
-```bash
-npm run dev
-```
-
-O comando inicia **somente a interface do portfólio**. Não precisa levantar APIs nem abrir vários terminais.
-
-Para gerar os arquivos de publicação:
+Para gerar a versão estática:
 
 ```bash
 npm run build
 ```
 
-A saída fica em `dist/` e pode ser publicada como site estático. Na Hostinger, basta configurar a publicação dos arquivos gerados, sem implantar P15, P16 ou P18 como serviços.
+Os arquivos de publicação são gerados em `dist/`.
 
-## Publicação atual
+Para conferir os metadados e arquivos essenciais de SEO após o build:
 
-A versão pública é publicada pelo GitHub Pages:
+```bash
+npm run check:seo
+```
+
+## Publicação
+
+A versão pública é disponibilizada pelo GitHub Pages:
 
 [https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/](https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/)
 
-O fluxo do GitHub Actions executa a compilação e publica a versão estática quando há atualização na branch `main`. O build gera os arquivos em `dist/`.
+O GitHub Actions executa a instalação, compilação e verificação dos arquivos de SEO. O fluxo de publicação utiliza o conteúdo compilado pelo Vite em `dist/`.
 
-## Responsividade e orientação
+## SEO e indexação
 
-A interface possui estilos para desktop, tablet e celular. Cada módulo apresenta um resumo da função e um guia passo a passo; no celular, o menu lateral e o botão de ajuda tornam as funções localizáveis sem depender de uma apresentação ao vivo.
+- Título e descrição em português do Brasil.
+- URL canônica para a página principal.
+- Open Graph e Twitter Card para compartilhamento.
+- Favicon SVG e ícone para dispositivos Apple.
+- Dados estruturados `Organization` e `WebSite`.
+- `robots.txt` e `sitemap.xml` para descoberta da página pública.
+- Checagem automatizada no fluxo de build.
 
-A revisão visual deve priorizar leitura dos cards, espaçamento, menus e formulários em telas estreitas, além de manter a rolagem horizontal limitada a componentes que precisam dela, como navegação por abas.
+O portfólio é uma aplicação de página única. As abas e módulos das demonstrações não têm URLs públicas individuais; o sitemap lista apenas a página principal.
 
-## Auditoria de manutenção
+## Limites da demonstração
 
-- Componentes duplicados que não eram mais renderizados foram removidos da aplicação principal.
-- As cópias de referência dos projetos P15/P16/P18 permanecem no repositório, sem participar do runtime do portfólio.
-- Os fluxos demonstrativos do Burger conectam pedidos, recebíveis, caixa e estoque; o relatório de pedidos permanece separado das entradas efetivamente recebidas.
+- Não há autenticação, banco de dados ou API de produção no P19.
+- Alterações nos exemplos ficam apenas em memória e são reiniciadas ao recarregar a página.
+- Nenhum agendamento, pedido, pagamento ou mensagem de WhatsApp é realmente enviado.
+- As informações de demonstração não devem ser usadas para gerir uma operação real.
 
-**Importante:** o P19 é um portfólio de apresentação. Não usar formulários ou dados de demonstração como cadastro ou operação de um negócio real.
+## Fechamento da V1
+
+A V1 prioriza apresentar os segmentos existentes, facilitar a exploração dos módulos em celular e desktop e encaminhar o visitante para o contato comercial. Novos segmentos ou funcionalidades extensas ficam para versões futuras, após validação comercial.
