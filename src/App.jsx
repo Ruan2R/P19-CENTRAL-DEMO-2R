@@ -30,6 +30,7 @@ const DEMOS = [
   { id:'barber.completo', name:'2R Barber Completo', segment:'Barber', title:'Solução completa Barber', description:'Landing page, agendamentos e administração completa com dados de demonstração.', modules:['site','overview','booking','appointments','clients','services','finance'], color:'amber', icon:'sparkles' },
   { id:'burger.pedidos', name:'2R Burger Pedidos', segment:'Burger', title:'Pedidos e operação', description:'Operação interna de atendimento, lançamento de pedidos, acompanhamento do preparo e controle de estoque.', modules:['overview','orders','products','inventory'], color:'orange', icon:'orders' },
   { id:'burger.gestao', name:'2R Burger Gestão', segment:'Burger', title:'Financeiro, produtos e estoque', description:'Controle demonstrativo de produtos, estoque e movimentações financeiras.', modules:['overview','finance','products','inventory'], color:'orange', icon:'inventory' },
+  { id:'burger.gestao.pedidos', name:'2R Burger Gestão + Pedidos', segment:'Burger', title:'Pedidos, gestão e financeiro', description:'Pedidos, produtos, estoque e financeiro reunidos em uma só modalidade, sem landing page.', modules:['overview','orders','products','inventory','finance'], color:'orange', icon:'sparkles' },
   { id:'burger.completo', name:'2R Burger Completo', segment:'Burger', title:'Solução completa Burger', description:'Landing page, operação interna de pedidos, produtos, estoque e financeiro reunidos em uma demonstração.', modules:['site','overview','orders','products','inventory','finance'], color:'orange', icon:'sparkles' },
 ];
 
@@ -86,6 +87,15 @@ const INITIAL_PAYABLES = [
 const INITIAL_RECEIVABLES = [
   { id: 601, client: 'Mariana Costa', service: 'Maquiagem social', date: 'Hoje', total: 160, received: 40, balance: 120 },
   { id: 602, client: 'Camila Oliveira', service: 'Design de sobrancelhas', date: 'Ontem', total: 40, received: 0, balance: 40 },
+];
+const BURGER_PAYABLES = [
+  { id: 551, description: 'Fornecedor de carnes e insumos', category: 'Insumos', amount: 480, dueDate: '2026-11-05', status: 'Em aberto' },
+  { id: 552, description: 'Embalagens e descartáveis', category: 'Operação', amount: 126.50, dueDate: '2026-11-07', status: 'Em aberto' },
+  { id: 553, description: 'Reposição de bebidas', category: 'Estoque', amount: 198.90, dueDate: '2026-10-30', status: 'Paga', paidAt: '2026-10-30' },
+];
+const BURGER_RECEIVABLES = [
+  { id: 701, client: 'Pedido #004 · Delivery', service: 'Pagamento na entrega', date: '2026-11-03', total: 86.70, received: 0, balance: 86.70 },
+  { id: 702, client: 'Pedido #005 · Balcão', service: 'Pagamento pendente', date: '2026-11-02', total: 54.80, received: 0, balance: 54.80 },
 ];
 
 const CLIENTS = [
@@ -230,7 +240,7 @@ export default function App() {
     return matchesText && matchesFilter;
   }), [search, filter]);
 
-  const featuredDemoIds = ['beauty.agenda.financeiro', 'barber.agenda.financeiro', 'burger.gestao'];
+  const featuredDemoIds = ['beauty.agenda.financeiro', 'barber.agenda.financeiro', 'burger.gestao.pedidos'];
   const isFeaturedDemo = (demo) => featuredDemoIds.includes(demo.id);
 
   useEffect(() => {
@@ -260,10 +270,10 @@ export default function App() {
     setPromotions([{id:1,name:'Combo corte + barba',kind:'Combo',services:['Corte degradê','Barba completa'],regular:90,promo:75,validity:'Período demonstrativo',status:'Ativa'},{id:2,name:'Acabamento especial',kind:'Serviço',services:['Acabamento'],regular:20,promo:15,validity:'Período demonstrativo',status:'Programada'}]);
     setProducts(seed.products);
     setTransactions(seed.transactions);
-    setPayables(INITIAL_PAYABLES.map(item=>({...item})));
+    setPayables((demo.segment === 'Burger' ? BURGER_PAYABLES : INITIAL_PAYABLES).map(item=>({...item})));
     setReceivables(demo.segment === 'Barber'
       ? [{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]
-      : demo.segment === 'Burger' ? [] : INITIAL_RECEIVABLES.map(item=>({...item})));
+      : demo.segment === 'Burger' ? BURGER_RECEIVABLES.map(item=>({...item})) : INITIAL_RECEIVABLES.map(item=>({...item})));
     setClients(seed.clients);
     setServices(seed.services);
     setAppointmentForm({client:'',contact:'',service:seed.services[0]?.name || '',date:localDateValue(),time:'16:00'});
@@ -358,7 +368,7 @@ export default function App() {
         {activeModule==='appointments'&&<EnhancedAppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>{setAppointmentForm({client:'',contact:'',service:services[0]?.name||'',date:localDateValue(),time:'16:00'});setModal('appointment');}} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
         {activeModule==='clients'&&<EnhancedClientsModule clients={clients} setClients={setClients} notify={notify} />}
         {activeModule==='services'&&<ServicesModule services={services} onIllustrativeAction={()=>notify('A inclusão e edição de serviços são ilustrativas nesta central. A configuração completa está disponível no sistema contratado.')} />}
-        {activeModule==='finance'&&<EnhancedFinanceModule transactions={transactions} setTransactions={setTransactions} payables={payables} setPayables={setPayables} receivables={receivables} setReceivables={setReceivables} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} resetFinance={()=>{setTransactions(getSeedData(activeDemo.segment).transactions);setPayables(INITIAL_PAYABLES.map(item=>({...item})));setReceivables(isBarber?[{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]:isBurger?[]:INITIAL_RECEIVABLES.map(item=>({...item})));}} notify={notify} />}
+        {activeModule==='finance'&&<EnhancedFinanceModule variant={isBurger?'burger':'studio'} transactions={transactions} setTransactions={setTransactions} payables={payables} setPayables={setPayables} receivables={receivables} setReceivables={setReceivables} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} resetFinance={()=>{setTransactions(getSeedData(activeDemo.segment).transactions);setPayables((isBurger?BURGER_PAYABLES:INITIAL_PAYABLES).map(item=>({...item})));setReceivables(isBarber?[{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]:isBurger?BURGER_RECEIVABLES.map(item=>({...item})):INITIAL_RECEIVABLES.map(item=>({...item})));}} notify={notify} />}
         {activeModule==='servicePromotions'&&<PromotionsPreview promotions={promotions} setPromotions={setPromotions} />}
         {activeModule==='products'&&<ProductsModule products={products} />}
         {activeModule==='inventory'&&<InventoryModule products={products} setProducts={setProducts} />}

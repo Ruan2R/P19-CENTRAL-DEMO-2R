@@ -113,6 +113,18 @@ function guideFor(demo, module) {
     ]
   };
 
+  if (module === 'finance' && demo && demo.segment === 'Burger') {
+    return {
+      title: 'Financeiro da operação Burger',
+      summary: 'Uma visão inspirada no P16: caixa do período, movimentações, contas a pagar, valores a receber e indicadores da operação. Produtos, estoque e pedidos ficam acessíveis pelo menu lateral.',
+      steps: [
+        'Comece pelo Resumo para conferir o resultado, entradas, saídas e as últimas movimentações.',
+        'Abra Financeiro para analisar o caixa, os vencimentos e os valores pendentes.',
+        'Use Movimentações, Contas a pagar e Contas a receber para simular lançamentos e baixas; os pedidos continuam na área Pedidos.'
+      ]
+    };
+  }
+
   if (module === 'booking' && demo && demo.segment === 'Barber') {
     return {
       title: 'Agendamento com escolha de profissional',
