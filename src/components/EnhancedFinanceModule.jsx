@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import {
-  AlertTriangle, ArrowDownLeft, ArrowUpRight, CalendarDays, CheckCircle2,
+  AlertTriangle, ArrowDownLeft, ArrowUpRight, CalendarDays,
   ChevronDown, CreditCard, LayoutDashboard, Plus, Receipt, RefreshCw,
-  Search, TrendingDown, TrendingUp, Wallet, X
+  Search, TrendingDown, TrendingUp, Wallet
 } from 'lucide-react';
 
 function currentDate() {
@@ -31,6 +31,15 @@ function movementMonth(value) {
   }
   return currentMonth;
 }
+function orderDateIso(value) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return value;
+  if (value === 'Ontem') {
+    const date = new Date(currentDate() + 'T12:00:00');
+    date.setDate(date.getDate() - 1);
+    return date.toISOString().slice(0, 10);
+  }
+  return currentDate();
+}
 function dateIso(value) {
   if (/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return value;
   if (value === 'Ontem') {
@@ -43,7 +52,7 @@ function dateIso(value) {
 
 export default function EnhancedFinanceModule({
   variant = 'studio', transactions, setTransactions, payables, setPayables,
-  receivables, setReceivables, resetTransactions, resetFinance, notify
+  receivables, setReceivables, orders = [], resetTransactions, resetFinance, notify
 }) {
   const isBurger = variant === 'burger';
   const [tab, setTab] = useState('summary');
@@ -72,6 +81,9 @@ export default function EnhancedFinanceModule({
   const [receivableDate, setReceivableDate] = useState(currentDate());
   const [receivableMethod, setReceivableMethod] = useState({});
   const [movementFormOpen, setMovementFormOpen] = useState(false);
+  const [orderReportPeriod, setOrderReportPeriod] = useState('day');
+  const [orderReportDate, setOrderReportDate] = useState(currentDate());
+  const [orderReportMonth, setOrderReportMonth] = useState(currentDate().slice(0, 7));
 
   const monthTransactions = useMemo(
     () => transactions.filter(item => movementMonth(item.date) === month),
@@ -81,7 +93,8 @@ export default function EnhancedFinanceModule({
     .reduce((sum, item) => sum + Number(item.value || 0), 0);
   const outgoing = monthTransactions.filter(item => item.category === 'Despesa')
     .reduce((sum, item) => sum + Number(item.value || 0), 0);
-  const pendingReceivables = receivables.reduce((sum, item) => sum + Number(item.balance || 0), 0);
+  const openReceivables = receivables.filter(item => !item.received && !item.cancelled && item.status !== 'Cancelado');
+  const pendingReceivables = openReceivables.reduce((sum, item) => sum + Number(item.balance || 0), 0);
   const openPayables = payables.filter(item => item.status !== 'Paga');
   const pendingPayables = openPayables.reduce((sum, item) => sum + Number(item.amount || 0), 0);
   const result = incoming - outgoing;
@@ -95,7 +108,7 @@ export default function EnhancedFinanceModule({
     return matchesText && matchesDirection;
   });
   const overduePayables = openPayables.filter(item => dateIso(item.dueDate) < currentDate());
-  const overdueReceivables = receivables.filter(item => dateIso(item.date) < currentDate());
+  const overdueReceivables = openReceivables.filter(item => dateIso(item.date) < currentDate());
   const categoryTotals = useMemo(() => {
     const map = {};
     monthTransactions.forEach(item => {
@@ -156,8 +169,9 @@ export default function EnhancedFinanceModule({
     if (item.status === 'Paga') return;
     setPayables(previous => previous.map(payable => payable.id === item.id
       ? { ...payable, status: 'Paga', paidAt: currentDate() } : payable));
-    setTransactions(previous => [{
-      id: Date.now(), description: item.description, category: 'Despesa',
+    const paymentId = 'payable-payment-' + item.id;
+    setTransactions(previous => previous.some(entry => entry.id === paymentId) ? previous : [{
+      id: paymentId, description: item.description, category: 'Despesa',
       detailCategory: item.category, date: currentDate(), value: Number(item.amount),
       paymentMethod: 'Não informado', source: 'Conta a pagar'
     }, ...previous]);
@@ -180,7 +194,7 @@ export default function EnhancedFinanceModule({
     setReceivables(previous => [{
       id: Date.now(), client: receivableCounterparty.trim() || 'Não informado',
       service: receivableDescription.trim(), date: receivableDate, total: Math.round(numeric * 100) / 100,
-      received: 0, balance: Math.round(numeric * 100) / 100
+      received: 0, balance: Math.round(numeric * 100) / 100, status: 'Pendente', cancelled: false
     }, ...previous]);
     setReceivableDescription('');
     setReceivableCounterparty('');
@@ -190,14 +204,20 @@ export default function EnhancedFinanceModule({
   }
 
   function receiveBalance(item) {
+    if (item.orderId) return notify('O recebimento de pedidos deve ser confirmado na área Pedidos.');
+    if (item.received || item.cancelled || item.status === 'Cancelado') return notify('Este valor não está mais pendente.');
     const method = receivableMethod[item.id] || 'Pix';
     const value = Number(item.balance || 0);
-    setTransactions(previous => [{
-      id: Date.now(), description: 'Recebimento · ' + (item.client || item.description || 'Valor pendente'),
+    if (value <= 0) return notify('Não há saldo pendente para receber.');
+    const paymentId = 'receivable-payment-' + item.id;
+    setTransactions(previous => previous.some(entry => entry.id === paymentId) ? previous : [{
+      id: paymentId, description: 'Recebimento · ' + (item.client || item.description || 'Valor pendente'),
       category: 'Receita', detailCategory: item.service || 'Recebimento', date: currentDate(),
       value, paymentMethod: method, source: 'Valor a receber'
     }, ...previous]);
-    setReceivables(previous => previous.filter(receivable => receivable.id !== item.id));
+    setReceivables(previous => previous.map(receivable => receivable.id === item.id
+      ? { ...receivable, received: value, balance: 0, status: 'Recebido', receivedDate: currentDate(), paymentMethod: method }
+      : receivable));
     notify('Recebimento registrado nas entradas do caixa.');
   }
 
@@ -218,6 +238,53 @@ export default function EnhancedFinanceModule({
     { id: 'payables', label: 'Contas a pagar', icon: CreditCard },
     { id: 'receivables', label: 'Contas a receber', icon: Receipt }
   ];
+
+  function OrderReports() {
+    const matchingOrders = orders.filter(order => {
+      const date = orderDateIso(order.date);
+      return orderReportPeriod === 'day' ? date === orderReportDate : date.startsWith(orderReportMonth);
+    }).slice().sort((a, b) => orderDateIso(b.date).localeCompare(orderDateIso(a.date)) || Number(b.code) - Number(a.code));
+    const cancelled = matchingOrders.filter(order => order.status === 'Cancelado');
+    const active = matchingOrders.filter(order => order.status !== 'Cancelado');
+    const unpaid = active.filter(order => order.payment !== 'Recebido');
+    const completed = active.filter(order => order.status === 'Entregue');
+    const totalSold = active.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const totalReceived = active.filter(order => order.payment === 'Recebido').reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const totalPending = unpaid.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const dayGroups = Object.values(matchingOrders.reduce((groups, order) => {
+      const date = orderDateIso(order.date);
+      if (!groups[date]) groups[date] = { date, count:0, cancelled:0, total:0, pending:0 };
+      groups[date].count += 1;
+      if (order.status === 'Cancelado') groups[date].cancelled += 1;
+      else {
+        groups[date].total += Number(order.total || 0);
+        if (order.payment !== 'Recebido') groups[date].pending += Number(order.total || 0);
+      }
+      return groups;
+    }, {})).sort((a, b) => b.date.localeCompare(a.date));
+
+    return <section className="panel table-panel p16-finance-panel burger-order-report">
+      <div className="panel-heading">
+        <div><h3>Relatório de pedidos</h3><p>Resumo por data de criação do pedido. O pagamento só entra no caixa após a confirmação em Pedidos.</p></div>
+        <div className="p16-report-period-toggle"><button type="button" className={orderReportPeriod === 'day' ? 'active' : ''} onClick={() => setOrderReportPeriod('day')}>Diário</button><button type="button" className={orderReportPeriod === 'month' ? 'active' : ''} onClick={() => setOrderReportPeriod('month')}>Mensal</button></div>
+      </div>
+      <div className="p16-report-date-control">
+        <label>{orderReportPeriod === 'day' ? 'Dia de referência' : 'Mês de referência'}<input type={orderReportPeriod === 'day' ? 'date' : 'month'} value={orderReportPeriod === 'day' ? orderReportDate : orderReportMonth} onChange={event => orderReportPeriod === 'day' ? setOrderReportDate(event.target.value) : setOrderReportMonth(event.target.value)}/></label>
+        <span>{matchingOrders.length} {matchingOrders.length === 1 ? 'pedido encontrado' : 'pedidos encontrados'}</span>
+      </div>
+      <div className="p16-report-metrics">
+        <article><span>Pedidos registrados</span><strong>{matchingOrders.length.toString().padStart(2, '0')}</strong><small>{completed.length} entregues · {cancelled.length} cancelados</small></article>
+        <article><span>Total vendido</span><strong>{money(totalSold)}</strong><small>Pedidos não cancelados</small></article>
+        <article><span>Recebido no caixa</span><strong>{money(totalReceived)}</strong><small>Pedidos pagos</small></article>
+        <article className="attention"><span>Falta receber</span><strong>{money(totalPending)}</strong><small>{unpaid.length} pedidos pendentes</small></article>
+      </div>
+      {orderReportPeriod === 'month' ? <div className="p16-report-days">
+        <h4>Pedidos por dia</h4>
+        {dayGroups.length ? dayGroups.map(day => <article key={day.date}><strong>{dateLabel(day.date)}</strong><span>{day.count} pedidos · {day.cancelled} cancelados</span><strong>{money(day.total)}</strong><small>{money(day.pending)} a receber</small></article>) : <div className="p16-finance-empty">Nenhum pedido neste mês.</div>}
+      </div> : null}
+      <div className="p16-report-footer">Relatório ilustrativo · usa a data de criação dos pedidos, sem substituir as movimentações financeiras efetivamente recebidas.</div>
+    </section>;
+  }
 
   function PageHeading({ eyebrow, title, description, children }) {
     return <div className="p16-finance-heading">
@@ -247,19 +314,33 @@ export default function EnhancedFinanceModule({
     </div> : <div className="p16-finance-empty">Nenhuma conta pendente.</div>;
   }
 
-  function ReceivablesList({ limit }) {
-    const items = receivables.slice().sort((a, b) => dateIso(a.date).localeCompare(dateIso(b.date)));
+  function ReceivablesList({ limit, includeHistory = false }) {
+    const items = receivables
+      .filter(item => includeHistory || (!item.received && !item.cancelled && item.status !== 'Cancelado'))
+      .slice()
+      .sort((a, b) => dateIso(a.date).localeCompare(dateIso(b.date)));
     const visible = typeof limit === 'number' ? items.slice(0, limit) : items;
     return visible.length ? <div className="p16-finance-list">
-      {visible.map(item => <article className="p16-finance-list-row" key={item.id}>
-        <div><strong>{item.client || item.description || 'Cliente não informado'}</strong><span>{item.service || 'Recebimento pendente'} · Previsto {dateLabel(item.date)}</span>
-        <small>Valor em aberto</small></div>
-        <strong className="p16-finance-value income">{money(item.balance)}</strong>
-        <div className="p16-finance-row-actions"><label>Recebimento<select value={receivableMethod[item.id] || 'Pix'} onChange={event => setReceivableMethod(previous => ({ ...previous, [item.id]: event.target.value }))}><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Não informado</option></select></label><button type="button" onClick={() => receiveBalance(item)}>Registrar</button></div>
-      </article>)}
-    </div> : <div className="p16-finance-empty">Nenhum valor pendente de recebimento.</div>;
+      {visible.map(item => {
+        const cancelled = Boolean(item.cancelled || item.status === 'Cancelado');
+        const received = Boolean(item.received || item.status === 'Recebido');
+        const orderLinked = Boolean(item.orderId);
+        return <article className="p16-finance-list-row" key={item.id}>
+          <div>
+            <strong>{item.client || item.description || 'Cliente não informado'}</strong>
+            <span>{item.service || 'Recebimento pendente'} · Previsto {dateLabel(item.date)}</span>
+            <small>{cancelled ? 'Pedido cancelado' : received ? 'Recebimento confirmado' : orderLinked ? 'Pagamento pendente · vinculado ao pedido' : 'Valor em aberto'}</small>
+          </div>
+          <strong className={'p16-finance-value ' + (received || cancelled ? '' : 'income')}>{money(received ? item.received : cancelled ? 0 : item.balance)}</strong>
+          <div className="p16-finance-row-actions">
+            {orderLinked ? <span className="p16-order-payment-note">{cancelled ? 'Cancelado em Pedidos' : received ? 'Pagamento registrado em Pedidos' : 'Pagamento gerenciado na área Pedidos'}</span>
+              : !received && !cancelled ? <><label>Recebimento<select value={receivableMethod[item.id] || 'Pix'} onChange={event => setReceivableMethod(previous => ({ ...previous, [item.id]: event.target.value }))}><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Não informado</option></select></label><button type="button" onClick={() => receiveBalance(item)}>Registrar</button></>
+              : <span className="p16-order-payment-note">{cancelled ? 'Registro cancelado' : 'Histórico preservado'}</span>}
+          </div>
+        </article>;
+      })}
+    </div> : <div className="p16-finance-empty">{includeHistory ? 'Nenhum valor a receber cadastrado.' : 'Nenhum valor pendente de recebimento.'}</div>;
   }
-
   function MovementList({ items, limit }) {
     const visible = typeof limit === 'number' ? items.slice(0, limit) : items;
     return visible.length ? <div className="p16-finance-list">
@@ -309,13 +390,14 @@ export default function EnhancedFinanceModule({
         </section> : null}
         <div className="p16-finance-columns">
           <section className="panel table-panel p16-finance-panel"><div className="panel-heading"><div><h3>Contas a pagar</h3><p>{openPayables.length} pendentes</p></div><strong className="p16-finance-value expense">{money(pendingPayables)}</strong></div><PayablesList limit={4}/><button className="p16-finance-secondary" type="button" onClick={() => setTab('payables')}>Ver todas as contas <ArrowDownLeft size={14}/></button></section>
-          <section className="panel table-panel p16-finance-panel"><div className="panel-heading"><div><h3>Valores a receber</h3><p>{receivables.length} pendentes</p></div><strong className="p16-finance-value income">{money(pendingReceivables)}</strong></div><ReceivablesList limit={4}/><button className="p16-finance-secondary" type="button" onClick={() => setTab('receivables')}>Ver todos os valores <ArrowDownLeft size={14}/></button></section>
+          <section className="panel table-panel p16-finance-panel"><div className="panel-heading"><div><h3>Valores a receber</h3><p>{openReceivables.length} pendentes</p></div><strong className="p16-finance-value income">{money(pendingReceivables)}</strong></div><ReceivablesList limit={4}/><button className="p16-finance-secondary" type="button" onClick={() => setTab('receivables')}>Ver todos os valores <ArrowDownLeft size={14}/></button></section>
         </div>
         <div className="p16-finance-columns">
           <section className="panel table-panel p16-finance-panel"><div className="panel-heading"><div><h3>Movimentações por categoria</h3><p>Entradas e saídas do mês.</p></div></div>{categoryTotals.length ? <div className="p16-finance-category-list">{categoryTotals.map(([name,value])=><div key={name}><span>{name}</span><strong>{money(value)}</strong></div>)}</div> : <div className="p16-finance-empty">Sem categorias neste período.</div>}</section>
           <section className="panel table-panel p16-finance-panel"><div className="panel-heading"><div><h3>Formas de pagamento</h3><p>Movimentações registradas no período.</p></div></div>{paymentTotals.length ? <div className="p16-finance-payment-list">{paymentTotals.map(([name,value])=><div key={name}><span><strong>{name}</strong><small>{value.count} movimentações</small></span><strong>{money(value.income + value.expense)}</strong></div>)}</div> : <div className="p16-finance-empty">Sem formas de pagamento neste período.</div>}</section>
         </div>
         <section className="panel table-panel p16-finance-panel"><div className="panel-heading"><div><h3>Movimentações do período</h3><p>Entradas e saídas efetivadas no caixa.</p></div><button className="text-action" type="button" onClick={() => setTab('transactions')}>Abrir todas <ArrowDownLeft size={14}/></button></div><MovementList items={movementItems} limit={8}/></section>
+        <OrderReports/>
       </>}
 
       {tab === 'transactions' && <section className="panel table-panel p16-finance-panel">
@@ -331,17 +413,17 @@ export default function EnhancedFinanceModule({
       </section>}
 
       {tab === 'receivables' && <section className="panel table-panel p16-finance-panel">
-        <div className="panel-heading"><div><h3>Contas a receber</h3><p>Acompanhe valores pendentes e registre os recebimentos.</p></div><button className="primary-button" type="button" onClick={()=>setShowReceivableForm(value=>!value)}><Plus size={15}/>{showReceivableForm ? 'Fechar' : 'Adicionar valor'}</button></div>
-        {showReceivableForm && <ReceivableForm/>}<ReceivablesList/>
+        <div className="panel-heading"><div><h3>Contas a receber</h3><p>Acompanhe valores pendentes e registre os recebimentos. Pagamentos ligados a pedidos são confirmados na área Pedidos.</p></div><button className="primary-button" type="button" onClick={()=>setShowReceivableForm(value=>!value)}><Plus size={15}/>{showReceivableForm ? 'Fechar' : 'Adicionar valor'}</button></div>
+        {showReceivableForm && <ReceivableForm/>}<ReceivablesList includeHistory/>
       </section>}
-      <div className="p16-finance-footer"><span>Controle demonstrativo · sem integração bancária ou gravação permanente.</span><button type="button" onClick={restoreExamples}><RefreshCw size={14}/> Restaurar exemplos</button></div>
+      <div className="p16-finance-footer"><span>Controle demonstrativo · sem integração bancária ou gravação permanente. Pedido vendido e pagamento recebido são informações separadas.</span><button type="button" onClick={restoreExamples}><RefreshCw size={14}/> Restaurar exemplos</button></div>
     </> : <>
       <div className="p18-finance-intro"><Wallet size={18}/><p>O financeiro acompanha os valores que já entraram e o que ainda falta receber. As alterações desta prévia são demonstrativas e não substituem o controle real do sistema.</p></div>
       <div className="p18-finance-summary-grid">
         <article className="p18-finance-card income"><span><TrendingUp size={16}/> Entradas do mês</span><strong>{money(incoming)}</strong><small>{monthTransactions.filter(item=>item.category==='Receita').length} movimentações</small></article>
         <article className="p18-finance-card expense"><span><TrendingDown size={16}/> Saídas do mês</span><strong>{money(outgoing)}</strong><small>{monthTransactions.filter(item=>item.category==='Despesa').length} movimentações</small></article>
         <article className={'p18-finance-card balance ' + (result<0?'negative':'')}><span><Wallet size={16}/> Resultado do mês</span><strong>{money(result)}</strong><small>Entradas menos saídas registradas</small></article>
-        <article className="p18-finance-card receivable"><span><Receipt size={16}/> Valores a receber</span><strong>{money(pendingReceivables)}</strong><small>{receivables.length} atendimentos pendentes</small></article>
+        <article className="p18-finance-card receivable"><span><Receipt size={16}/> Valores a receber</span><strong>{money(pendingReceivables)}</strong><small>{openReceivables.length} atendimentos pendentes</small></article>
         <article className="p18-finance-card due"><span><CreditCard size={16}/> Contas a pagar</span><strong>{money(pendingPayables)}</strong><small>{openPayables.length} contas em aberto</small></article>
       </div>
 

@@ -25,9 +25,10 @@ O P19 é o portfólio digital da **2R Informática — Seu parceiro em Tecnologi
 | Barber | Landing page + agendamentos |
 | Barber | Agendamentos + gestão + financeiro |
 | Barber | Solução completa |
-| Burger | Pedidos e operação |
-| Burger | Financeiro, produtos e estoque |
-| Burger | Solução completa |
+| Burger | 2R Burger Pedidos | Pedidos e operação |
+| Burger | 2R Burger Gestão | Financeiro, produtos e estoque |
+| Burger | 2R Burger Gestão + Pedidos | Pedidos, gestão, financeiro, produtos e estoque |
+| Burger | 2R Burger Completo | Landing page, pedidos e gestão completa |
 
 As modalidades são combinações comerciais de recursos para apresentação. A seleção de um pacote não abre um sistema real nem exige credenciais.
 
@@ -78,22 +79,24 @@ npm run build
 
 A saída fica em `dist/` e pode ser publicada como site estático. Na Hostinger, basta configurar a publicação dos arquivos gerados, sem implantar P15, P16 ou P18 como serviços.
 
-## Responsividade
+## Publicação atual
 
-A interface tem estilos próprios para desktop, tablet e celular. As revisões devem validar:
-- navegação e apresentação em telas grandes;
-- cards e prévias em resoluções intermediárias;
-- menus, formulários e tabelas em celulares;
-- leitura clara das modalidades e dos recursos incluídos.
+A versão pública é publicada pelo GitHub Pages:
 
-A responsividade será refinada por etapas com testes visuais em dispositivos e larguras diferentes.
+[https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/](https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/)
 
-## Próximos refinamentos
+O fluxo do GitHub Actions executa a compilação e publica a versão estática quando há atualização na branch `main`. O build gera os arquivos em `dist/`.
 
-- Revisar visualmente os componentes desktop e mobile.
-- Conferir anonimização dos dados demonstrativos, especialmente nomes de profissionais do Barber.
-- Ajustar cores e identidade visual das prévias de cada segmento.
-- Melhorar a clareza dos recursos incluídos em cada modalidade.
-- Publicar a versão estática na Hostinger depois da validação visual.
+## Responsividade e orientação
+
+A interface possui estilos para desktop, tablet e celular. Cada módulo apresenta um resumo da função e um guia passo a passo; no celular, o menu lateral e o botão de ajuda tornam as funções localizáveis sem depender de uma apresentação ao vivo.
+
+A revisão visual deve priorizar leitura dos cards, espaçamento, menus e formulários em telas estreitas, além de manter a rolagem horizontal limitada a componentes que precisam dela, como navegação por abas.
+
+## Auditoria de manutenção
+
+- Componentes duplicados que não eram mais renderizados foram removidos da aplicação principal.
+- As cópias de referência dos projetos P15/P16/P18 permanecem no repositório, sem participar do runtime do portfólio.
+- Os fluxos demonstrativos do Burger conectam pedidos, recebíveis, caixa e estoque; o relatório de pedidos permanece separado das entradas efetivamente recebidas.
 
 **Importante:** o P19 é um portfólio de apresentação. Não usar formulários ou dados de demonstração como cadastro ou operação de um negócio real.

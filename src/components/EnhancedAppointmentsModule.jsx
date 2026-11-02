@@ -51,6 +51,7 @@ export default function EnhancedAppointmentsModule({ appointments, setAppointmen
   const activeFilterCount = Number(Boolean(search.trim())) + Number(status !== 'all') + Number(period !== 'any');
   const invalidRange = period === 'custom' && Boolean(dateFrom && dateTo && dateFrom > dateTo);
   const today = todayValue();
+  const currentTime = new Date().toTimeString().slice(0, 5);
   const nextSeven = new Date(today + 'T12:00:00');
   nextSeven.setDate(nextSeven.getDate() + 6);
   const nextSevenValue = nextSeven.toISOString().slice(0, 10);
@@ -58,7 +59,7 @@ export default function EnhancedAppointmentsModule({ appointments, setAppointmen
 
   const filtered = useMemo(() => appointments.filter(item => {
     const date = appointmentDateValue(item.date);
-    if (mode === 'upcoming' && (['Concluído', 'Cancelado', 'Não compareceu'].includes(item.status) || date < today)) return false;
+    if (mode === 'upcoming' && (['Concluído', 'Cancelado', 'Não compareceu'].includes(item.status) || date < today || (date === today && /^\d{2}:\d{2}$/.test(String(item.time || '')) && item.time < currentTime))) return false;
     if (mode === 'pending' && !['Aguardando', 'Aguardando sinal'].includes(item.status)) return false;
     if (status !== 'all' && item.status !== status) return false;
     if (search.trim()) {
@@ -74,7 +75,7 @@ export default function EnhancedAppointmentsModule({ appointments, setAppointmen
     if (period === 'month' && !date.startsWith(currentMonth)) return false;
     if (period === 'custom' && ((dateFrom && date < dateFrom) || (dateTo && date > dateTo))) return false;
     return true;
-  }).slice().sort((a, b) => appointmentDateValue(a.date).localeCompare(appointmentDateValue(b.date)) || String(a.time).localeCompare(String(b.time))), [appointments, mode, search, status, period, dateFrom, dateTo, today, nextSevenValue, currentMonth]);
+  }).slice().sort((a, b) => appointmentDateValue(a.date).localeCompare(appointmentDateValue(b.date)) || String(a.time).localeCompare(String(b.time))), [appointments, mode, search, status, period, dateFrom, dateTo, today, currentTime, nextSevenValue, currentMonth]);
 
   function updateStatus(id, nextStatus) {
     setAppointments(previous => previous.map(item => item.id === id ? { ...item, status: nextStatus } : item));

@@ -1,4 +1,4 @@
-import { ArrowRight, Boxes, CalendarDays, ClipboardList, Eye, LayoutDashboard, Package, Scissors, Sparkles, Store, Users, Wallet, X, BadgeCheck, CircleHelp } from 'lucide-react';
+import { ArrowRight, Boxes, CalendarDays, ClipboardList, Eye, LayoutDashboard, Package, Scissors, Sparkles, Store, Users, Wallet, X, CircleHelp } from 'lucide-react';
 
 const MODULE_GUIDES = {
   site: {
@@ -12,11 +12,11 @@ const MODULE_GUIDES = {
   },
   overview: {
     title: 'O painel reúne um resumo da operação',
-    summary: 'Aqui você encontra os principais indicadores, a atividade em destaque e atalhos para as áreas incluídas no pacote.',
+    summary: 'Aqui você encontra os principais indicadores, a atividade em destaque e atalhos para todas as áreas incluídas no pacote. Use o menu lateral ou os atalhos para não deixar nenhum recurso passar.',
     steps: [
       'Comece pelos indicadores na parte superior para entender o cenário.',
       'Confira a lista resumida de agendamentos, pedidos ou estoque.',
-      'Use os atalhos para abrir a área que deseja explorar em detalhes.'
+      'Use os atalhos do painel ou o menu lateral para abrir cada módulo incluído. No celular, abra o menu pelo ícone no canto superior esquerdo.'
     ]
   },
   booking: {
@@ -57,11 +57,11 @@ const MODULE_GUIDES = {
   },
   finance: {
     title: 'Resumo e movimentações financeiras',
-    summary: 'O Financeiro é dividido em Resumo, Entradas, Saídas, Valores a receber e Contas a pagar, com resultado mensal e atualização demonstrativa dos totais.',
+    summary: 'No Beauty e no Barber, o financeiro segue a organização do P18: indicadores do mês, valores a receber, registro de entradas/saídas, contas a pagar e histórico de caixa.',
     steps: [
-      'No Resumo, confira entradas, saídas, resultado do mês, valores a receber e contas a pagar.',
-      'Abra Entradas ou Saídas para consultar e registrar movimentações; em Valores a receber, confirme o recebimento de um atendimento.',
-      'Em Contas a pagar, cadastre uma conta e marque como paga para registrar a saída automaticamente.'
+      'Confira os cinco indicadores no início: entradas, saídas, resultado do mês, valores a receber e contas a pagar.',
+      'Em Valores a receber, abra a lista para conferir o saldo de cada atendimento e registre quando o pagamento realmente entrar.',
+      'Use Registrar movimentação para lançar entradas ou saídas manuais. Em Contas a pagar, cadastre a despesa e marque como paga para gerar a saída no histórico.'
     ]
   },
   servicePromotions: {
@@ -75,29 +75,34 @@ const MODULE_GUIDES = {
   },
   orders: {
     title: 'Pedidos e operação do atendimento',
-    summary: 'O fluxo começa com um atendimento aberto. A equipe lança os itens, acompanha o preparo e consulta o resumo dos pedidos.',
+    summary: 'O fluxo segue o P16: abra um atendimento, lance os produtos, acompanhe o preparo, registre a entrega e confirme o recebimento. Pedidos e financeiro compartilham os valores pendentes.',
     steps: [
-      'Confira se o atendimento está iniciado; sem ele, o lançamento fica bloqueado.',
-      'Toque em “Lançar pedido”, escolha quantidades e registre.',
-      'Avance o status do pedido e confira o reflexo demonstrativo no estoque.'
+      'Clique em Iniciar atendimento. Cada atendimento reinicia a numeração de pedidos em 001.',
+      'Use Lançar pedido, identifique balcão/mesa/delivery, adicione produtos e quantidades e registre. Produtos de revenda têm baixa automática no estoque; preparados na hora não controlam saldo próprio.',
+      'Avance Recebido → Em preparo → Pronto → Entregue. Depois use Registrar pagamento para informar data e forma de recebimento; o valor entra no Financeiro e o pendente é baixado.',
+      'Pedidos ainda em preparo ou prontos impedem encerrar o atendimento. Pedido entregue sem pagamento pode permanecer em Valores a receber; o encerramento não apaga esse saldo.',
+      'Ao cancelar um pedido não pago, a baixa de estoque dos itens controlados é devolvida. Pedido pago não pode ser cancelado nesta prévia.'
     ]
   },
   products: {
     title: 'Catálogo de produtos',
-    summary: 'O catálogo diferencia produtos com quantidade controlada dos itens preparados sob demanda. Também reúne preços e categorias.',
+    summary: 'O catálogo segue a separação do P16: produtos de revenda, com custo/preço e quantidade controlada, e preparados na hora, com custo estimado e sem saldo do produto final.',
     steps: [
-      'Observe a categoria de cada item.',
-      'Compare produtos com estoque e produtos produzidos sob pedido.',
-      'Abra Estoque para simular a movimentação de quantidades.'
+      'Compare Produtos de revenda com Preparados na hora. O primeiro grupo mantém estoque; o segundo não controla quantidade do produto final.',
+      'Use Novo produto para informar nome, categoria, tipo, custo, preço e, para revenda, quantidade inicial e estoque mínimo.',
+      'Confira a margem estimada por item e o aviso de reposição. O cadastro é demonstrativo e duplicidades de nome são bloqueadas.',
+      'Produtos já utilizados em pedidos são preservados para não quebrar o histórico.'
     ]
   },
   inventory: {
     title: 'Posição e movimentação de estoque',
-    summary: 'Esta tela mostra a quantidade disponível dos produtos controlados e diferencia os itens produzidos somente após o pedido.',
+    summary: 'A tela registra entradas e saídas de produtos de revenda e mantém o histórico. Pedidos fazem a baixa automaticamente; a movimentação manual serve para compras, devoluções, ajustes, perdas e vendas avulsas.',
     steps: [
-      'Confira a quantidade atual de cada item.',
-      'Use os controles de entrada e retirada para simular uma movimentação.',
-      'Restaure os exemplos para retornar aos números iniciais.'
+      'Confira o saldo atual e o estoque mínimo de cada produto controlado. Itens preparados na hora não aparecem nesta lista.',
+      'Selecione um produto, o tipo de movimento, a quantidade, a data e descreva o motivo. A prévia mostra o saldo antes e depois.',
+      'Saídas maiores que o saldo são bloqueadas; unidades e porções exigem números inteiros. Kg e litros aceitam frações.',
+      'Consulte o Histórico de estoque para localizar cadastros iniciais, compras, saídas manuais e baixas/devoluções de pedidos.',
+      'Venda avulsa movimenta somente o estoque; ela não cria entrada financeira. Para uma venda com pedido e pagamento, use a área Pedidos.'
     ]
   }
 };
@@ -116,11 +121,11 @@ function guideFor(demo, module) {
   if (module === 'finance' && demo && demo.segment === 'Burger') {
     return {
       title: 'Financeiro da operação Burger',
-      summary: 'Uma visão inspirada no P16: caixa do período, movimentações, contas a pagar, valores a receber e indicadores da operação. Produtos, estoque e pedidos ficam acessíveis pelo menu lateral.',
+      summary: 'A visão segue o P16: resultado, entradas, saídas, contas a pagar, valores a receber, categorias, formas de pagamento e relatório de pedidos. Quando o valor vier de um pedido, a confirmação é feita na aba Pedidos para não duplicar o lançamento.',
       steps: [
-        'Comece pelo Resumo para conferir o resultado, entradas, saídas e as últimas movimentações.',
-        'Abra Financeiro para analisar o caixa, os vencimentos e os valores pendentes.',
-        'Use Movimentações, Contas a pagar e Contas a receber para simular lançamentos e baixas; os pedidos continuam na área Pedidos.'
+        'No Resumo, confira o resultado, as entradas/saídas do mês e as ações rápidas. Em Financeiro, veja as contas pendentes, vencimentos, categorias e formas de pagamento.',
+        'Movimentações registra entradas/saídas efetivas; Contas a pagar gera uma saída quando marcada como paga. Valores a receber permite cadastrar e acompanhar valores manuais.',
+        'Valores vinculados a pedidos aparecem em Contas a receber e no Relatório de pedidos, mas o pagamento deve ser confirmado na aba Pedidos. Assim o caixa e o saldo pendente são atualizados juntos.'
       ]
     };
   }

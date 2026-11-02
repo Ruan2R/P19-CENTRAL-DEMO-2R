@@ -2103,3 +2103,181 @@
   .p16-finance-tabs { display:flex; flex-wrap:nowrap; }
   .p16-finance-tabs>button { flex:0 0 auto; }
 }
+
+
+/* Final P16-inspired Burger catalog, stock and order refinement. */
+.burger-catalog-module,.burger-inventory-module,.burger-operations { display:grid; gap:16px; min-width:0; }
+.burger-catalog-intro { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:#f7fafc; }
+.burger-catalog-intro>div { min-width:0; }
+.burger-catalog-icon { width:40px; height:40px; flex:0 0 40px; display:grid; place-items:center; border-radius:11px; background:#eaf5f9; color:var(--blue); }
+.burger-catalog-intro strong { display:block; color:var(--ink); font-size:13px; margin:1px 0 4px; }
+.burger-catalog-intro p { margin:0; color:var(--muted); font-size:11px; line-height:1.6; }
+.burger-catalog-metrics,.burger-inventory-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.burger-catalog-metrics article,.burger-inventory-metrics article { display:grid; gap:7px; min-width:0; padding:14px; border:1px solid var(--line); border-radius:11px; background:#fff; }
+.burger-catalog-metrics article>span,.burger-inventory-metrics article>span { color:var(--muted); font-size:10px; font-weight:750; }
+.burger-catalog-metrics article>strong,.burger-inventory-metrics article>strong { color:var(--ink); font-size:22px; line-height:1.1; font-variant-numeric:tabular-nums; }
+.burger-catalog-metrics article>small,.burger-inventory-metrics article>small { color:var(--muted); font-size:10px; line-height:1.4; }
+.burger-catalog-metrics article.attention,.burger-inventory-metrics article.attention { border-color:#ead9b9; background:#fffaf1; }
+.burger-catalog-metrics article.attention>strong,.burger-inventory-metrics article.attention>strong { color:#a76b23; }
+.burger-catalog-panel,.burger-inventory-panel { min-width:0; padding:17px; }
+.burger-catalog-heading { align-items:flex-start; gap:12px; }
+.burger-catalog-heading>div { min-width:0; }
+.burger-catalog-heading h3,.burger-inventory-panel .panel-heading h3 { margin:4px 0 5px; color:var(--ink); font-size:16px; line-height:1.3; }
+.burger-catalog-heading p,.burger-inventory-panel .panel-heading p { margin:0; color:var(--muted); font-size:11px; line-height:1.55; }
+.burger-product-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; padding:15px; border:1px solid var(--line); border-radius:11px; background:#f8fafc; }
+.burger-product-form label,.burger-stock-form label { display:grid; gap:6px; min-width:0; color:var(--muted); font-size:11px; font-weight:700; }
+.burger-product-form input,.burger-product-form select,.burger-stock-form input,.burger-stock-form select { width:100%; min-width:0; min-height:42px; padding:9px 11px; border:1px solid var(--line); border-radius:9px; outline:none; background:#fff; color:var(--ink); font:inherit; font-size:12px; }
+.burger-product-form input:focus,.burger-product-form select:focus,.burger-stock-form input:focus,.burger-stock-form select:focus { border-color:#75b8ca; box-shadow:0 0 0 3px rgba(3,146,178,.1); }
+.burger-product-form-note { grid-column:1/-1; display:flex; align-items:flex-start; gap:8px; padding:10px 11px; border-radius:9px; background:#eef7fa; color:#49697a; font-size:10px; line-height:1.55; }
+.burger-product-form-note svg { flex:0 0 auto; color:var(--blue); }
+.burger-product-form-actions { grid-column:1/-1; display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; }
+.burger-product-search,.burger-stock-history-tools>label { display:flex; align-items:center; gap:8px; min-width:0; min-height:42px; margin:12px 0 15px; padding:0 11px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--muted); }
+.burger-product-search input,.burger-stock-history-tools input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:var(--ink); font:inherit; font-size:11px; }
+.burger-product-group { margin-top:14px; }
+.burger-product-group-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding-bottom:10px; border-bottom:1px solid var(--line); }
+.burger-product-group-heading h3 { margin:0 0 4px; color:var(--ink); font-size:14px; }
+.burger-product-group-heading p { margin:0; color:var(--muted); font-size:10px; line-height:1.5; }
+.burger-product-group-heading button { display:inline-flex; align-items:center; gap:7px; flex:0 0 auto; min-height:34px; padding:0 9px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--muted); font-size:10px; font-weight:750; }
+.burger-product-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding-top:11px; }
+.burger-product-card { display:grid; gap:8px; min-width:0; padding:14px; border:1px solid var(--line); border-radius:11px; background:#fff; }
+.burger-product-card-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.burger-product-icon,.burger-stock-product-icon { display:grid; place-items:center; width:34px; height:34px; flex:0 0 34px; border-radius:9px; background:#eef5f8; color:var(--blue); }
+.burger-product-type { display:inline-flex; align-items:center; min-height:25px; padding:0 8px; border-radius:99px; background:#f4f6f8; color:#647587; font-size:9px; font-weight:800; }
+.burger-product-type.prepared { background:#f5eff8; color:#805c99; }
+.burger-product-type.resale { background:#edf6f0; color:#367a58; }
+.burger-product-card h4 { margin:0; color:var(--ink); font-size:13px; line-height:1.35; overflow-wrap:anywhere; }
+.burger-product-card>p { margin:-5px 0 0; color:var(--muted); font-size:10px; }
+.burger-product-prices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding-top:8px; border-top:1px solid var(--line); }
+.burger-product-prices>div,.burger-product-margin,.burger-product-stock { display:grid; gap:4px; min-width:0; }
+.burger-product-prices span,.burger-product-margin span,.burger-product-stock span { color:var(--muted); font-size:9px; line-height:1.4; }
+.burger-product-prices strong,.burger-product-margin strong,.burger-product-stock strong { color:var(--ink); font-size:11px; line-height:1.4; overflow-wrap:anywhere; }
+.burger-product-margin { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 9px; border-radius:8px; background:#f7f9fb; }
+.burger-product-margin strong.positive { color:#16865f; }
+.burger-product-margin strong.negative { color:#c65a54; }
+.burger-product-stock { padding-top:7px; border-top:1px solid var(--line); }
+.burger-stock-status { display:inline-flex; align-items:center; width:max-content; max-width:100%; padding:4px 7px; border-radius:99px; font-size:9px; font-weight:800; }
+.burger-stock-status.ok { background:#edf7f1; color:#2c7d57; }
+.burger-stock-status.low { background:#fff4e4; color:#a36a24; }
+.burger-product-archive { justify-self:start; min-height:30px; padding:0; border:0; background:transparent; color:#a45a55; font-size:10px; font-weight:750; }
+.burger-product-empty { padding:18px 10px; border:1px dashed var(--line); border-radius:9px; color:var(--muted); font-size:11px; line-height:1.5; text-align:center; }
+.burger-catalog-note { margin:0; color:var(--muted); font-size:10px; line-height:1.6; }
+.burger-stock-list { display:grid; }
+.burger-stock-row { display:grid; grid-template-columns:36px minmax(0,1fr) auto auto; gap:10px; align-items:center; padding:12px 0; border-bottom:1px solid var(--line); }
+.burger-stock-row:last-child { border-bottom:0; }
+.burger-stock-row>div { display:grid; gap:4px; min-width:0; }
+.burger-stock-row>div strong { color:var(--ink); font-size:11px; }
+.burger-stock-row>div small { color:var(--muted); font-size:9px; line-height:1.4; }
+.burger-stock-row>strong { color:var(--ink); font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.burger-stock-row>strong.low { color:#a76b23; }
+.burger-stock-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; padding:14px; border:1px solid var(--line); border-radius:11px; background:#f8fafc; }
+.burger-stock-form .wide { grid-column:1/-1; }
+.burger-stock-preview { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:10px; align-items:center; padding:12px; border:1px solid #d9e9ee; border-radius:9px; background:#fff; }
+.burger-stock-preview>div { display:grid; gap:5px; min-width:0; }
+.burger-stock-preview span { color:var(--muted); font-size:9px; }
+.burger-stock-preview strong { color:var(--ink); font-size:12px; overflow-wrap:anywhere; }
+.burger-stock-preview>.arrow { color:var(--blue); font-size:18px; }
+.burger-stock-preview.warning { border-color:#edc4b9; background:#fff8f6; }
+.burger-stock-error { grid-column:1/-1; margin:0; color:#b64d45; font-size:10px; }
+.burger-stock-actions { grid-column:1/-1; display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; }
+.burger-stock-history-tools { display:grid; grid-template-columns:minmax(0,1fr) 150px; gap:9px; margin-bottom:9px; }
+.burger-stock-history-tools>label { margin:0; }
+.burger-stock-history-tools>select { min-width:0; min-height:42px; padding:0 9px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); font-size:11px; }
+.burger-stock-history { display:grid; }
+.burger-stock-history>article { display:grid; grid-template-columns:34px minmax(0,1fr) auto; gap:9px; align-items:start; padding:12px 0; border-bottom:1px solid var(--line); }
+.burger-stock-history>article>div { display:grid; gap:4px; min-width:0; }
+.burger-stock-history>article>div strong { color:var(--ink); font-size:11px; }
+.burger-stock-history>article>div small,.burger-stock-history>article>div span { color:var(--muted); font-size:9px; line-height:1.45; }
+.burger-stock-history>article>div p { margin:0; color:#536a7b; font-size:10px; line-height:1.45; }
+.burger-stock-history>article>strong { white-space:nowrap; font-size:11px; font-variant-numeric:tabular-nums; }
+.burger-stock-history>article>strong.positive { color:#16865f; }
+.burger-stock-history>article>strong.negative { color:#c65a54; }
+.burger-stock-history-toggle { display:flex; align-items:center; justify-content:center; gap:7px; width:100%; min-height:37px; margin-top:8px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--blue); font-size:10px; font-weight:750; }
+.burger-orders-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.burger-order-scope { display:flex; flex-wrap:wrap; gap:6px; }
+.burger-order-scope button { min-height:38px; padding:0 12px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--muted); font-size:10px; font-weight:750; }
+.burger-order-scope button.active { border-color:#bfdde7; background:#eaf5f9; color:var(--blue); }
+.burger-orders-filters { display:grid; grid-template-columns:minmax(0,1fr) 150px; gap:9px; margin:13px 0; }
+.burger-orders-filters>label { display:flex; align-items:center; gap:8px; min-width:0; min-height:40px; padding:0 10px; border:1px solid var(--line); border-radius:9px; color:var(--muted); }
+.burger-orders-filters input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:var(--ink); font:inherit; font-size:11px; }
+.burger-orders-filters select { min-width:0; min-height:40px; padding:0 8px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); font-size:11px; }
+.burger-order-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.burger-order-card { display:grid; gap:10px; min-width:0; padding:14px; border:1px solid var(--line); border-radius:11px; background:#fff; }
+.burger-order-card-heading { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.burger-order-card-heading .order-code { margin-right:auto; }
+.burger-order-date { color:var(--muted); font-size:9px; }
+.burger-order-customer { display:grid; gap:4px; min-width:0; }
+.burger-order-customer strong { color:var(--ink); font-size:12px; }
+.burger-order-customer span { color:var(--muted); font-size:10px; line-height:1.5; overflow-wrap:anywhere; }
+.burger-order-values { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; padding-top:9px; border-top:1px solid var(--line); }
+.burger-order-values>div { display:grid; gap:4px; min-width:0; }
+.burger-order-values span { color:var(--muted); font-size:9px; }
+.burger-order-values strong { color:var(--ink); font-size:11px; line-height:1.4; overflow-wrap:anywhere; }
+.burger-order-values strong.positive { color:#16865f; }
+.burger-order-values strong.negative { color:#b56a2a; }
+.burger-order-actions { display:flex; flex-wrap:wrap; gap:7px; }
+.burger-order-actions button,.burger-payment-section button { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:34px; padding:0 9px; border:1px solid var(--line); border-radius:8px; background:#f8fafc; color:var(--blue); font-size:10px; font-weight:750; }
+.burger-order-actions button.danger { color:#b64f49; }
+.burger-payment-section { padding-top:9px; border-top:1px solid var(--line); }
+.burger-register-payment { display:inline-flex; align-items:center; gap:7px; min-height:36px; padding:0 10px; border:1px solid #bfdde7; border-radius:8px; background:#eef7fa; color:var(--blue); font-size:10px; font-weight:800; }
+.burger-payment-section form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+.burger-payment-form-heading { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--ink); font-size:11px; }
+.burger-payment-section label { display:grid; gap:5px; color:var(--muted); font-size:9px; font-weight:700; }
+.burger-payment-section input,.burger-payment-section select { min-width:0; width:100%; min-height:36px; padding:7px 8px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); font:inherit; font-size:10px; }
+.burger-payment-section form>div:last-child { grid-column:1/-1; display:flex; flex-wrap:wrap; gap:7px; justify-content:flex-end; }
+.p16-order-payment-note { color:var(--muted); font-size:9px; line-height:1.45; }
+@media(max-width:760px) {
+  .burger-catalog-metrics,.burger-inventory-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .burger-product-grid,.burger-order-cards { grid-template-columns:1fr; }
+  .burger-product-form,.burger-stock-form { grid-template-columns:1fr; }
+  .burger-product-form-note,.burger-product-form-actions,.burger-stock-form .wide,.burger-stock-preview,.burger-stock-error,.burger-stock-actions { grid-column:1; }
+  .burger-orders-toolbar { align-items:stretch; flex-direction:column; }
+  .burger-order-scope { width:100%; }
+  .burger-order-scope button { flex:1; }
+  .burger-orders-filters { grid-template-columns:minmax(0,1fr) 120px; }
+}
+@media(max-width:390px) {
+  .burger-catalog-metrics,.burger-inventory-metrics { grid-template-columns:1fr 1fr; }
+  .burger-catalog-panel,.burger-inventory-panel { padding:13px; }
+  .burger-stock-row { grid-template-columns:32px minmax(0,1fr) auto; }
+  .burger-stock-row .burger-stock-status { grid-column:2/-1; }
+  .burger-stock-history-tools { grid-template-columns:1fr; }
+  .burger-stock-preview { grid-template-columns:1fr; }
+  .burger-stock-preview>.arrow { display:none; }
+  .burger-orders-filters { grid-template-columns:1fr; }
+  .burger-payment-section form { grid-template-columns:1fr; }
+  .burger-payment-form-heading,.burger-payment-section form>div:last-child { grid-column:1; }
+  .burger-order-values { grid-template-columns:1fr 1fr; }
+}
+
+
+/* Burger order reporting, P16-style. */
+.p16-report-period-toggle { display:flex; flex:0 0 auto; padding:4px; border:1px solid var(--line); border-radius:9px; background:#f7f9fb; }
+.p16-report-period-toggle button { min-height:32px; padding:0 10px; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:10px; font-weight:750; }
+.p16-report-period-toggle button.active { background:#fff; color:var(--blue); box-shadow:0 1px 5px rgba(30,60,80,.1); }
+.p16-report-date-control { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:13px 0; }
+.p16-report-date-control label { display:grid; gap:6px; min-width:0; color:var(--muted); font-size:10px; font-weight:700; }
+.p16-report-date-control input { width:180px; max-width:100%; min-height:38px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); font:inherit; font-size:11px; }
+.p16-report-date-control>span { color:var(--muted); font-size:10px; }
+.p16-report-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+.p16-report-metrics article { display:grid; gap:6px; min-width:0; padding:12px; border:1px solid var(--line); border-radius:9px; background:#fff; }
+.p16-report-metrics article>span { color:var(--muted); font-size:9px; font-weight:750; }
+.p16-report-metrics article>strong { color:var(--ink); font-size:clamp(14px,2vw,19px); line-height:1.2; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.p16-report-metrics article>small { color:var(--muted); font-size:9px; line-height:1.4; }
+.p16-report-metrics article.attention { border-color:#ead9b9; background:#fffaf1; }
+.p16-report-metrics article.attention>strong { color:#a76b23; }
+.p16-report-days { display:grid; gap:8px; margin-top:15px; }
+.p16-report-days h4 { margin:0; color:var(--ink); font-size:12px; }
+.p16-report-days article { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line); }
+.p16-report-days article>strong:first-child { color:var(--ink); font-size:11px; }
+.p16-report-days article>span,.p16-report-days article>small { color:var(--muted); font-size:9px; line-height:1.4; }
+.p16-report-days article>strong:nth-of-type(2) { grid-column:2; grid-row:1; color:var(--ink); font-size:11px; }
+.p16-report-footer { margin-top:12px; padding-top:11px; border-top:1px solid var(--line); color:var(--muted); font-size:9px; line-height:1.5; }
+@media(max-width:760px) {
+  .p16-report-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .p16-report-date-control { align-items:flex-start; flex-direction:column; }
+}
+@media(max-width:390px) {
+  .p16-report-metrics { grid-template-columns:1fr 1fr; gap:7px; }
+  .p16-report-metrics article { padding:10px; }
+  .p16-report-metrics article>strong { font-size:14px; }
+}

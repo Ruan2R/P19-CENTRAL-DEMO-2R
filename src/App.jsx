@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, ChevronDown,
-  CircleDollarSign, ClipboardList, Clock3, Copy, CreditCard, ExternalLink, Eye,
-  FileText, Filter, Grid2X2, LayoutDashboard, Menu, Package, Plus, Scissors,
-  Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
-  TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
-  MoreHorizontal, CheckCircle2, CircleHelp, Clock, CircleAlert, RefreshCw,
-  Code2, Wrench, Network, Linkedin, ShieldCheck, Star
+  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, CircleDollarSign, ClipboardList, Clock3, CreditCard, Eye, Filter, Grid2X2, LayoutDashboard, Menu, Package, Plus, Scissors, Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, CircleHelp, Code2, Linkedin, ShieldCheck, Star
 } from 'lucide-react';
 import SiteModuleView from './components/SiteModule.jsx';
 import BookingTimeWheelPicker from './components/BookingTimeWheelPicker.jsx';
 import EnhancedAppointmentsModule from './components/EnhancedAppointmentsModule.jsx';
 import EnhancedClientsModule from './components/EnhancedClientsModule.jsx';
 import EnhancedFinanceModule from './components/EnhancedFinanceModule.jsx';
+import BurgerOrdersModule from './components/BurgerOrdersModule.jsx';
+import { BurgerProductsModule, BurgerInventoryModule } from './components/BurgerCatalogModules.jsx';
 import { ModuleBrief, ScreenGuide } from './components/ContextualGuide.jsx';
 
 const publicAsset = (filename) => `${import.meta.env.BASE_URL}${filename}`;
@@ -48,30 +44,29 @@ const MODULES = {
   inventory: { label:'Estoque', icon:Boxes, description:'Entradas e quantidades' },
 };
 
-const SEGMENTS = {
-  Beauty: { short:'BEAUTY', customer:'2R Beauty', subtitle:'Experiências de beleza para diferentes estilos e ocasiões.', accent:'#b76d8f', secondary:'#f8edf2', services:[['Maquiagem social','R$ 160,00','40 min'],['Design de sobrancelhas','R$ 40,00','40 min'],['Lash lifting','R$ 150,00','1h 30min']], hero:'Beleza do seu jeito, no seu ritmo.', action:'Escolher meu horário' },
-  Barber: { short:'BARBER', customer:'2R Barber', subtitle:'Seu estilo, seu horário, sua identidade.', accent:'#bd954e', secondary:'#f8f2e6', services:[['Corte degradê','R$ 55,00','40 min'],['Barba completa','R$ 35,00','30 min'],['Corte + barba','R$ 80,00','1h']], hero:'Seu próximo visual começa aqui.', action:'Agendar corte' },
-  Burger: { short:'BURGER', customer:'2R Burger', subtitle:'Sabor, praticidade e uma operação organizada.', accent:'#d8753d', secondary:'#fff0e5', services:[['Smash clássico','R$ 29,90','Destaque da casa'],['Combo Brasa','R$ 39,90','Destaque da casa'],['Batata crocante','R$ 14,90','Acompanhamento']], hero:'Seu próximo burger favorito está aqui.', action:'Conhecer a operação' },
-};
-
 const INITIAL_APPOINTMENTS = [
   { id:1, client:'Mariana Costa', contact:'(67) 99999-0001', service:'Maquiagem social', time:'09:00', date:'Hoje', status:'Confirmado', price:160 },
   { id:2, client:'Camila Oliveira', contact:'(67) 99999-0002', service:'Design de sobrancelhas', time:'10:30', date:'Hoje', status:'Confirmado', price:40 },
   { id:3, client:'Juliana Martins', contact:'(67) 99999-0003', service:'Lash lifting', time:'13:00', date:'Hoje', status:'Aguardando', price:150 },
   { id:4, client:'Bianca Souza', contact:'(67) 99999-0004', service:'Design de sobrancelhas', time:'15:00', date:'Hoje', status:'Confirmado', price:40 },
 ];
-const INITIAL_ORDERS = [
-  { id:101, code:'001', customer:'Cliente demonstrativo 01', items:'2x Smash clássico, 1x Batata', total:74.70, status:'Em preparo', payment:'Pendente' },
-  { id:102, code:'002', customer:'Cliente demonstrativo 02', items:'1x Combo Brasa', total:39.90, status:'Novo', payment:'Pendente' },
-  { id:103, code:'003', customer:'Cliente demonstrativo 03', items:'1x Smash duplo, 2x Refrigerante', total:67.80, status:'Pronto', payment:'Recebido' },
-];
 const INITIAL_PRODUCTS = [
-  { id:1, name:'Pão brioche', category:'Estoque', stock:24, unit:'un.', price:3.5 },
-  { id:2, name:'Blend 160g', category:'Estoque', stock:18, unit:'un.', price:8.9 },
-  { id:3, name:'Queijo cheddar', category:'Estoque', stock:32, unit:'fatias', price:1.2 },
-  { id:4, name:'Smash clássico', category:'Produção sob pedido', stock:null, unit:'pedido', price:29.9 },
-  { id:5, name:'Batata pré-frita', category:'Estoque', stock:16, unit:'kg', price:12.5 },
-  { id:6, name:'Refrigerante lata', category:'Estoque', stock:36, unit:'un.', price:3.2 },
+  { id:1, name:'Smash clássico', category:'Hambúrgueres', kind:'prepared', sellable:true, stockTracked:false, cost:12, price:29.90, stock:null, minimum:0, unit:'porcao' },
+  { id:2, name:'Combo Brasa', category:'Combos', kind:'prepared', sellable:true, stockTracked:false, cost:16, price:39.90, stock:null, minimum:0, unit:'porcao' },
+  { id:3, name:'Smash duplo', category:'Hambúrgueres', kind:'prepared', sellable:true, stockTracked:false, cost:15, price:36.90, stock:null, minimum:0, unit:'porcao' },
+  { id:4, name:'Batata crocante', category:'Acompanhamentos', kind:'prepared', sellable:true, stockTracked:false, cost:4, price:14.90, stock:null, minimum:0, unit:'porcao' },
+  { id:5, name:'Refrigerante lata', category:'Bebidas', kind:'resale', sellable:true, stockTracked:true, cost:3.20, price:6.00, stock:34, minimum:12, unit:'un' },
+  { id:6, name:'Água mineral', category:'Bebidas', kind:'resale', sellable:true, stockTracked:true, cost:1.10, price:4.00, stock:24, minimum:8, unit:'un' },
+];
+const INITIAL_ORDERS = [
+  { id:101, code:'001', sessionId:'historico-demo-1', date:'Hoje', customer:'Cliente demonstrativo 01', items:'2x Smash clássico, 1x Batata crocante', productItems:[{productId:1,name:'Smash clássico',quantity:2,unit:'porcao',unitPrice:29.90,stockTracked:false},{productId:4,name:'Batata crocante',quantity:1,unit:'porcao',unitPrice:14.90,stockTracked:false}], total:74.70, status:'Entregue', payment:'Pendente' },
+  { id:102, code:'002', sessionId:'historico-demo-1', date:'Hoje', customer:'Cliente demonstrativo 02', items:'1x Combo Brasa', productItems:[{productId:2,name:'Combo Brasa',quantity:1,unit:'porcao',unitPrice:39.90,stockTracked:false}], total:39.90, status:'Entregue', payment:'Pendente' },
+  { id:103, code:'003', sessionId:'historico-demo-1', date:'Ontem', customer:'Cliente demonstrativo 03', items:'1x Smash duplo, 2x Refrigerante lata', productItems:[{productId:3,name:'Smash duplo',quantity:1,unit:'porcao',unitPrice:36.90,stockTracked:false},{productId:5,name:'Refrigerante lata',quantity:2,unit:'un',unitPrice:6,stockTracked:true}], total:48.90, status:'Entregue', payment:'Recebido', paymentMethod:'Pix', paymentDate:'Ontem' },
+];
+const INITIAL_STOCK_MOVEMENTS = [
+  { id:401, productId:5, productName:'Refrigerante lata', type:'initial', quantity:36, unit:'un', date:'Hoje', reason:'Estoque inicial demonstrativo', before:0, after:36 },
+  { id:402, productId:6, productName:'Água mineral', type:'initial', quantity:24, unit:'un', date:'Hoje', reason:'Estoque inicial demonstrativo', before:0, after:24 },
+  { id:403, productId:5, productName:'Refrigerante lata', type:'order_consumption', quantity:2, unit:'un', date:'Ontem', reason:'Baixa automática do pedido #003', before:36, after:34 },
 ];
 const INITIAL_TRANSACTIONS = [
   { id:1, description:'Atendimentos do dia', category:'Receita', date:'Hoje', value:890 },
@@ -93,10 +88,13 @@ const BURGER_PAYABLES = [
   { id: 552, description: 'Embalagens e descartáveis', category: 'Operação', amount: 126.50, dueDate: '2026-11-07', status: 'Em aberto' },
   { id: 553, description: 'Reposição de bebidas', category: 'Estoque', amount: 198.90, dueDate: '2026-10-30', status: 'Paga', paidAt: '2026-10-30' },
 ];
-const BURGER_RECEIVABLES = [
-  { id: 701, client: 'Pedido #004 · Delivery', service: 'Pagamento na entrega', date: '2026-11-03', total: 86.70, received: 0, balance: 86.70 },
-  { id: 702, client: 'Pedido #005 · Balcão', service: 'Pagamento pendente', date: '2026-11-02', total: 54.80, received: 0, balance: 54.80 },
-];
+function burgerReceivablesFromOrders(orderList) {
+  return orderList.filter(order => order.payment === 'Pendente' && order.status !== 'Cancelado').map(order => ({
+    id:'order-' + order.id, orderId:order.id, orderNumber:order.code, client:order.customer,
+    service:'Pedido #' + order.code, date:order.date || 'Hoje', total:order.total,
+    received:0, balance:order.total, status:'Pendente', cancelled:false
+  }));
+}
 
 const CLIENTS = [
   { name:'Mariana Costa', contact:'(67) 9 0000-0001', visits:8, last:'Hoje' },
@@ -140,31 +138,18 @@ const BURGER_TRANSACTIONS = [
   { id:32, description:'Compra de ingredientes', category:'Despesa', detailCategory:'Insumos', date:'Ontem', value:246.80, paymentMethod:'Cartão' },
   { id:33, description:'Pedidos delivery', category:'Receita', detailCategory:'Delivery', date:'Ontem', value:428.90, paymentMethod:'Dinheiro' },
   { id:34, description:'Embalagens e descartáveis', category:'Despesa', detailCategory:'Operação', date:'27 out.', value:86.40, paymentMethod:'Pix' },
+  { id:'order-payment-103', sourceId:103, source:'Pedido', description:'Pedido #003 · Cliente demonstrativo 03', category:'Receita', detailCategory:'Vendas de pedidos', date:'Ontem', value:48.90, paymentMethod:'Pix' },
+  { id:'payable-payment-553', description:'Reposição de bebidas', category:'Despesa', detailCategory:'Estoque', date:'30 out.', value:198.90, paymentMethod:'Pix', source:'Conta a pagar' },
 ];
-const BURGER_MENU = [
-  { id:1, name:'Smash clássico', description:'Pão brioche, blend artesanal, queijo e molho da casa.', price:29.90, category:'Hambúrgueres' },
-  { id:2, name:'Combo Brasa', description:'Smash clássico com batata crocante e bebida.', price:39.90, category:'Combos' },
-  { id:3, name:'Smash duplo', description:'Dois blends, queijo cheddar e molho especial.', price:36.90, category:'Hambúrgueres' },
-  { id:4, name:'Batata crocante', description:'Porção individual com tempero da casa.', price:14.90, category:'Acompanhamentos' },
-  { id:5, name:'Refrigerante lata', description:'Bebida gelada 350 ml.', price:6.00, category:'Bebidas' },
-];
-const BURGER_RECIPES = {
-  'Smash clássico': {'Pão brioche':1,'Blend 160g':1,'Queijo cheddar':1},
-  'Combo Brasa': {'Pão brioche':1,'Blend 160g':1,'Queijo cheddar':1,'Batata pré-frita':0.2,'Refrigerante lata':1},
-  'Smash duplo': {'Pão brioche':1,'Blend 160g':2,'Queijo cheddar':2},
-  'Batata crocante': {'Batata pré-frita':0.2},
-  'Refrigerante lata': {'Refrigerante lata':1},
-};
 function getSeedData(segment) {
   const seed = segment === 'Barber'
-    ? { appointments:BARBER_APPOINTMENTS, clients:BARBER_CLIENTS, services:BARBER_SERVICES, transactions:BARBER_TRANSACTIONS, orders:INITIAL_ORDERS, products:INITIAL_PRODUCTS }
+    ? { appointments:BARBER_APPOINTMENTS, clients:BARBER_CLIENTS, services:BARBER_SERVICES, transactions:BARBER_TRANSACTIONS, orders:[], products:[], stockMovements:[] }
     : segment === 'Burger'
-      ? { appointments:[], clients:[], services:[], transactions:BURGER_TRANSACTIONS, orders:INITIAL_ORDERS, products:INITIAL_PRODUCTS }
-      : { appointments:INITIAL_APPOINTMENTS, clients:CLIENTS, services:SERVICES, transactions:INITIAL_TRANSACTIONS, orders:INITIAL_ORDERS, products:INITIAL_PRODUCTS };
-  return Object.fromEntries(Object.entries(seed).map(([key,values]) => [key, values.map(item => ({...item}))]));
-}
-function currentDateLabel() {
-  return new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' }).replace(/^./, c => c.toUpperCase());
+      ? { appointments:[], clients:[], services:[], transactions:BURGER_TRANSACTIONS, orders:INITIAL_ORDERS, products:INITIAL_PRODUCTS, stockMovements:INITIAL_STOCK_MOVEMENTS }
+      : { appointments:INITIAL_APPOINTMENTS, clients:CLIENTS, services:SERVICES, transactions:INITIAL_TRANSACTIONS, orders:[], products:[], stockMovements:[] };
+  return Object.fromEntries(Object.entries(seed).map(([key,values]) => [
+    key, values.map(item => ({ ...item, ...(Array.isArray(item.productItems) ? { productItems:item.productItems.map(line => ({ ...line })) } : {}) }))
+  ]));
 }
 function localDateValue() {
   const date = new Date();
@@ -221,6 +206,8 @@ export default function App() {
   const [orders, setOrders] = useState(INITIAL_ORDERS);
   const [attendanceOpen, setAttendanceOpen] = useState(false);
   const [attendanceOrders, setAttendanceOrders] = useState([]);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [stockMovements, setStockMovements] = useState([]);
   const [promotions, setPromotions] = useState([{id:1,name:'Combo corte + barba',kind:'Combo',services:['Corte degradê','Barba completa'],regular:90,promo:75,validity:'Período demonstrativo',status:'Ativa'},{id:2,name:'Acabamento especial',kind:'Serviço',services:['Acabamento'],regular:20,promo:15,validity:'Período demonstrativo',status:'Programada'}]);
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
   const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS);
@@ -232,7 +219,6 @@ export default function App() {
   const [toast, setToast] = useState('');
   const [siteSegment, setSiteSegment] = useState('Beauty');
   const [appointmentForm, setAppointmentForm] = useState({client:'',contact:'',service:'Design de sobrancelhas',date:localDateValue(),time:'16:00'});
-  const [transactionForm, setTransactionForm] = useState({description:'',category:'Receita',value:''});
 
   const visibleDemos = useMemo(() => DEMOS.filter(demo => {
     const matchesText = `${demo.name} ${demo.title} ${demo.description}`.toLowerCase().includes(search.toLowerCase());
@@ -265,19 +251,20 @@ export default function App() {
     setSiteSegment(demo.segment === 'Vitrine' ? 'Beauty' : demo.segment);
     setAppointments(seed.appointments);
     setOrders(seed.orders);
-    setAttendanceOpen(demo.segment === 'Burger');
-    setAttendanceOrders(demo.segment === 'Burger' ? seed.orders.map(item=>({...item})) : []);
+    setAttendanceOpen(false);
+    setAttendanceOrders([]);
+    setCurrentSessionId(null);
+    setStockMovements(seed.stockMovements);
     setPromotions([{id:1,name:'Combo corte + barba',kind:'Combo',services:['Corte degradê','Barba completa'],regular:90,promo:75,validity:'Período demonstrativo',status:'Ativa'},{id:2,name:'Acabamento especial',kind:'Serviço',services:['Acabamento'],regular:20,promo:15,validity:'Período demonstrativo',status:'Programada'}]);
     setProducts(seed.products);
     setTransactions(seed.transactions);
     setPayables((demo.segment === 'Burger' ? BURGER_PAYABLES : INITIAL_PAYABLES).map(item=>({...item})));
     setReceivables(demo.segment === 'Barber'
-      ? [{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]
-      : demo.segment === 'Burger' ? BURGER_RECEIVABLES.map(item=>({...item})) : INITIAL_RECEIVABLES.map(item=>({...item})));
+      ? [{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40,status:'Pendente'},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35,status:'Pendente'}]
+      : demo.segment === 'Burger' ? burgerReceivablesFromOrders(seed.orders) : INITIAL_RECEIVABLES.map(item=>({...item,status:'Pendente'})));
     setClients(seed.clients);
     setServices(seed.services);
     setAppointmentForm({client:'',contact:'',service:seed.services[0]?.name || '',date:localDateValue(),time:'16:00'});
-    setTransactionForm({description:'',category:'Receita',value:''});
     setMobileNav(false);
     setModal(null);
     setGuideOpen(window.matchMedia('(max-width: 760px)').matches);
@@ -288,6 +275,68 @@ export default function App() {
     setMobileNav(false);
     setGuideOpen(false);
     if (activeDemo?.modules.includes(module)) setActiveModule(module);
+  }
+  function resetFinanceExamples() {
+    const isBurgerDemo = activeDemo?.segment === 'Burger';
+    const seedTransactions = getSeedData(activeDemo?.segment || 'Beauty').transactions;
+    if (isBurgerDemo) {
+      const orderPayments = orders.filter(order => order.payment === 'Recebido' && order.status !== 'Cancelado').map(order => ({
+        id:'order-payment-' + order.id, sourceId:order.id, source:'Pedido',
+        description:'Pedido #' + order.code + ' · ' + order.customer,
+        category:'Receita', detailCategory:'Vendas de pedidos',
+        date:order.paymentDate || order.date || localDateValue(),
+        value:Number(order.total), paymentMethod:order.paymentMethod || 'Não informado'
+      }));
+      setTransactions([...orderPayments, ...seedTransactions.filter(item => item.source !== 'Pedido' || !orderPayments.some(payment => payment.sourceId === item.sourceId))]);
+      setReceivables(burgerReceivablesFromOrders(orders));
+    } else {
+      setTransactions(seedTransactions);
+      if (activeDemo?.segment === 'Barber') setReceivables([
+        {id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40,status:'Pendente'},
+        {id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35,status:'Pendente'}
+      ]);
+      else setReceivables(INITIAL_RECEIVABLES.map(item=>({...item,status:'Pendente'})));
+    }
+    setPayables((isBurgerDemo ? BURGER_PAYABLES : INITIAL_PAYABLES).map(item=>({...item})));
+    notify('Exemplos financeiros restaurados.');
+  }
+  function resetBurgerInventory() {
+    const seed = getSeedData('Burger');
+    setProducts(seed.products);
+    setStockMovements(seed.stockMovements);
+    setOrders(seed.orders);
+    setAttendanceOrders([]);
+    setAttendanceOpen(false);
+    setCurrentSessionId(null);
+    setTransactions(seed.transactions);
+    setPayables(BURGER_PAYABLES.map(item=>({...item})));
+    setReceivables(burgerReceivablesFromOrders(seed.orders));
+    notify('Dados demonstrativos do Burger restaurados: pedidos, caixa, produtos e estoque.');
+  }
+  function updateAppointmentsAndFinance(updater) {
+    const nextAppointments = typeof updater === 'function' ? updater(appointments) : updater;
+    setAppointments(nextAppointments);
+    setReceivables(previous => previous.map(receivable => {
+      if (receivable.orderId) return receivable;
+      const appointment = nextAppointments.find(item => item.id === receivable.id);
+      if (!appointment) return receivable;
+      if (['Cancelado', 'Não compareceu'].includes(appointment.status)) {
+        return { ...receivable, cancelled:true, status:'Cancelado', balance:0 };
+      }
+      if (receivable.cancelled) {
+        return {
+          ...receivable, cancelled:false, status:'Pendente',
+          balance:Math.max(0, Number(receivable.total || 0) - Number(receivable.received || 0))
+        };
+      }
+      return receivable;
+    }));
+  }
+  function resetAppointmentsExamples() {
+    const currentIds = new Set(appointments.map(item => item.id));
+    setAppointments(getSeedData(activeDemo?.segment || 'Beauty').appointments);
+    setReceivables(previous => previous.filter(item => item.orderId || !currentIds.has(item.id)));
+    notify('Exemplos de agendamentos restaurados.');
   }
 
   if (!activeDemo && page === 'portfolio') {
@@ -347,7 +396,6 @@ export default function App() {
   }
 
   const currentModules = activeDemo.modules;
-  const activeSegment = SEGMENTS[siteSegment] || SEGMENTS.Beauty;
   const isBurger = activeDemo.segment === 'Burger';
   const isBarber = activeDemo.segment === 'Barber';
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
@@ -364,115 +412,24 @@ export default function App() {
         {activeModule==='site'&&<SiteModuleView activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
         {activeModule==='overview'&&<OverviewModule demo={activeDemo} appointments={appointments} orders={orders} products={products} transactions={transactions} changeModule={changeModule}/>} 
          {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{const appointmentId=Date.now();setAppointments(prev=>[...prev,{id:appointmentId,client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professionalAssignments?.map(item=>item.service+': '+item.professional).join(' · ')}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase()||String(item.contact||'').replace(/\D/g,'')===String(payload.contact||'').replace(/\D/g,''))?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);setReceivables(prev=>[...prev,{id:appointmentId,client:payload.client,service:payload.services.map(item=>item.name).join(' + '),date:payload.date,total:payload.total,received:0,balance:payload.total}]);notify('Agendamento fictício confirmado. O cadastro do cliente foi associado automaticamente.');}} />}
-         {activeModule==='orders'&&<BurgerOrdersModule attendanceOpen={attendanceOpen} setAttendanceOpen={setAttendanceOpen} attendanceOrders={attendanceOrders} setAttendanceOrders={setAttendanceOrders} products={products} setProducts={setProducts} notify={notify} />}
-        {activeModule==='appointments'&&<EnhancedAppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>{setAppointmentForm({client:'',contact:'',service:services[0]?.name||'',date:localDateValue(),time:'16:00'});setModal('appointment');}} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
+         {activeModule==='orders'&&<BurgerOrdersModule attendanceOpen={attendanceOpen} setAttendanceOpen={setAttendanceOpen} currentSessionId={currentSessionId} setCurrentSessionId={setCurrentSessionId} attendanceOrders={attendanceOrders} setAttendanceOrders={setAttendanceOrders} orders={orders} setOrders={setOrders} products={products} setProducts={setProducts} setStockMovements={setStockMovements} setTransactions={setTransactions} setReceivables={setReceivables} notify={notify} />}
+        {activeModule==='appointments'&&<EnhancedAppointmentsModule appointments={appointments} setAppointments={updateAppointmentsAndFinance} openModal={()=>{setAppointmentForm({client:'',contact:'',service:services[0]?.name||'',date:localDateValue(),time:'16:00'});setModal('appointment');}} resetAppointments={resetAppointmentsExamples} />}
         {activeModule==='clients'&&<EnhancedClientsModule clients={clients} setClients={setClients} notify={notify} />}
         {activeModule==='services'&&<ServicesModule services={services} onIllustrativeAction={()=>notify('A inclusão e edição de serviços são ilustrativas nesta central. A configuração completa está disponível no sistema contratado.')} />}
-        {activeModule==='finance'&&<EnhancedFinanceModule variant={isBurger?'burger':'studio'} transactions={transactions} setTransactions={setTransactions} payables={payables} setPayables={setPayables} receivables={receivables} setReceivables={setReceivables} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} resetFinance={()=>{setTransactions(getSeedData(activeDemo.segment).transactions);setPayables((isBurger?BURGER_PAYABLES:INITIAL_PAYABLES).map(item=>({...item})));setReceivables(isBarber?[{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]:isBurger?BURGER_RECEIVABLES.map(item=>({...item})):INITIAL_RECEIVABLES.map(item=>({...item})));}} notify={notify} />}
+        {activeModule==='finance'&&<EnhancedFinanceModule variant={isBurger?'burger':'studio'} orders={orders} transactions={transactions} setTransactions={setTransactions} payables={payables} setPayables={setPayables} receivables={receivables} setReceivables={setReceivables} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} resetFinance={resetFinanceExamples} notify={notify} />}
         {activeModule==='servicePromotions'&&<PromotionsPreview promotions={promotions} setPromotions={setPromotions} />}
-        {activeModule==='products'&&<ProductsModule products={products} />}
-        {activeModule==='inventory'&&<InventoryModule products={products} setProducts={setProducts} />}
-        {activeDemo.segment !== 'Burger' && AUTOMATION_NOTES[activeDemo.segment] && <section className="panel automation-panel preview-automation-panel">
+        {activeModule==='products'&&<BurgerProductsModule products={products} setProducts={setProducts} setStockMovements={setStockMovements} orders={orders} notify={notify} />}
+        {activeModule==='inventory'&&<BurgerInventoryModule products={products} setProducts={setProducts} stockMovements={stockMovements} setStockMovements={setStockMovements} notify={notify} resetInventory={resetBurgerInventory} />}
+        {(activeDemo.segment !== 'Burger' || activeModule === 'overview') && AUTOMATION_NOTES[activeDemo.segment] && <section className="panel automation-panel preview-automation-panel">
           <div className="automation-heading"><div className="automation-icon"><Activity size={20}/></div><div><span className="eyebrow muted-eyebrow">COMO AS ÁREAS SE CONECTAM</span><h2>{AUTOMATION_NOTES[activeDemo.segment].title}</h2><p>Resumo ilustrativo do que esta modalidade pode reunir.</p></div></div>
           <div className="automation-points">{AUTOMATION_NOTES[activeDemo.segment].points.map((point,index)=><div className="automation-point" key={point}><span>{String(index+1).padStart(2,'0')}</span><p>{point}</p></div>)}</div>
         </section>}
         <div className="demo-footer-note"><Eye size={14}/><span>Como testar: navegue pelo menu lateral, abra formulários e experimente as ações. Os dados são fictícios, nada é enviado ou salvo e recarregar a página reinicia a demonstração.</span></div>
       </main>
     </div>
-    {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const phone=appointmentForm.contact.trim();const clientName=appointmentForm.client.trim()||'Cliente demonstrativo';const appointmentId=Date.now();setAppointments(prev=>[...prev,{id:appointmentId,client:clientName,contact:phone,service:appointmentForm.service,time:appointmentForm.time,date:appointmentForm.date,status:'Aguardando',price:services.find(s=>s.name===appointmentForm.service)?.price||40}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===clientName.toLowerCase()||(phone&&String(item.contact||'').replace(/\D/g,'')===phone.replace(/\D/g,'')))?prev:[{name:clientName,contact:phone||'Telefone não informado',visits:0,last:'Sem visitas'},...prev]);setModal(null);notify('Agendamento lançado. Quando o cliente não existia, o cadastro foi criado automaticamente.');}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins" required/></label><label>Telefone / WhatsApp<input type="tel" inputMode="tel" value={appointmentForm.contact} onChange={e=>setAppointmentForm({...appointmentForm,contact:e.target.value})} placeholder="(67) 99999-9999"/></label><p className="appointment-auto-customer-hint"><BadgeCheck size={14}/> Cliente lançado por aqui e ainda sem cadastro? Ao salvar, um cadastro demonstrativo será criado automaticamente e ficará disponível na aba Clientes.</p><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Data<input type="date" value={appointmentForm.date} onChange={e=>setAppointmentForm({...appointmentForm,date:e.target.value})} min={localDateValue()}/></label></div><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar agendamento</button></div></form></Modal>}
-    {modal==='transaction'&&<Modal title="Novo lançamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const value=Number(String(transactionForm.value).replace(',','.'));if(!transactionForm.description||!Number.isFinite(value)||value<=0){notify('Preencha a descrição e um valor válido.');return;}setTransactions(prev=>[{id:Date.now(),description:transactionForm.description,category:transactionForm.category,date:'Hoje',value},...prev]);setModal(null);setTransactionForm({description:'',category:'Receita',value:''});notify('Lançamento fictício adicionado.')}}><label>Descrição<input value={transactionForm.description} onChange={e=>setTransactionForm({...transactionForm,description:e.target.value})} placeholder="Ex.: Venda de serviço" required/></label><div className="form-grid"><label>Tipo<select value={transactionForm.category} onChange={e=>setTransactionForm({...transactionForm,category:e.target.value})}><option>Receita</option><option>Despesa</option></select></label><label>Valor (R$)<input inputMode="decimal" value={transactionForm.value} onChange={e=>setTransactionForm({...transactionForm,value:e.target.value})} placeholder="0,00" required/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar lançamento</button></div></form></Modal>}
+    {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const phone=appointmentForm.contact.trim();const clientName=appointmentForm.client.trim()||'Cliente demonstrativo';const appointmentId=Date.now();const price=services.find(s=>s.name===appointmentForm.service)?.price||40;setAppointments(prev=>[...prev,{id:appointmentId,client:clientName,contact:phone,service:appointmentForm.service,time:appointmentForm.time,date:appointmentForm.date,status:'Aguardando',price}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===clientName.toLowerCase()||(phone&&String(item.contact||'').replace(/\D/g,'')===phone.replace(/\D/g,'')))?prev:[{name:clientName,contact:phone||'Telefone não informado',visits:0,last:'Sem visitas'},...prev]);setReceivables(prev=>[...prev,{id:appointmentId,client:clientName,service:appointmentForm.service,date:appointmentForm.date,total:price,received:0,balance:price,status:'Pendente'}]);setModal(null);notify('Agendamento lançado. O cadastro do cliente e o valor a receber foram atualizados.');}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins" required/></label><label>Telefone / WhatsApp<input type="tel" inputMode="tel" value={appointmentForm.contact} onChange={e=>setAppointmentForm({...appointmentForm,contact:e.target.value})} placeholder="(67) 99999-9999"/></label><p className="appointment-auto-customer-hint"><BadgeCheck size={14}/> Cliente lançado por aqui e ainda sem cadastro? Ao salvar, um cadastro demonstrativo será criado automaticamente e ficará disponível na aba Clientes.</p><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Data<input type="date" value={appointmentForm.date} onChange={e=>setAppointmentForm({...appointmentForm,date:e.target.value})} min={localDateValue()}/></label></div><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar agendamento</button></div></form></Modal>}
     {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
     {guideOpen&&<ScreenGuide mode="demo" demo={activeDemo} module={activeModule} onClose={()=>setGuideOpen(false)}/>}
-  </div>;
-}
-
-
-function MobileGuide({mode,demo,onClose}) {
-  const isCatalog = mode === 'catalog';
-  const isVitrine = demo?.segment === 'Vitrine';
-  const isBurger = demo?.segment === 'Burger';
-  const isBarber = demo?.segment === 'Barber';
-  const hasBooking = demo?.modules.includes('booking');
-  const hasOrders = demo?.modules.includes('orders');
-  const hasInventory = demo?.modules.includes('inventory') || demo?.modules.includes('products');
-  const hasFinance = demo?.modules.includes('finance');
-
-  let title = 'Como explorar no celular';
-  let subtitle = 'O passo a passo foi pensado para telas pequenas e navegação por toque.';
-  let steps = [];
-  let note = 'Esta é uma demonstração: cadastros e alterações são fictícios e não são enviados para clientes.';
-
-  if (isCatalog) {
-    steps = [
-      {title:'Escolha um segmento',body:'Use os filtros Todos, Vitrine, Beauty, Barber e Burger. No celular, deslize os filtros para os lados para ver todas as opções.'},
-      {title:'Abra uma modalidade',body:'Role a lista e toque em “Visualizar modalidade” no cartão que deseja conhecer.'},
-      {title:'Navegue pelo menu',body:'Dentro da demonstração, toque no botão ☰ no topo para abrir as telas disponíveis naquele pacote.'},
-      {title:'Explore os fluxos',body:'Role a tela para baixo. Nas tabelas mais largas, deslize para o lado para consultar as outras colunas.'}
-    ];
-  } else if (isVitrine) {
-    title = 'Explore a landing page';
-    subtitle = 'No celular, a página de exemplo funciona como uma vitrine vertical.';
-    steps = [
-      {title:'Alterne o modelo',body:'Use os botões Beauty, Barber e Burger no seletor acima da prévia para trocar o exemplo.'},
-      {title:'Desça pela página',body:'Deslize para baixo para conhecer a apresentação, os serviços e as informações de cada modelo.'},
-      {title:'Teste o botão principal',body:'Toque na chamada da página para ver o destino demonstrativo. Nenhuma mensagem ou pedido real é enviado.'}
-    ];
-  } else if (isBurger && hasOrders) {
-    title = 'Teste pedidos e estoque';
-    subtitle = 'O fluxo Burger foi organizado para você operar em etapas curtas pelo celular.';
-    steps = [
-      {title:'Abra Pedidos e operação',body:'Toque em ☰ no topo e escolha a área de pedidos no menu lateral.'},
-      {title:'Confira o atendimento',body:'Com o atendimento aberto, toque em “Lançar pedido”. Se estiver encerrado, inicie um novo atendimento primeiro.'},
-      {title:'Monte e registre o pedido',body:'Use os botões − e + para ajustar as quantidades e toque em “Registrar pedido”. A baixa de estoque demonstrativa acontece nesse momento.'},
-      {title:'Acompanhe as etapas',body:'Atualize o status do pedido e depois abra Produtos ou Estoque no menu para conferir as quantidades.'}
-    ];
-  } else if (isBurger) {
-    title = 'Explore gestão e estoque';
-    subtitle = 'As telas ficam em sequência vertical e podem ser acessadas pelo menu.';
-    steps = [
-      {title:'Abra o menu',body:'Toque em ☰ no topo para ver os módulos incluídos neste pacote.'},
-      {title:'Confira os produtos',body:'Entre em Produtos ou Estoque para consultar os itens, preços e quantidades da demonstração.'},
-      {title:'Veja o financeiro',body:hasFinance?'Abra Financeiro pelo menu e confira receitas, despesas e saldo ilustrativo.':'Este pacote não inclui o módulo Financeiro; volte ao catálogo para comparar outra modalidade.'},
-      {title:'Deslize quando necessário',body:'Role a tela para baixo e, nas tabelas, deslize horizontalmente para acessar todas as colunas.'}
-    ];
-  } else if (hasBooking) {
-    title = isBarber ? 'Teste a agenda da barbearia' : 'Teste o agendamento';
-    subtitle = 'No celular, o agendamento é apresentado em uma sequência vertical, etapa por etapa.';
-    steps = [
-      {title:'Abra Agendamento público',body:'Toque em ☰ no topo e selecione Agendamento público no menu lateral.'},
-      {title:'Escolha serviços e horário',body:isBarber?'Selecione os serviços, escolha a data e o profissional de cada procedimento. Os horários aparecem em intervalos de 30 minutos.':'Selecione um ou mais serviços, escolha a data, depois a hora e o minuto.'},
-      {title:'Preencha seus dados',body:'Informe um nome e um WhatsApp fictícios e toque em “Confirmar agendamento”.'},
-      {title:'Confira na agenda',body:'Abra novamente o menu e entre em Agendamentos. O registro que acabou de criar aparece na agenda administrativa.'}
-    ];
-  } else if (hasFinance) {
-    title = 'Explore o financeiro';
-    subtitle = 'Use o menu para acessar os lançamentos e confira os detalhes rolando a tela.';
-    steps = [
-      {title:'Abra Financeiro',body:'Toque em ☰ e escolha Financeiro no menu lateral.'},
-      {title:'Confira o resumo',body:'Veja receitas, despesas e saldo ilustrativo nos cartões do início da tela.'},
-      {title:'Teste um lançamento',body:'Toque em “Novo lançamento”, preencha os dados de exemplo e confirme para atualizar os números.'},
-      {title:'Volte ao menu',body:'Use ☰ para comparar com outros módulos disponíveis neste pacote.'}
-    ];
-  } else {
-    title = 'Como navegar nesta demonstração';
-    steps = [
-      {title:'Abra o menu',body:'Toque em ☰ no topo para consultar as telas disponíveis neste pacote.'},
-      {title:'Escolha um módulo',body:'Toque em uma opção para abrir a área correspondente.'},
-      {title:'Explore os detalhes',body:'Role a tela verticalmente. Nas tabelas, deslize para os lados para consultar mais informações.'}
-    ];
-  }
-
-  return <div className="mobile-guide-overlay" onMouseDown={event=>{if(event.target===event.currentTarget)onClose();}}>
-    <section className="mobile-guide-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-guide-title">
-      <div className="mobile-guide-grabber" aria-hidden="true"></div>
-      <header className="mobile-guide-header">
-        <div><span className="mobile-guide-kicker">GUIA RÁPIDO · MOBILE</span><h2 id="mobile-guide-title">{title}</h2><p>{subtitle}</p></div>
-        <button type="button" className="mobile-guide-close" onClick={onClose} aria-label="Fechar guia"><X size={19}/></button>
-      </header>
-      <ol className="mobile-guide-steps">{steps.map((step,index)=><li key={step.title}><span className="mobile-guide-step-number">{String(index+1).padStart(2,'0')}</span><div><strong>{step.title}</strong><p>{step.body}</p></div></li>)}</ol>
-      <div className="mobile-guide-note"><Eye size={16}/><p>{note}</p></div>
-      <footer className="mobile-guide-footer"><button type="button" onClick={onClose}>Entendi, vamos testar <ArrowRight size={16}/></button></footer>
-    </section>
   </div>;
 }
 
@@ -483,9 +440,9 @@ function OverviewModule({demo,appointments,orders,products,transactions,changeMo
   const hasOrders=demo.modules.includes('orders');
   const inMoney=transactions.filter(t=>t.category==='Receita').reduce((s,t)=>s+t.value,0);
   const outMoney=transactions.filter(t=>t.category==='Despesa').reduce((s,t)=>s+t.value,0);
-  const revenue=hasOrders?orders.reduce((s,o)=>s+o.total,0):inMoney;
+  const revenue=hasOrders?orders.filter(o=>o.payment==='Recebido'&&o.status!=='Cancelado').reduce((s,o)=>s+o.total,0):inMoney;
   const waiting=hasOrders?orders.filter(o=>o.status==='Novo').length:appointments.filter(a=>a.status==='Aguardando').length;
-  const quickModules=demo.modules.filter(m=>m!=='overview').slice(0,4);
+  const quickModules=demo.modules.filter(m=>m!=='overview');
   const overviewTitle=burger?(hasOrders?'Pedidos recentes':'Posição do estoque'):'Próximos agendamentos';
   const overviewDescription=burger?(hasOrders?'Acompanhe o andamento dos pedidos de exemplo.':'Confira os produtos com controle de quantidade.'):'Visualização rápida da agenda demonstrativa.';
   const viewAllModule=burger?(hasOrders?'orders':'inventory'):'appointments';
@@ -496,7 +453,7 @@ function OverviewModule({demo,appointments,orders,products,transactions,changeMo
         <MetricCard label="Pedidos do exemplo" value={orders.length.toString().padStart(2,'0')} delta={waiting+' novo(s)'} icon={ShoppingBag} kind="orange" footnote="para acompanhar"/>
         <MetricCard label="Vendas em pedidos" value={money(revenue)} delta="Pedidos fictícios" icon={CircleDollarSign} kind="green" footnote="valor ilustrativo"/>
         <MetricCard label="Produtos cadastrados" value={products.length.toString().padStart(2,'0')} delta="Catálogo de exemplo" icon={Package} kind="blue" footnote="itens"/>
-        <MetricCard label="Itens com estoque" value={products.filter(p=>p.stock!==null).length.toString().padStart(2,'0')} delta="Controlados" icon={Boxes} kind="purple" footnote="produtos"/>
+        <MetricCard label="Itens com estoque" value={products.filter(p=>p.stockTracked).length.toString().padStart(2,'0')} delta="Controlados" icon={Boxes} kind="purple" footnote="produtos"/>
       </> : burger ? <>
         <MetricCard label="Receitas lançadas" value={money(inMoney)} delta="Entradas fictícias" icon={TrendingUp} kind="green" footnote="valores de exemplo"/>
         <MetricCard label="Despesas lançadas" value={money(outMoney)} delta="Saídas fictícias" icon={CreditCard} kind="rose" footnote="valores de exemplo"/>
@@ -518,20 +475,6 @@ function OverviewModule({demo,appointments,orders,products,transactions,changeMo
     </div>
   </>;
 }
-function AppointmentsModule({appointments,setAppointments,openModal,resetAppointments}) {
-  const [query,setQuery]=useState('');
-  const [status,setStatus]=useState('Todos');
-  const list=appointments.filter(a=>a.client.toLowerCase().includes(query.toLowerCase())&&(status==='Todos'||a.status===status));
-  function updateStatus(id,nextStatus){setAppointments(prev=>prev.map(a=>a.id===id?{...a,status:nextStatus}:a));}
-  return <>
-    <div className="module-toolbar"><div className="toolbar-filters"><label className="search-box compact"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar cliente..."/></label><label className="select-filter"><Filter size={15}/><select value={status} onChange={e=>setStatus(e.target.value)}><option>Todos</option><option>Confirmado</option><option>Aguardando</option><option>Concluído</option><option>Cancelado</option></select></label></div><button className="primary-button" onClick={openModal}><Plus size={16}/> Novo agendamento</button></div>
-    <div className="panel table-panel"><div className="panel-heading"><div><h3>Agenda de hoje</h3><p>{list.length} agendamento(s) na demonstração</p></div><span className="date-chip"><CalendarDays size={15}/> {currentDateLabel()}</span></div>
-      <AppointmentRows appointments={list} full onStatusChange={updateStatus}/>
-      {list.length===0&&<div className="empty-table">Nenhum agendamento encontrado com esse filtro.</div>}
-      <div className="table-foot"><span>Dados ilustrativos · alterações ficam em memória até atualizar a página.</span><button className="text-action" onClick={resetAppointments}><RefreshCw size={14}/> Restaurar exemplos</button></div>
-    </div>
-  </>;
-}
 function AppointmentRows({appointments,full=false,onStatusChange}) {
   return <div className={`data-table ${full?'full-table':''}`}><div className="table-head appt-head"><span>Horário</span><span>Cliente</span><span>Serviço</span><span>Status</span>{full&&<span>Ação</span>}</div>
     {appointments.map(a=><div className="table-row appt-head" key={a.id}><span className="time-cell"><Clock3 size={14}/>{a.time}</span><span className="client-cell"><span className="table-avatar">{a.client.split(' ').map(x=>x[0]).slice(0,2).join('')}</span><span><strong>{a.client}</strong><small>{a.date}</small></span></span><span className="service-cell">{a.service}</span><span><StatusBadge status={a.status}/></span>
@@ -540,67 +483,23 @@ function AppointmentRows({appointments,full=false,onStatusChange}) {
   </div>;
 }
 function StatusBadge({status}) { let cls=status==='Confirmado'||status==='Pronto'||status==='Concluído'?'status-green':status==='Aguardando'||status==='Em preparo'?'status-amber':status==='Cancelado'?'status-red':'status-blue';return <span className={`status-badge ${cls}`}><span/>{status}</span>; }
-function FinanceModule({transactions,setTransactions,openModal,resetTransactions}) { const incoming=transactions.filter(t=>t.category==='Receita').reduce((s,t)=>s+t.value,0);const outgoing=transactions.filter(t=>t.category==='Despesa').reduce((s,t)=>s+t.value,0);return <><div className="metric-grid finance-metrics"><MetricCard label="Total de receitas" value={money(incoming)} delta="Lançamentos fictícios" icon={TrendingUp} kind="green"/><MetricCard label="Total de despesas" value={money(outgoing)} delta="Lançamentos fictícios" icon={CreditCard} kind="rose"/><MetricCard label="Saldo do período" value={money(incoming-outgoing)} delta="Receitas − despesas" icon={Wallet} kind="blue"/><MetricCard label="Movimentações" value={transactions.length.toString().padStart(2,'0')} delta="Entradas e saídas" icon={ReceiptText} kind="purple"/></div><section className="panel table-panel"><div className="panel-heading"><div><h3>Movimentações financeiras</h3><p>Registros de exemplo para apresentar o controle financeiro.</p></div><button className="primary-button" onClick={openModal}><Plus size={16}/> Novo lançamento</button></div><div className="data-table"><div className="table-head finance-head"><span>Descrição</span><span>Categoria</span><span>Data</span><span className="align-right">Valor</span></div>{transactions.map(t=><div key={t.id} className="table-row finance-head"><span className="finance-description"><span className={`transaction-icon ${t.category==='Receita'?'revenue':'expense'}`}>{t.category==='Receita'?<TrendingUp size={16}/>:<CreditCard size={16}/>}</span><strong>{t.description}</strong></span><span><span className={`category-pill ${t.category==='Receita'?'income':'expense'}`}>{t.category}</span></span><span className="muted-text">{t.date}</span><strong className={`money-cell ${t.category==='Receita'?'positive':'negative'}`}>{t.category==='Despesa'?'- ': '+ '}{money(t.value)}</strong></div>)}</div><div className="table-foot"><span>Valores exclusivamente fictícios.</span><button className="text-action" onClick={resetTransactions}><RefreshCw size={14}/> Restaurar exemplos</button></div></section></>; }
-function ProductsModule({products}) { return <><div className="metric-grid"><MetricCard label="Itens cadastrados" value={products.length.toString().padStart(2,'0')} delta="Catálogo de exemplo" icon={Package} kind="blue"/><MetricCard label="Com estoque" value={products.filter(p=>p.stock!==null).length.toString().padStart(2,'0')} delta="Controle por quantidade" icon={Boxes} kind="green"/><MetricCard label="Sob pedido" value={products.filter(p=>p.stock===null).length.toString().padStart(2,'0')} delta="Produção sob demanda" icon={ShoppingBag} kind="orange"/><MetricCard label="Categorias" value="02" delta="Tipos demonstrativos" icon={Grid2X2} kind="purple"/></div><section className="panel table-panel"><div className="panel-heading"><div><h3>Catálogo de produtos</h3><p>Separação entre itens com estoque e itens preparados sob demanda.</p></div><span className="sample-tag"><BadgeCheck size={14}/> EXEMPLO</span></div><ProductTable products={products}/></section></>; }
-function InventoryModule({products,setProducts}) { return <><div className="welcome-strip inventory-welcome"><div className="welcome-icon"><Boxes size={19}/></div><div><strong>Controle de estoque demonstrativo</strong><p>Os produtos com estoque usam quantidade. Itens feitos sob pedido não mantêm saldo de unidades.</p></div></div><section className="panel table-panel"><div className="panel-heading"><div><h3>Posição atual do estoque</h3><p>{products.filter(p=>p.stock!==null).length} produto(s) com controle de quantidade</p></div><button className="secondary-button" onClick={()=>setProducts(INITIAL_PRODUCTS)}><RefreshCw size={15}/> Restaurar</button></div><ProductTable products={products} inventory setProducts={setProducts}/></section></>; }
-function ProductTable({products,inventory=false,setProducts}) { return <div className="data-table"><div className="table-head product-head"><span>Produto</span><span>Tipo</span><span>Estoque</span><span>Preço / custo demo</span>{inventory&&<span>Movimentar</span>}</div>{products.map(p=><div className="table-row product-head" key={p.id}><span className="product-name"><span className="product-thumb"><Package size={17}/></span><strong>{p.name}</strong></span><span><span className={`category-pill ${p.stock===null?'made-to-order':'in-stock'}`}>{p.category}</span></span><span>{p.stock===null?<span className="muted-text">Sob pedido</span>:<strong>{p.stock} <small>{p.unit}</small></strong>}</span><span>{money(p.price)}</span>{inventory&&<span className="stock-actions">{p.stock!==null&&<><button title="Retirar uma unidade" onClick={()=>setProducts(prev=>prev.map(item=>item.id===p.id?{...item,stock:Math.max(0,item.stock-1)}:item))} disabled={p.stock===0}>−</button><button title="Adicionar uma unidade" onClick={()=>setProducts(prev=>prev.map(item=>item.id===p.id?{...item,stock:item.stock+1}:item))}>+</button></>}</span>}</div>)}</div>; }
-function ClientsModule({clients}) { const [query,setQuery]=useState('');const filtered=clients.filter(c=>c.name.toLowerCase().includes(query.toLowerCase()));return <section className="panel table-panel"><div className="panel-heading"><div><h3>Clientes demonstrativos</h3><p>Registros de exemplo, sem relação com pessoas reais.</p></div><label className="search-box compact"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar cliente..."/></label></div><div className="data-table"><div className="table-head client-head"><span>Cliente</span><span>Contato fictício</span><span>Atendimentos</span><span>Última visita</span></div>{filtered.map(c=><div className="table-row client-head" key={c.name}><span className="client-cell"><span className="table-avatar">{c.name.split(' ').map(x=>x[0]).slice(0,2).join('')}</span><strong>{c.name}</strong></span><span className="muted-text">{c.contact}</span><span>{c.visits}</span><span className="muted-text">{c.last}</span></div>)}</div></section>; }
+function ProductTable({products}) {
+  return <div className="data-table">
+    <div className="table-head product-head"><span>Produto</span><span>Tipo</span><span>Estoque</span><span>Preço</span></div>
+    {products.filter(item=>item.active!==false).slice(0,5).map(item=><div className="table-row product-head" key={item.id}>
+      <span className="product-name"><span className="product-thumb"><Package size={17}/></span><strong>{item.name}</strong></span>
+      <span><span className={'category-pill ' + (item.stockTracked?'in-stock':'made-to-order')}>{item.kind==='prepared'?'Preparado na hora':'Revenda'}</span></span>
+      <span>{item.stockTracked?Number(item.stock).toLocaleString('pt-BR')+' '+item.unit:'Sob pedido'}</span>
+      <span>{money(item.price)}</span>
+    </div>)}
+  </div>;
+}
 function ServicesModule({services,onIllustrativeAction}) {
   return <>
     <div className="module-toolbar services-demo-toolbar"><div><span className="muted-text">Catálogo demonstrativo de procedimentos e valores.</span></div><button type="button" className="primary-button" onClick={onIllustrativeAction}><Plus size={15}/> Adicionar serviço</button></div>
     <div className="service-card-grid">{services.map((s,i)=><article className="service-card" key={s.name}><div className={`service-number n${i+1}`}>{String(i+1).padStart(2,'0')}</div><div className="service-category">{s.type}</div><h3>{s.name}</h3><div className="service-detail"><Clock3 size={14}/>{s.duration}</div><div className="service-price">{money(s.price)}</div><div className="service-enabled"><span/>Disponível no exemplo</div></article>)}</div>
     <div className="service-helper"><Settings2 size={18}/><div><strong>Catálogo demonstrativo</strong><p>Os cartões representam os serviços cadastrados. O botão “Adicionar serviço” é ilustrativo nesta central e informa como funciona a personalização no sistema contratado.</p></div></div>
   </>;
-}
-function SiteModule({activeDemo,siteSegment,setSiteSegment,onCta}) {
-  const changeable=activeDemo.segment==='Vitrine';
-  const selected=SEGMENTS[siteSegment]||SEGMENTS.Beauty;
-  const businessType=siteSegment==='Beauty'?'beleza e estética':siteSegment==='Barber'?'barbearias':'alimentação';
-  return <div className="landing-page-module">
-    <section className="landing-purpose-section">
-      <div className="landing-purpose-copy">
-        <span className="landing-purpose-kicker">ENTENDA A SOLUÇÃO</span>
-        <h2>O que é uma landing page?</h2>
-        <p>É uma página criada para apresentar um negócio, produto ou serviço e conduzir quem visita até uma ação clara — por exemplo, chamar no WhatsApp, solicitar um orçamento ou agendar um horário.</p>
-        <p>Em vez de tentar mostrar tudo, ela reúne as informações mais importantes em uma sequência objetiva: proposta, diferenciais, serviços, confiança e um próximo passo fácil de encontrar.</p>
-        <div className="landing-purpose-points">
-          <article><span>01</span><div><strong>Apresenta</strong><small>Mostra o que o negócio oferece e para quem.</small></div></article>
-          <article><span>02</span><div><strong>Gera confiança</strong><small>Organiza imagens, informações, diferenciais e provas sociais.</small></div></article>
-          <article><span>03</span><div><strong>Direciona</strong><small>Leva a pessoa ao contato, orçamento ou agendamento.</small></div></article>
-        </div>
-      </div>
-      <aside className="landing-real-example">
-        <span className="landing-real-label">PROJETO PUBLICADO</span>
-        <div className="landing-real-mark"><Sparkles size={20}/></div>
-        <h3>Danielly Oliveira Beauty Studio</h3>
-        <p>Um exemplo real desenvolvido pela 2R Informática. A página apresenta a marca, os serviços e os canais de contato da profissional.</p>
-        <a href="https://ruan2r.github.io/P11-LANDING-PAGE-DANY/" target="_blank" rel="noopener noreferrer">Ver landing page funcional <ExternalLink size={16}/></a>
-        <small>Abre em uma nova aba.</small>
-      </aside>
-    </section>
-
-    <div className="landing-preview-heading">
-      <div><span>EXEMPLO VISUAL</span><h3>Veja como uma página pode ser organizada.</h3><p>Alterne os segmentos para comparar estilos de apresentação e chamadas para ação.</p></div>
-      <span className="landing-preview-tag">CONTEÚDO ILUSTRATIVO</span>
-    </div>
-    <div className={"landing-preview landing-" + siteSegment.toLowerCase()} style={{'--landing-accent':selected.accent,'--landing-secondary':selected.secondary}}>
-      <div className="landing-preview-top">
-        <div className="landing-preview-logo"><span>{siteSegment==='Beauty'?'SB':siteSegment==='Barber'?'BC':'BB'}</span><div><strong>{selected.customer}</strong><small>{siteSegment==='Beauty'?'BELEZA & ESTÉTICA':siteSegment==='Barber'?'BARBEARIA':'HAMBURGUERIA'}</small></div></div>
-        <div className="landing-preview-nav"><span>Início</span><span>{siteSegment==='Burger'?'Destaques':'Serviços'}</span><span>Sobre</span><button onClick={onCta}>{selected.action}</button></div>
-        <div className="landing-mobile-menu"><Menu size={19}/></div>
-      </div>
-      {changeable&&<div className="landing-switcher"><span><MonitorSmartphone size={15}/> Modelo de demonstração:</span>{Object.keys(SEGMENTS).map(segment=><button key={segment} onClick={()=>setSiteSegment(segment)} className={siteSegment===segment?'active':''}>{segment}</button>)}</div>}
-      <div className="landing-hero">
-        <div className="landing-copy"><span className="landing-kicker"><Sparkles size={14}/> {selected.short} · EXPERIÊNCIA DIGITAL</span><h2>{selected.hero}</h2><p>{selected.subtitle}</p><button className="landing-cta" onClick={onCta}>{selected.action}<ArrowRight size={16}/></button><div className="landing-social-proof"><span className="proof-avatars"><i>J</i><i>M</i><i>A</i></span><span><strong>Atendimento com carinho</strong><small>Uma experiência pensada para você</small></span></div></div>
-        <div className="landing-visual"><div className={"landing-visual-main " + siteSegment.toLowerCase()}><div className="visual-abstract-circle"/><div className="visual-abstract-shape"/>{siteSegment==='Beauty'?<div className="beauty-illustration"><Sparkles size={52}/><span>BEAUTY</span></div>:siteSegment==='Barber'?<div className="barber-illustration"><Scissors size={58}/><span>YOUR STYLE</span></div>:<div className="burger-illustration"><ShoppingBag size={58}/><span>GOOD FOOD</span></div>}<div className="floating-rating"><Sparkles size={14}/><span>feito para seu negócio</span></div></div></div>
-      </div>
-      <div className="landing-services">
-        <div><span className="landing-kicker">FEITO PARA FACILITAR</span><h3>{siteSegment==='Burger'?'Itens em destaque':'Conheça nossos serviços'}</h3></div>
-        <div className="landing-service-list">{selected.services.map((s,i)=><div key={s[0]} className="landing-service-item"><span className="landing-service-number">0{i+1}</span><span><strong>{s[0]}</strong><small>{s[2]}</small></span><b>{s[1]}</b><ArrowUpRight size={15}/></div>)}</div>
-      </div>
-      <div className="landing-disclaimer"><Eye size={14}/> Prévia visual para o segmento de {businessType} · textos, serviços e valores fictícios · estrutura adaptável à identidade do cliente. {siteSegment==='Burger'?'Este exemplo não representa cardápio ou pedidos públicos: a operação do P16 é interna.':''}</div>
-    </div>
-  </div>;
 }
 function PublicBookingModule({segment,services,onBook}) {
   const [form,setForm] = useState({client:'',contact:'',services:services[0]?.name?[services[0].name]:[],date:localDateValue(),time:'10:00',professionalByService:{}});
@@ -652,41 +551,6 @@ function PublicBookingModule({segment,services,onBook}) {
   </div>;
 }
 
-function BurgerOrdersModule({attendanceOpen,setAttendanceOpen,attendanceOrders,setAttendanceOrders,products,setProducts,notify}) {
- const [showNewOrder,setShowNewOrder]=useState(false),[customer,setCustomer]=useState(''),[quantities,setQuantities]=useState({}),[filter,setFilter]=useState('Todos');
- const catalog=[{id:1,name:'Smash clássico',price:29.9,recipe:{'Pão brioche':1,'Blend 160g':1,'Queijo cheddar':1}},{id:2,name:'Combo Brasa',price:39.9,recipe:{'Pão brioche':1,'Blend 160g':1,'Queijo cheddar':1,'Batata pré-frita':.2,'Refrigerante lata':1}},{id:3,name:'Smash duplo',price:36.9,recipe:{'Pão brioche':1,'Blend 160g':2,'Queijo cheddar':2}},{id:4,name:'Batata crocante',price:14.9,recipe:{'Batata pré-frita':.2}},{id:5,name:'Refrigerante lata',price:6,recipe:{'Refrigerante lata':1}}];
- const selected=catalog.filter(item=>(quantities[item.id]||0)>0), total=selected.reduce((sum,item)=>sum+item.price*quantities[item.id],0);
- const filtered=attendanceOrders.filter(order=>filter==='Todos'||order.status===filter);
- const nextCode=String(attendanceOrders.reduce((max,order)=>Math.max(max,Number(order.code)||0),0)+1).padStart(3,'0');
- const pending=attendanceOrders.filter(order=>order.payment==='Pendente').length;
- function createOrder(event){event.preventDefault();if(!attendanceOpen){notify('Inicie o atendimento antes de lançar pedidos.');return;}if(!selected.length)return;
-  const consumed={};selected.forEach(item=>Object.entries(item.recipe).forEach(([name,qty])=>consumed[name]=(consumed[name]||0)+qty*quantities[item.id]));
-  for(const [name,qty] of Object.entries(consumed)){const product=products.find(item=>item.name===name&&item.stock!==null);if(!product||product.stock<qty){notify('Estoque demonstrativo insuficiente para '+name+'.');return;}}
-  setProducts(prev=>prev.map(product=>product.stock!==null&&consumed[product.name]!==undefined?{...product,stock:Number((product.stock-consumed[product.name]).toFixed(2))}:product));
-  setAttendanceOrders(prev=>[...prev,{id:Date.now(),code:nextCode,customer:customer.trim()||'Cliente demonstrativo',items:selected.map(item=>quantities[item.id]+'x '+item.name).join(', '),total,status:'Recebido',payment:'Pendente'}]);
-  setQuantities({});setCustomer('');setShowNewOrder(false);notify('Pedido #'+nextCode+' lançado; estoque demonstrativo atualizado.');
- }
- function updateOrder(id,status){setAttendanceOrders(prev=>prev.map(order=>order.id===id?{...order,status}:order));}
- return <div className="burger-operations">
-  <section className="panel attendance-control-card"><div><span className="public-kicker">OPERAÇÃO · P16</span><h2>{attendanceOpen?'Atendimento em andamento':'Atendimento encerrado'}</h2><p>{attendanceOpen?'Pedidos são lançados e acompanhados dentro deste atendimento.':'Inicie um atendimento para liberar os lançamentos.'}</p></div>
-   {attendanceOpen?<button className="secondary-button" disabled={pending>0} onClick={()=>{setAttendanceOpen(false);setAttendanceOrders([]);notify('Atendimento encerrado.');}}>Encerrar atendimento</button>:<button className="primary-button" onClick={()=>{setAttendanceOrders([]);setAttendanceOpen(true);notify('Novo atendimento iniciado. Numeração reiniciada em 001.');}}>Iniciar atendimento</button>}
-   {attendanceOpen&&<div className="attendance-open-meta"><span><strong>{attendanceOrders.length}</strong> pedidos neste atendimento</span><span><strong>{pending}</strong> pedidos sem recebimento</span><span>Próximo pedido <strong>#{nextCode}</strong></span></div>}
-  </section>
-  <div className="orders-intro"><div className="orders-intro-icon"><ClipboardList size={20}/></div><div><strong>Pedidos do atendimento</strong><p>Lançamento pela administração. Não há cardápio público ou envio de pedidos pelo cliente nesta versão.</p></div><span className="sample-tag"><BadgeCheck size={14}/> P16 · DEMO</span></div>
-  {attendanceOpen&&<div className="module-toolbar"><span className="muted-text">Numeração sequencial por atendimento.</span><button className="primary-button" onClick={()=>setShowNewOrder(value=>!value)}><Plus size={16}/>{showNewOrder?'Fechar pedido':'Lançar pedido'}</button></div>}
-  {showNewOrder&&attendanceOpen&&<section className="panel new-internal-order"><div className="panel-heading"><div><h3>Novo pedido interno</h3><p>Selecione produtos e quantidades; a baixa demonstrativa ocorre ao registrar.</p></div><strong className="order-code">#{nextCode}</strong></div>
-   <form onSubmit={createOrder}><label>Cliente / identificação<input value={customer} onChange={event=>setCustomer(event.target.value)} placeholder="Ex.: Cliente balcão"/></label>
-    <div className="internal-order-product-grid">{catalog.map(item=><article className="internal-order-product" key={item.id}><div><strong>{item.name}</strong><small>{money(item.price)}</small></div><div className="menu-quantity"><button type="button" disabled={!quantities[item.id]} onClick={()=>setQuantities(prev=>({...prev,[item.id]:Math.max(0,(prev[item.id]||0)-1)}))}>−</button><span>{quantities[item.id]||0}</span><button type="button" onClick={()=>setQuantities(prev=>({...prev,[item.id]:(prev[item.id]||0)+1}))}>+</button></div></article>)}</div>
-    <div className="internal-order-footer"><span>Total do pedido<strong>{money(total)}</strong></span><button className="primary-button" type="submit" disabled={!selected.length}>Registrar pedido #{nextCode}</button></div>
-   </form></section>}
-  <div className="order-summary-grid"><div><span>Pedidos no atendimento</span><strong>{attendanceOrders.length.toString().padStart(2,'0')}</strong></div><div><span>Sem recebimento</span><strong>{pending.toString().padStart(2,'0')}</strong></div><div><span>Em preparo</span><strong>{attendanceOrders.filter(order=>order.status==='Em preparo').length.toString().padStart(2,'0')}</strong></div><div><span>Total dos pedidos</span><strong>{money(attendanceOrders.reduce((sum,order)=>sum+order.total,0))}</strong></div></div>
-  <section className="panel table-panel"><div className="panel-heading"><div><h3>Lista de pedidos</h3><p>Recebido → em preparo → pronto → entregue; cancelamentos separados.</p></div><label className="select-filter"><Filter size={15}/><select value={filter} onChange={event=>setFilter(event.target.value)}><option>Todos</option><option>Recebido</option><option>Em preparo</option><option>Pronto</option><option>Entregue</option><option>Cancelado</option></select></label></div>
-   <div className="data-table"><div className="table-head order-head"><span>Pedido</span><span>Cliente / origem</span><span>Itens</span><span>Total</span><span>Etapa / ação</span></div>{filtered.map(order=><div className="table-row order-head" key={order.id}><span><strong className="order-code">#{order.code}</strong></span><span>{order.customer||'Cliente demonstrativo'}</span><span className="order-items">{order.items}</span><strong>{money(order.total)}</strong><span className="order-actions"><StatusBadge status={order.status}/>{order.status==='Recebido'&&<button className="small-outline" onClick={()=>updateOrder(order.id,'Em preparo')}>Iniciar preparo</button>}{order.status==='Em preparo'&&<button className="small-outline" onClick={()=>updateOrder(order.id,'Pronto')}>Marcar pronto</button>}{order.status==='Pronto'&&<button className="small-outline" onClick={()=>updateOrder(order.id,'Entregue')}>Registrar entrega</button>}{!['Cancelado','Entregue'].includes(order.status)&&<button className="small-outline danger" onClick={()=>updateOrder(order.id,'Cancelado')}>Cancelar</button>}</span></div>)}</div>
-   <div className="table-foot"><span>O valor do pedido não significa recebimento. A confirmação financeira é separada.</span></div>
-  </section>
-  <section className="panel future-feature-card"><div className="future-feature-icon"><MonitorSmartphone size={20}/></div><div><span className="eyebrow muted-eyebrow">POSSIBILIDADE DE PERSONALIZAÇÃO</span><h3>Acesso operacional para garçons pelo celular</h3><p>Um perfil individual poderia identificar o atendimento/mesa, lançar itens e encaminhar o pedido à administração. Esta expansão ainda não está desenvolvida no P16.</p><strong className="future-status">Ideia futura · não incluída na versão atual</strong></div></section>
- </div>;
-}
 function PromotionsPreview({promotions,setPromotions}){
  const [filter,setFilter]=useState('Todas');
  const visible=promotions.filter(item=>filter==='Todas'||item.status===filter);
