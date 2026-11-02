@@ -1,3 +1,5 @@
+# Este arquivo está preparado para quando o portfólio for publicado na raiz de um domínio próprio.
+# No GitHub Pages de projeto (subdiretório), a regra precisa ficar na raiz do host para produzir efeito.
 User-agent: *
 Allow: /
 
