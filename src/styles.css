@@ -2842,3 +2842,90 @@
   .custom-solutions-note-copy p { font-size: 11px; }
   .portfolio-custom-bottom>div:first-child>p { font-size: 11px; }
 }
+
+
+/* Desktop typography refinement v2 — increase reading comfort without changing mobile layouts. */
+@media (min-width: 761px) {
+  /* Public portfolio: reinforce supporting copy, tags and calls to action. */
+  .portfolio-shell .portfolio-section-kicker,
+  .portfolio-shell .portfolio-eyebrow { font-size: 12px; }
+
+  .portfolio-shell .portfolio-section-heading p,
+  .portfolio-shell .portfolio-process-layout > div:first-child > p,
+  .portfolio-shell .portfolio-about-layout > div:nth-child(2) > p,
+  .portfolio-shell .portfolio-contact-layout > div:first-child > p { font-size: 15px; line-height: 1.75; }
+
+  .portfolio-shell .portfolio-project-meta,
+  .portfolio-shell .portfolio-project-status { font-size: 12px; }
+
+  .portfolio-shell .portfolio-project-content > p { font-size: 15px; line-height: 1.75; }
+  .portfolio-shell .portfolio-feature-tags span { font-size: 12px; }
+  .portfolio-shell .portfolio-project-button { min-height: 46px; font-size: 15px; }
+  .portfolio-shell .portfolio-demo-note p,
+  .portfolio-shell .portfolio-all-projects > span,
+  .portfolio-shell .portfolio-all-projects button { font-size: 13px; }
+
+  /* Custom applications: prevent the later component styles from shrinking the copy. */
+  .portfolio-shell .portfolio-custom-heading .portfolio-section-kicker { font-size: 12px; }
+  .portfolio-shell .portfolio-custom-heading h2 { font-size: clamp(32px, 3vw, 42px); line-height: 1.2; }
+  .portfolio-shell .portfolio-custom-heading p { font-size: 15px; line-height: 1.75; }
+  .portfolio-shell .portfolio-custom-heading-badge { font-size: 13px; }
+  .portfolio-shell .portfolio-custom-card h3 { font-size: 17px; line-height: 1.4; }
+  .portfolio-shell .portfolio-custom-card p { font-size: 14px; line-height: 1.7; }
+  .portfolio-shell .portfolio-custom-bottom > div:first-child > strong { font-size: 17px; }
+  .portfolio-shell .portfolio-custom-bottom > div:first-child > p { font-size: 14px; line-height: 1.7; }
+  .portfolio-shell .portfolio-custom-actions .portfolio-button { min-height: 46px; font-size: 14px; }
+  .portfolio-shell .portfolio-footer-inner,
+  .portfolio-shell .portfolio-footer-inner button { font-size: 13px; }
+
+  /* Modalities catalogue: bring small category labels and feature chips up to readable size. */
+  .hub-shell .catalog-results-count { font-size: 15px; }
+  .hub-shell .segment-heading h3 { font-size: 20px; line-height: 1.35; }
+  .hub-shell .segment-heading p { font-size: 14px; line-height: 1.65; }
+  .hub-shell .group-count { font-size: 13px; }
+  .hub-shell .demo-segment-tag { font-size: 12px; }
+  .hub-shell .demo-card h4 { font-size: 20px; line-height: 1.35; }
+  .hub-shell .demo-card-title { font-size: 17px; line-height: 1.45; }
+  .hub-shell .demo-card p { font-size: 15px; line-height: 1.7; }
+  .hub-shell .demo-featured-badge { font-size: 12px; }
+  .hub-shell .module-chips span { font-size: 12px; }
+  .hub-shell .credential-row > span,
+  .hub-shell .credential-row button { font-size: 12px; }
+  .hub-shell .enter-demo-button { min-height: 46px; font-size: 15px; }
+  .hub-shell .catalog-usage-heading > span { font-size: 11px; }
+  .hub-shell .catalog-usage-heading > strong { font-size: 18px; }
+  .hub-shell .catalog-usage-guide article > span { font-size: 13px; }
+  .hub-shell .catalog-usage-guide article strong { font-size: 14px; }
+  .hub-shell .catalog-usage-guide article p { font-size: 13px; line-height: 1.65; }
+  .hub-shell .custom-solutions-note-copy > span { font-size: 11px; }
+  .hub-shell .custom-solutions-note-copy h3 { font-size: 18px; line-height: 1.4; }
+  .hub-shell .custom-solutions-note-copy p { font-size: 14px; line-height: 1.7; }
+  .hub-shell .custom-solutions-note-actions a { min-height: 40px; font-size: 12px; }
+  .hub-shell .catalog-back-button { min-height: 40px; font-size: 14px; }
+
+  /* Demonstration workspaces: improve the baseline across all administrative modules. */
+  .demo-app :is(p) { font-size: 15px; line-height: 1.7; }
+  .demo-app :is(small) { font-size: 13px; }
+  .demo-app :is(label) { font-size: 14px; }
+  .demo-app :is(input, select, textarea) { font-size: 15px; }
+  .demo-app :is(button):not(.icon-quiet):not(.sidebar-close):not(.mobile-menu):not(.mobile-guide-trigger) { font-size: 14px; }
+  .demo-app .side-nav-item { font-size: 15px; min-height: 47px; }
+  .demo-app .sidebar-section-label { font-size: 12px; }
+  .demo-app .demo-data-note p { font-size: 13px; line-height: 1.65; }
+  .demo-app .demo-breadcrumb { font-size: 13px; }
+  .demo-app .main-title-row p { font-size: 16px; line-height: 1.65; }
+  .demo-app .welcome-strip strong { font-size: 17px; }
+  .demo-app .welcome-strip p { font-size: 15px; }
+  .demo-app .sample-tag { font-size: 12px; }
+  .demo-app .metric-label { font-size: 14px; }
+  .demo-app .metric-foot { font-size: 13px; }
+  .demo-app .table-head { font-size: 13px; }
+  .demo-app .table-row { font-size: 15px; }
+  .demo-app .client-cell strong { font-size: 15px; }
+  .demo-app .client-cell small { font-size: 13px; }
+  .demo-app .status-badge { font-size: 12px; }
+  .demo-app .quick-links strong { font-size: 15px; }
+  .demo-app .quick-links small { font-size: 13px; line-height: 1.55; }
+  .demo-app .text-action { font-size: 14px; }
+  .demo-app .demo-footer-note { font-size: 13px; }
+}
