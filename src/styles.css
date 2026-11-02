@@ -2372,3 +2372,130 @@
     font-size: clamp(28px, 7vw, 34px);
   }
 }
+
+
+/* Desktop typography refinement: larger labels and helper text without changing mobile sizing. */
+@media (min-width: 1024px) {
+  .demo-app .brand-name { font-size: 14px; }
+  .demo-app .brand-tagline { font-size: 12px; }
+  .demo-app .workspace-meta strong { font-size: 12px; }
+  .demo-app .workspace-meta span { font-size: 10px; }
+  .demo-app .sidebar-section-label { font-size: 10px; }
+  .demo-app .side-nav-item { font-size: 12px; }
+  .demo-app .demo-data-note strong { font-size: 11px; }
+  .demo-app .demo-data-note p { font-size: 10px; line-height: 1.55; }
+
+  .demo-app .demo-breadcrumb { font-size: 11px; }
+  .demo-app .main-title-row h1 { font-size: clamp(27px, 2.7vw, 34px); }
+  .demo-app .main-title-row p { font-size: 13px; }
+  .demo-app .main-title-row .eyebrow { font-size: 11px; }
+  .demo-app .workspace-badge,
+  .demo-app .fake-live { font-size: 10px; }
+  .demo-app .secondary-button,
+  .demo-app .primary-button { font-size: 12px; }
+
+  .demo-app .module-brief-copy>span { font-size: 9px; }
+  .demo-app .module-brief-copy>strong { font-size: 14px; }
+  .demo-app .module-brief-copy>p { font-size: 11px; line-height: 1.55; }
+  .demo-app .module-brief>button { font-size: 11px; }
+
+  .demo-app .welcome-strip strong { font-size: 13px; }
+  .demo-app .welcome-strip p { font-size: 11px; line-height: 1.55; }
+  .demo-app .sample-tag { font-size: 9px; }
+  .demo-app .metric-label { font-size: 11px; }
+  .demo-app .metric-value { font-size: clamp(19px, 1.7vw, 24px); }
+  .demo-app .metric-foot { font-size: 10px; }
+
+  .demo-app .panel-heading h3 { font-size: 15px; }
+  .demo-app .panel-heading p { font-size: 11px; line-height: 1.55; }
+  .demo-app .text-action { font-size: 11px; }
+  .demo-app .table-head { font-size: 10px; }
+  .demo-app .table-row { font-size: 11px; }
+  .demo-app .client-cell strong { font-size: 11px; }
+  .demo-app .client-cell small { font-size: 10px; }
+  .demo-app .table-avatar { font-size: 10px; }
+  .demo-app .status-badge { font-size: 10px; }
+  .demo-app .quick-links strong { font-size: 11px; }
+  .demo-app .quick-links small { font-size: 10px; }
+  .demo-app .tip-card strong { font-size: 11px; }
+  .demo-app .tip-card p { font-size: 10px; line-height: 1.6; }
+  .demo-app .demo-footer-note,
+  .demo-app .demo-footer-note button { font-size: 10px; }
+
+  .demo-app .automation-heading h2 { font-size: 18px; }
+  .demo-app .automation-heading p { font-size: 12px; }
+  .demo-app .automation-point>span { font-size: 11px; }
+  .demo-app .automation-point p { font-size: 12px; line-height: 1.65; }
+  .demo-app .automation-reminder strong,
+  .demo-app .automation-reminder p { font-size: 12px; line-height: 1.6; }
+
+  .demo-app .p18-finance-heading h2,
+  .demo-app .p16-finance-heading h2 { font-size: clamp(23px, 2.1vw, 29px); }
+  .demo-app .p18-finance-heading p,
+  .demo-app .p16-finance-heading p,
+  .demo-app .p18-finance-intro p { font-size: 13px; }
+  .demo-app .p18-finance-card>span { font-size: 12px; }
+  .demo-app .p18-finance-card>small { font-size: 11px; }
+  .demo-app .p18-finance-section .panel-heading p,
+  .demo-app .p16-finance-panel .panel-heading p { font-size: 11px; }
+  .demo-app .p18-finance-toggle { font-size: 12px; }
+  .demo-app .p18-finance-empty,
+  .demo-app .p18-finance-footnote { font-size: 11px; }
+
+  .demo-app .appointment-search-field input,
+  .demo-app .appointment-filter-toggle,
+  .demo-app .appointment-range-tools label,
+  .demo-app .clients-search input,
+  .demo-app .booking-service-copy strong,
+  .demo-app .booking-service-option>b { font-size: 13px; }
+  .demo-app .booking-service-copy small,
+  .demo-app .booking-summary label,
+  .demo-app .booking-fields label { font-size: 12px; }
+  .demo-app .booking-summary input,
+  .demo-app .booking-summary select,
+  .demo-app .booking-fields input,
+  .demo-app .booking-fields select { font-size: 13px; }
+
+  .demo-app .service-category { font-size: 10px; }
+  .demo-app .service-card h3 { font-size: 15px; }
+  .demo-app .service-detail { font-size: 11px; }
+  .demo-app .service-enabled { font-size: 10px; }
+  .demo-app .service-helper strong { font-size: 12px; }
+  .demo-app .service-helper p { font-size: 11px; line-height: 1.6; }
+
+  .demo-app .burger-catalog-intro p,
+  .demo-app .burger-catalog-heading p,
+  .demo-app .burger-inventory-panel .panel-heading p { font-size: 12px; }
+  .demo-app .burger-catalog-intro strong { font-size: 14px; }
+  .demo-app .burger-catalog-metrics article>span,
+  .demo-app .burger-inventory-metrics article>span { font-size: 11px; }
+  .demo-app .burger-catalog-metrics article>small,
+  .demo-app .burger-inventory-metrics article>small { font-size: 11px; }
+  .demo-app .burger-product-card h4 { font-size: 14px; }
+  .demo-app .burger-product-card>p,
+  .demo-app .burger-product-prices span,
+  .demo-app .burger-product-margin span,
+  .demo-app .burger-product-stock span { font-size: 10px; }
+  .demo-app .burger-product-prices strong,
+  .demo-app .burger-product-margin strong,
+  .demo-app .burger-product-stock strong { font-size: 12px; }
+  .demo-app .burger-stock-row>div strong,
+  .demo-app .burger-stock-row>strong { font-size: 13px; }
+  .demo-app .burger-stock-row>div small,
+  .demo-app .burger-stock-history>article>div small,
+  .demo-app .burger-stock-history>article>div span { font-size: 10px; }
+  .demo-app .burger-stock-history>article>div strong,
+  .demo-app .burger-stock-history>article>strong { font-size: 12px; }
+  .demo-app .burger-order-customer strong { font-size: 13px; }
+  .demo-app .burger-order-customer span,
+  .demo-app .burger-order-values span { font-size: 10px; }
+  .demo-app .burger-order-values strong { font-size: 12px; }
+  .demo-app .burger-order-date { font-size: 10px; }
+  .demo-app .burger-register-payment { font-size: 11px; }
+  .demo-app .burger-catalog-note { font-size: 11px; }
+
+  .demo-app .screen-guide-header h2 { font-size: 25px; }
+  .demo-app .screen-guide-header p { font-size: 13px; }
+  .demo-app .screen-guide-steps li>p { font-size: 12px; line-height: 1.65; }
+  .demo-app .screen-guide-steps li { font-size: 12px; }
+}
