@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -49,6 +50,64 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Wait for branch-based Pages deployment to finish
+        if: github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          node <<'NODE'
+          const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+          const [owner, repo] = process.env.REPOSITORY.split('/');
+          const baseUrl = `https://api.github.com/repos/${owner}/${repo}`;
+          const headers = {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${process.env.GH_TOKEN}`,
+            'X-GitHub-Api-Version': '2022-11-28'
+          };
+
+          async function githubJson(url) {
+            const response = await fetch(url, { headers });
+            if (!response.ok) {
+              throw new Error(`GitHub API respondeu ${response.status}: ${await response.text()}`);
+            }
+            return response.json();
+          }
+
+          const targetSha = process.env.TARGET_SHA;
+          const discoveryDeadline = Date.now() + 45000;
+          let branchRun = null;
+
+          // The branch-based Pages workflow is started by the same push.
+          // Wait briefly for GitHub to register it before deciding none exists.
+          while (Date.now() < discoveryDeadline && !branchRun) {
+            const data = await githubJson(`${baseUrl}/actions/runs?per_page=50`);
+            branchRun = data.workflow_runs
+              .filter(run => run.name.toLowerCase() === 'pages build and deployment' && run.head_sha === targetSha)
+              .sort((a, b) => b.id - a.id)[0] || null;
+            if (!branchRun) await sleep(5000);
+          }
+
+          if (!branchRun) {
+            console.log('Nenhuma publicação Pages por branch foi encontrada para este commit. Seguindo com o artefato Vite.');
+          } else {
+            console.log(`Aguardando a publicação Pages por branch #${branchRun.id} para ${targetSha}.`);
+            const deadline = Date.now() + 10 * 60 * 1000;
+            while (Date.now() < deadline) {
+              const current = await githubJson(`${baseUrl}/actions/runs/${branchRun.id}`);
+              if (current.status === 'completed') {
+                console.log(`Publicação Pages por branch finalizada: ${current.conclusion}.`);
+                break;
+              }
+              await sleep(10000);
+            }
+            const finalState = await githubJson(`${baseUrl}/actions/runs/${branchRun.id}`);
+            if (finalState.status !== 'completed') {
+              throw new Error('Tempo esgotado aguardando a publicação Pages por branch; o deploy do Vite foi interrompido para evitar uma disputa de publicação.');
+            }
+          }
+          NODE
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
