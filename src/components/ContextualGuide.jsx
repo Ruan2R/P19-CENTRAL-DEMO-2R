@@ -1,4 +1,4 @@
-import { ArrowRight, Boxes, CalendarDays, ClipboardList, Eye, LayoutDashboard, Package, Scissors, Sparkles, Store, Users, Wallet, X, CircleHelp } from 'lucide-react';
+import { ArrowRight, Boxes, CalendarDays, ClipboardList, DoorClosed, Eye, LayoutDashboard, Package, Scissors, ShieldCheck, Sparkles, Store, Tag, Users, Wallet, X, CircleHelp } from 'lucide-react';
 
 const MODULE_GUIDES = {
   site: {
@@ -199,7 +199,9 @@ function iconFor(module) {
     orders: ClipboardList,
     products: Package,
     inventory: Boxes,
-    servicePromotions: Sparkles
+    servicePromotions: Tag,
+    blocks: DoorClosed,
+    policies: ShieldCheck
   };
   return icons[module] || CircleHelp;
 }
