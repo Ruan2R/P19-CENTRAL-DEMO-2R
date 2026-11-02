@@ -5,18 +5,18 @@ const MODULE_GUIDES = {
     title: 'Uma página completa, não só uma lista de serviços',
     summary: 'A landing page apresenta a marca em uma sequência: proposta, história, serviços, detalhes, resultados, confiança, localização e um próximo passo claro.',
     steps: [
-      'Navegue pelo menu da própria página para ver cada seção.',
+      'Use os links de navegação da própria página para visitar cada seção.',
       'Explore os serviços e os blocos de detalhes para perceber como a página explica cada opção.',
       'Confira galeria, depoimentos, localização, redes sociais e a chamada final.'
     ]
   },
   overview: {
     title: 'O painel reúne um resumo da operação',
-    summary: 'Aqui você encontra os principais indicadores, a atividade em destaque e atalhos para todas as áreas incluídas no pacote. Use o menu lateral ou os atalhos para não deixar nenhum recurso passar.',
+    summary: 'Aqui você encontra os principais indicadores, a atividade em destaque e atalhos para as áreas incluídas no pacote. No celular, as abas ficam visíveis logo abaixo do cabeçalho; no desktop, a navegação permanece na lateral.',
     steps: [
       'Comece pelos indicadores na parte superior para entender o cenário.',
       'Confira a lista resumida de agendamentos, pedidos ou estoque.',
-      'Use os atalhos do painel ou o menu lateral para abrir cada módulo incluído. No celular, abra o menu pelo ícone no canto superior esquerdo.'
+      'No celular, escolha diretamente uma das abas visíveis logo abaixo do cabeçalho. No desktop, use a navegação lateral ou os atalhos do painel para abrir os módulos incluídos.'
     ]
   },
   booking: {
@@ -114,7 +114,7 @@ function guideFor(demo, module) {
     steps: [
       'Observe os dados apresentados na tela.',
       'Experimente filtros, botões e formulários disponíveis.',
-      'Use o menu para avançar para outra área do pacote.'
+      'Selecione outra aba de navegação para avançar para uma área diferente do pacote.'
     ]
   };
 
@@ -149,7 +149,7 @@ function guideFor(demo, module) {
       steps: [
         'Conheça os destaques da página e as informações da marca.',
         'Use a chamada principal para entender o destino de contato demonstrativo.',
-        'Abra Pedidos pelo menu para experimentar a operação interna.'
+        'Selecione a aba Pedidos para experimentar a operação interna.'
       ]
     };
   }
@@ -211,7 +211,7 @@ export function ScreenGuide({ mode, demo, module, onClose }) {
     steps: [
       'Escolha o segmento nos filtros do catálogo.',
       'Comece pelo cartão “Mais indicado” para conhecer a solução de Gestão.',
-      'Abra os módulos pelo menu e leia a orientação de cada tela antes de testar o fluxo.'
+      'Escolha um dos módulos pelas abas de navegação da demonstração e leia a orientação de cada tela antes de testar o fluxo.'
     ]
   } : guideFor(demo, module);
 
