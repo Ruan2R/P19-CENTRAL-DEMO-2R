@@ -615,6 +615,138 @@ function PromotionsPreview({promotions,setPromotions}){
  </div>;
 }
 
+
+function BlocksPreview({segment,blocks,setBlocks,notify}) {
+  const isBarber = segment === 'Barber';
+  const [date,setDate] = useState(dateAfterDays(1));
+  const [scope,setScope] = useState(isBarber ? 'professional' : 'business');
+  const [professional,setProfessional] = useState('Profissional 1');
+  const [allDay,setAllDay] = useState(false);
+  const [start,setStart] = useState(isBarber ? '13:00' : '');
+  const [end,setEnd] = useState(isBarber ? '14:00' : '');
+  const [reason,setReason] = useState('');
+
+  function createBlock(event) {
+    event.preventDefault();
+    if ((start && !end) || (!start && end) || (start && end && start >= end)) {
+      notify('Confira os horários: informe início e fim válidos.');
+      return;
+    }
+    if (isBarber && scope === 'professional' && (!start || !end)) {
+      notify('Para bloquear um profissional, informe o início e o fim.');
+      return;
+    }
+    if (isBarber && scope === 'business' && !allDay && (!start || !end)) {
+      notify('Informe o horário ou marque o bloqueio do dia inteiro.');
+      return;
+    }
+
+    const block = {
+      id: Date.now(),
+      date,
+      start: isBarber && scope === 'business' && allDay ? '' : start,
+      end: isBarber && scope === 'business' && allDay ? '' : end,
+      scope: isBarber ? scope : 'business',
+      professional: isBarber && scope === 'professional' ? professional : '',
+      reason: reason.trim()
+    };
+    setBlocks(current => [...current,block].sort((a,b)=>a.date.localeCompare(b.date)));
+    setDate(dateAfterDays(1));
+    setStart(isBarber ? '13:00' : '');
+    setEnd(isBarber ? '14:00' : '');
+    setReason('');
+    setAllDay(false);
+    notify('Bloqueio demonstrativo adicionado à agenda.');
+  }
+
+  function removeBlock(id) {
+    setBlocks(current=>current.filter(item=>item.id!==id));
+    notify('Bloqueio demonstrativo removido.');
+  }
+
+  function formatBlockDate(value) {
+    return new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'short'}).format(new Date(value+'T12:00:00'));
+  }
+
+  function blockTarget(block) {
+    if (!isBarber) return 'Agenda completa';
+    return block.scope === 'business' ? 'Toda a barbearia' : (block.professional || 'Profissional');
+  }
+
+  return <div className="preview-management-module">
+    <div className="welcome-strip">
+      <div className="welcome-icon"><DoorClosed size={19}/></div>
+      <div><strong>Bloqueios da agenda</strong><p>{isBarber ? 'Reserve períodos para um profissional específico ou para toda a barbearia.' : 'Cadastre folgas, compromissos e pausas fora do funcionamento habitual.'}</p></div>
+      <span className="sample-tag">EXEMPLO</span>
+    </div>
+
+    <div className="preview-management-grid">
+      <section className="panel preview-management-card">
+        <div className="panel-heading"><div><h3>Novo bloqueio</h3><p>Defina quando a agenda ficará indisponível.</p></div><span className="preview-management-mark"><Plus size={18}/></span></div>
+        <form className="preview-management-form" onSubmit={createBlock}>
+          <label>Data<input type="date" value={date} min={localDateValue()} onChange={event=>setDate(event.target.value)} required/></label>
+
+          {isBarber && <label>Aplicar a<select value={scope} onChange={event=>{setScope(event.target.value);setAllDay(false);if(event.target.value==='professional'){setStart('13:00');setEnd('14:00');}}}><option value="professional">Um profissional</option><option value="business">Toda a barbearia</option></select></label>}
+          {isBarber && scope==='professional' && <label>Profissional<select value={professional} onChange={event=>setProfessional(event.target.value)}><option>Profissional 1</option><option>Profissional 2</option></select></label>}
+          {isBarber && scope==='business' && <label className="preview-management-check"><input type="checkbox" checked={allDay} onChange={event=>setAllDay(event.target.checked)}/> Bloquear o dia inteiro</label>}
+
+          {!(isBarber && scope==='business' && allDay) && <div className="preview-management-time-grid">
+            <label>Início {isBarber ? '' : '(opcional)'}<input type="time" value={start} onChange={event=>setStart(event.target.value)} required={isBarber}/></label>
+            <label>Fim {isBarber ? '' : '(opcional)'}<input type="time" value={end} onChange={event=>setEnd(event.target.value)} required={isBarber}/></label>
+          </div>}
+          <label>Motivo ou observação<input value={reason} maxLength={160} onChange={event=>setReason(event.target.value)} placeholder="Ex.: compromisso, manutenção..."/></label>
+          <button className="primary-button" type="submit"><Plus size={16}/> Criar bloqueio</button>
+        </form>
+        <p className="preview-management-note">Na demonstração, o bloqueio é fictício e não altera a disponibilidade de agendamentos reais.</p>
+      </section>
+
+      <section className="panel preview-management-card">
+        <div className="panel-heading"><div><h3>Próximos bloqueios</h3><p>Indisponibilidades cadastradas nesta prévia.</p></div><span className="count-chip">{blocks.length}</span></div>
+        {blocks.length ? <div className="preview-block-list">
+          {blocks.map(block=><article className="preview-block-row" key={block.id}>
+            <div className="preview-block-date"><strong>{new Date(block.date+'T12:00:00').getDate()}</strong><span>{new Intl.DateTimeFormat('pt-BR',{month:'short'}).format(new Date(block.date+'T12:00:00'))}</span></div>
+            <div className="preview-block-copy"><strong>{formatBlockDate(block.date)}</strong><span>{block.start && block.end ? `${block.start} – ${block.end}` : 'Dia inteiro'}</span><small>{blockTarget(block)}{block.reason ? ` · ${block.reason}` : ''}</small></div>
+            <button type="button" className="preview-management-remove" onClick={()=>removeBlock(block.id)} aria-label="Remover bloqueio"><X size={16}/></button>
+          </article>)}
+        </div> : <div className="preview-management-empty"><CalendarDays size={24}/><strong>Nenhum bloqueio cadastrado</strong><p>Quando precisar reservar um período, cadastre ao lado.</p></div>}
+      </section>
+    </div>
+  </div>;
+}
+
+function PoliciesPreview({segment,policies,setPolicies,notify}) {
+  const isBarber = segment === 'Barber';
+  const noun = isBarber ? 'barbearia' : 'estúdio';
+  function patchPolicy(patch) {
+    setPolicies(current=>({...current,...patch}));
+  }
+  return <div className="preview-management-module">
+    <div className="welcome-strip">
+      <div className="welcome-icon"><ShieldCheck size={19}/></div>
+      <div><strong>Orientações para clientes</strong><p>Escolha quais regras devem aparecer antes da confirmação do agendamento.</p></div>
+      <span className="sample-tag">EXEMPLO</span>
+    </div>
+
+    <section className="panel preview-policy-card">
+      <div className="panel-heading"><div><h3>Políticas da {noun}</h3><p>Ative apenas as orientações que deseja apresentar ao cliente.</p></div><span className="preview-management-mark"><ShieldCheck size={19}/></span></div>
+      <div className="preview-policy-options">
+        <label className="preview-policy-toggle"><input type="checkbox" checked={policies.showLateness} onChange={event=>patchPolicy({showLateness:event.target.checked})}/><span><strong>Mostrar tolerância a atrasos</strong><small>Informa o prazo permitido para chegar após o horário marcado.</small></span></label>
+        <label className="preview-policy-toggle"><input type="checkbox" checked={policies.showCancellation} onChange={event=>patchPolicy({showCancellation:event.target.checked})}/><span><strong>Mostrar prazo de cancelamento</strong><small>Orienta com quantas horas de antecedência o cliente deve avisar.</small></span></label>
+        <label className="preview-policy-toggle"><input type="checkbox" checked={policies.showCompanion} onChange={event=>patchPolicy({showCompanion:event.target.checked})}/><span><strong>Mostrar aviso sobre acompanhantes</strong><small>Explica as regras para acompanhantes e crianças no espaço.</small></span></label>
+        <label className="preview-policy-toggle"><input type="checkbox" checked={policies.showNoShow} onChange={event=>patchPolicy({showNoShow:event.target.checked})}/><span><strong>Mostrar política de faltas e sinal</strong><small>Apresenta orientações sobre faltas, cancelamentos e valores antecipados.</small></span></label>
+      </div>
+
+      {policies.showLateness && <label className="preview-policy-field">Tolerância de atraso (minutos)<input type="number" min="0" max="60" value={policies.latenessTolerance} onChange={event=>patchPolicy({latenessTolerance:Math.min(60,Math.max(0,Number(event.target.value||0)))})}/></label>}
+      {policies.showCancellation && <label className="preview-policy-field">Prazo para avisar (horas)<input type="number" min="0" max="168" value={policies.cancellationNotice} onChange={event=>patchPolicy({cancellationNotice:Math.min(168,Math.max(0,Number(event.target.value||0)))})}/></label>}
+      {policies.showCompanion && <label className="preview-policy-field">Acompanhantes e crianças<textarea rows={4} maxLength={700} value={policies.companionPolicy} onChange={event=>patchPolicy({companionPolicy:event.target.value})}/></label>}
+      {policies.showNoShow && <label className="preview-policy-field">Faltas e sinal pago<textarea rows={4} maxLength={700} value={policies.noShowPolicy} onChange={event=>patchPolicy({noShowPolicy:event.target.value})}/></label>}
+
+      <div className="preview-policy-footer"><span><ShieldCheck size={16}/> As regras ativas apareceriam na etapa de confirmação do agendamento.</span><button type="button" className="primary-button" onClick={()=>notify('Orientações demonstrativas atualizadas.')}>Salvar orientações <Check size={16}/></button></div>
+    </section>
+    <p className="preview-management-note">As opções e os textos são fictícios nesta central. Nenhuma regra é publicada em uma agenda real.</p>
+  </div>;
+}
+
 function OrderRows({orders}) { return <div className="simple-order-list">{orders.map(o=><div className="simple-order-row" key={o.id}><span className="order-mini-icon"><ShoppingBag size={16}/></span><span><strong>Pedido #{o.code}</strong><small>{o.items}</small></span><span className="order-list-right"><strong>{money(o.total)}</strong><StatusBadge status={o.status}/></span></div>)}</div>; }
 function Modal({title,onClose,children}) { return <div className="modal-overlay" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><section className="modal-card"><div className="modal-heading"><div><span className="eyebrow muted-eyebrow">MODO DEMONSTRAÇÃO</span><h2>{title}</h2></div><button className="icon-quiet" onClick={onClose} aria-label="Fechar"><X size={19}/></button></div>{children}</section></div>; }
 
