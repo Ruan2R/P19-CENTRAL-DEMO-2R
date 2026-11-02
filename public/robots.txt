@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/sitemap.xml
