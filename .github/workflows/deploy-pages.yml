@@ -13,8 +13,9 @@ permissions:
   pages: write
   id-token: write
 
+# Keep this artifact deployment separate from GitHub Pages' branch workflow.
 concurrency:
-  group: pages
+  group: p19-artifact-pages-deploy
   cancel-in-progress: true
 
 jobs:
