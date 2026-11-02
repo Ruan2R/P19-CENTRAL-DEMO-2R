@@ -2376,34 +2376,47 @@
 
 
 
-/* Desktop typography v2 — public portfolio and every interactive demo screen. */
+
+
+/* Desktop typography system — applies consistently to portfolio, modality catalogue and every demo tab. */
 @media (min-width: 761px) {
-  /* Public 2R portfolio */
-  .portfolio-brand strong { font-size: 14px; }
+  /* Shared base */
+  .app-shell,
+  .portfolio-shell { font-size: 14px; }
+
+  /* Public portfolio */
+  .portfolio-shell p { font-size: 14px; line-height: 1.7; }
+  .portfolio-shell small { font-size: 13px; }
+  .portfolio-shell label { font-size: 13px; }
+  .portfolio-shell button,
+  .portfolio-shell input,
+  .portfolio-shell select,
+  .portfolio-shell textarea { font-size: 14px; }
+  .portfolio-brand strong { font-size: 15px; }
   .portfolio-brand small { font-size: 12px; }
   .portfolio-nav>a:not(.portfolio-nav-cta) { font-size: 14px; }
-  .portfolio-nav-cta { font-size: 13px; }
-  .portfolio-eyebrow { font-size: 11px; }
+  .portfolio-nav-cta { font-size: 14px; }
+  .portfolio-eyebrow,
+  .portfolio-section-kicker { font-size: 11px; }
   .portfolio-hero h1 { font-size: clamp(44px, 4.8vw, 70px); }
   .portfolio-hero-copy>p { font-size: 15px; line-height: 1.75; }
   .portfolio-button { font-size: 14px; }
-  .portfolio-quick-access b { font-size: 13px; }
-  .portfolio-section-kicker { font-size: 11px; }
+  .portfolio-quick-access b { font-size: 14px; }
   .portfolio-section-heading h2,
   .portfolio-process-layout h2,
   .portfolio-about-layout h2 { font-size: clamp(30px, 3vw, 40px); }
   .portfolio-section-heading p,
   .portfolio-process-layout>div:first-child>p,
   .portfolio-about-layout>div:nth-child(2)>p { font-size: 14px; line-height: 1.75; }
-  .portfolio-text-link { font-size: 13px; }
+  .portfolio-text-link { font-size: 14px; }
   .portfolio-service-copy strong { font-size: 14px; }
   .portfolio-service-copy small { font-size: 13px; line-height: 1.6; }
   .portfolio-project-meta,
-  .portfolio-project-status { font-size: 10px; }
+  .portfolio-project-status { font-size: 11px; }
   .portfolio-project-content h3 { font-size: 24px; }
   .portfolio-project-content>p { font-size: 14px; line-height: 1.7; }
-  .portfolio-feature-tags span { font-size: 10px; }
-  .portfolio-project-button { font-size: 13px; }
+  .portfolio-feature-tags span { font-size: 11px; }
+  .portfolio-project-button { font-size: 14px; }
   .portfolio-principles strong { font-size: 14px; }
   .portfolio-principles p { font-size: 13px; line-height: 1.7; }
   .portfolio-about-quote strong { font-size: 17px; }
@@ -2413,17 +2426,59 @@
   .portfolio-contact-actions .portfolio-button { font-size: 14px; }
   .portfolio-footer-inner,
   .portfolio-footer-inner button { font-size: 12px; }
-  .portfolio-photo-overlay strong { font-size: 14px; }
-  .portfolio-photo-overlay span { font-size: 11px; }
 
-  /* Demo workspace — shared baseline for Beauty, Barber, Burger and landing previews */
+  /* Modality catalogue / commercial hub */
+  .hub-shell { font-size: 14px; }
+  .hub-shell .brand-name { font-size: 15px; }
+  .hub-shell .brand-tagline { font-size: 12px; }
+  .hub-shell .demo-pill { font-size: 11px; }
+  .hub-shell .hero-banner h1 { font-size: clamp(38px, 3.8vw, 50px); line-height: 1.13; }
+  .hub-shell .hero-banner p { font-size: 15px; line-height: 1.75; }
+  .hub-shell .hero-banner .eyebrow { font-size: 11px; }
+  .hub-shell .hero-segment-line>span { font-size: 11px; }
+  .hub-shell .hero-segment-line b { font-size: 14px; }
+  .hub-shell .float-card { font-size: 13px; }
+  .hub-shell .hero-core small { font-size: 9px; }
+  .hub-shell .section-heading h2 { font-size: 29px; }
+  .hub-shell .section-heading p { font-size: 14px; line-height: 1.65; }
+  .hub-shell .muted-eyebrow { font-size: 11px; }
+  .hub-shell .catalog-results-count { font-size: 14px; }
+  .hub-shell .search-box input { font-size: 14px; }
+  .hub-shell .search-box kbd { font-size: 11px; }
+  .hub-shell .filter-pill { font-size: 13px; }
+  .hub-shell .catalog-usage-heading>span { font-size: 10px; }
+  .hub-shell .catalog-usage-heading>strong { font-size: 17px; }
+  .hub-shell .catalog-usage-guide article>span { font-size: 12px; }
+  .hub-shell .catalog-usage-guide article strong { font-size: 13px; }
+  .hub-shell .catalog-usage-guide article p { font-size: 12px; line-height: 1.6; }
+  .hub-shell .mobile-guide-card-copy strong { font-size: 14px; }
+  .hub-shell .mobile-guide-card-copy small { font-size: 12px; }
+  .hub-shell .mobile-guide-card-action { font-size: 12px; }
+  .hub-shell .segment-heading h3 { font-size: 18px; }
+  .hub-shell .segment-heading p { font-size: 13px; line-height: 1.6; }
+  .hub-shell .group-count { font-size: 12px; }
+  .hub-shell .demo-card h4 { font-size: 19px; line-height: 1.3; }
+  .hub-shell .demo-card-title { font-size: 16px; line-height: 1.4; }
+  .hub-shell .demo-card p { font-size: 14px; line-height: 1.65; }
+  .hub-shell .demo-segment-tag,
+  .hub-shell .demo-featured-badge { font-size: 10px; }
+  .hub-shell .module-chips span { font-size: 11px; }
+  .hub-shell .enter-demo-button { font-size: 14px; }
+  .hub-shell .empty-state strong { font-size: 16px; }
+  .hub-shell .empty-state span { font-size: 13px; }
+  .hub-shell .access-note-copy>strong { font-size: 15px; }
+  .hub-shell .access-note-copy>p { font-size: 13px; line-height: 1.65; }
+  .hub-shell .catalog-back-button { font-size: 13px; }
+  .hub-shell .footer { font-size: 12px; }
+
+  /* All administrative demo tabs: overview, booking, appointments, clients, services, products, stock, orders and finance */
   .demo-app { font-size: 14px; }
   .demo-app .brand-name { font-size: 15px; }
   .demo-app .brand-tagline { font-size: 12px; }
   .demo-app .workspace-meta strong { font-size: 14px; }
   .demo-app .workspace-meta span { font-size: 12px; }
   .demo-app .sidebar-section-label { font-size: 11px; }
-  .demo-app .side-nav-item { font-size: 14px; }
+  .demo-app .side-nav-item { font-size: 14px; min-height: 46px; }
   .demo-app .demo-data-note strong { font-size: 13px; }
   .demo-app .demo-data-note p { font-size: 12px; line-height: 1.6; }
   .demo-app .demo-breadcrumb { font-size: 12px; }
@@ -2432,61 +2487,69 @@
   .demo-app .main-title-row .eyebrow { font-size: 12px; }
   .demo-app .workspace-badge,
   .demo-app .fake-live { font-size: 11px; }
-  .demo-app .secondary-button,
-  .demo-app .primary-button { font-size: 13px; }
-
   .demo-app .module-brief-copy>span { font-size: 10px; }
-  .demo-app .module-brief-copy>strong { font-size: 15px; }
-  .demo-app .module-brief-copy>p { font-size: 13px; line-height: 1.6; }
-  .demo-app .module-brief>button { font-size: 12px; }
+  .demo-app .module-brief-copy>strong { font-size: 16px; }
+  .demo-app .module-brief-copy>p { font-size: 14px; line-height: 1.6; }
+  .demo-app .module-brief>button { font-size: 13px; }
+
+  /* General readable defaults for every tab, not just selected components */
+  .demo-app :is(p) { font-size: 14px; line-height: 1.65; }
+  .demo-app :is(small) { font-size: 12px; }
+  .demo-app :is(label) { font-size: 13px; }
+  .demo-app :is(input,select,textarea) { font-size: 14px; }
+  .demo-app :is(button):not(.icon-quiet):not(.sidebar-close):not(.mobile-menu):not(.mobile-guide-trigger) { font-size: 13px; }
+  .demo-app :is(h2) { font-size: 25px; line-height: 1.25; }
+  .demo-app :is(h3) { font-size: 19px; line-height: 1.35; }
+  .demo-app :is(h4) { font-size: 17px; line-height: 1.35; }
+
   .demo-app .welcome-strip strong { font-size: 16px; }
-  .demo-app .welcome-strip p { font-size: 13px; line-height: 1.6; }
-  .demo-app .sample-tag { font-size: 10px; }
+  .demo-app .welcome-strip p { font-size: 14px; }
+  .demo-app .sample-tag { font-size: 11px; }
   .demo-app .metric-label { font-size: 13px; }
   .demo-app .metric-value { font-size: clamp(22px, 1.8vw, 28px); }
   .demo-app .metric-foot { font-size: 12px; }
-
-  .demo-app .panel-heading h3 { font-size: 17px; }
-  .demo-app .panel-heading p { font-size: 13px; line-height: 1.6; }
-  .demo-app .text-action { font-size: 12px; }
+  .demo-app .panel-heading h3 { font-size: 19px; }
+  .demo-app .panel-heading p { font-size: 14px; line-height: 1.6; }
+  .demo-app .text-action { font-size: 13px; }
   .demo-app .table-head { font-size: 12px; }
-  .demo-app .table-row { font-size: 13px; }
-  .demo-app .client-cell strong { font-size: 13px; }
+  .demo-app .table-row { font-size: 14px; }
+  .demo-app .client-cell strong { font-size: 14px; }
   .demo-app .client-cell small { font-size: 12px; }
   .demo-app .table-avatar { font-size: 12px; }
   .demo-app .status-badge { font-size: 11px; }
-  .demo-app .quick-links strong { font-size: 13px; }
+  .demo-app .quick-links strong { font-size: 14px; }
   .demo-app .quick-links small { font-size: 12px; line-height: 1.5; }
-  .demo-app .tip-card strong { font-size: 13px; }
-  .demo-app .tip-card p { font-size: 12px; line-height: 1.65; }
-  .demo-app .demo-footer-note,
-  .demo-app .demo-footer-note button { font-size: 12px; }
+  .demo-app .tip-card strong { font-size: 14px; }
+  .demo-app .tip-card p { font-size: 13px; line-height: 1.65; }
+  .demo-app .demo-footer-note { font-size: 12px; }
 
-  .demo-app .automation-heading h2 { font-size: 20px; }
+  .demo-app .automation-heading h2 { font-size: 21px; }
   .demo-app .automation-heading p { font-size: 14px; }
   .demo-app .automation-point>span { font-size: 12px; }
   .demo-app .automation-point p { font-size: 14px; line-height: 1.65; }
   .demo-app .automation-reminder strong { font-size: 14px; }
   .demo-app .automation-reminder p { font-size: 13px; line-height: 1.6; }
+  .demo-app .screen-guide-header h2 { font-size: 28px; }
+  .demo-app .screen-guide-header p { font-size: 15px; }
+  .demo-app .screen-guide-steps li>p,
+  .demo-app .screen-guide-steps li { font-size: 14px; line-height: 1.7; }
 
-  .demo-app .p18-finance-heading h2,
-  .demo-app .p16-finance-heading h2 { font-size: clamp(26px, 2.2vw, 32px); }
-  .demo-app .p18-finance-heading p,
-  .demo-app .p16-finance-heading p,
-  .demo-app .p18-finance-intro p { font-size: 14px; }
-  .demo-app .p18-finance-card>span { font-size: 13px; }
-  .demo-app .p18-finance-card>strong { font-size: 30px; }
-  .demo-app .p18-finance-card>small { font-size: 12px; }
-  .demo-app .p18-finance-section .panel-heading p,
-  .demo-app .p16-finance-panel .panel-heading p { font-size: 13px; }
-  .demo-app .p18-finance-toggle { font-size: 13px; }
-  .demo-app .p18-finance-empty,
-  .demo-app .p18-finance-footnote { font-size: 12px; }
-
+  /* Appointment, customer and service screens */
   .demo-app .appointment-search-field input,
   .demo-app .appointment-filter-toggle,
   .demo-app .appointment-range-tools label,
-  .demo-app .clients-search input,
+  .demo-app .clients-search input { font-size: 14px; }
+  .demo-app .appointment-auto-customer-hint { font-size: 12px; line-height: 1.6; }
+  .demo-app .service-category,
+  .demo-app .service-enabled { font-size: 11px; }
+  .demo-app .service-card h3 { font-size: 18px; }
+  .demo-app .service-detail { font-size: 13px; }
+  .demo-app .service-helper strong { font-size: 14px; }
+  .demo-app .service-helper p { font-size: 13px; line-height: 1.65; }
+
+  /* Client booking / landing page previews */
+  .demo-app .public-module-heading h2 { font-size: 28px; }
+  .demo-app .public-module-heading p { font-size: 14px; }
   .demo-app .booking-service-copy strong,
   .demo-app .booking-service-option>b { font-size: 14px; }
   .demo-app .booking-service-copy small,
@@ -2496,17 +2559,40 @@
   .demo-app .booking-summary select,
   .demo-app .booking-fields input,
   .demo-app .booking-fields select { font-size: 14px; }
-  .demo-app .service-category { font-size: 11px; }
-  .demo-app .service-card h3 { font-size: 17px; }
-  .demo-app .service-detail { font-size: 13px; }
-  .demo-app .service-enabled { font-size: 11px; }
-  .demo-app .service-helper strong { font-size: 14px; }
-  .demo-app .service-helper p { font-size: 13px; line-height: 1.65; }
+  .demo-app .booking-step>span { font-size: 12px; }
+  .demo-app .booking-step p { font-size: 13px; }
+  .demo-app .booking-availability-note,
+  .demo-app .booking-privacy { font-size: 12px; line-height: 1.6; }
+  .demo-app .booking-total>span { font-size: 13px; }
+  .demo-app .booking-total>strong { font-size: 25px; }
+  .demo-app .landing-copy h2 { font-size: clamp(28px, 3vw, 38px); }
+  .demo-app .landing-copy p,
+  .demo-app .landing-disclaimer { font-size: 14px; }
+  .demo-app .landing-preview-nav span,
+  .demo-app .landing-preview-nav button,
+  .demo-app .landing-switcher button { font-size: 13px; }
+  .demo-app .landing-service-item strong,
+  .demo-app .landing-service-item b { font-size: 14px; }
+  .demo-app .landing-service-item small { font-size: 12px; }
 
+  /* Burger orders, products and inventory */
+  .demo-app .orders-intro strong { font-size: 15px; }
+  .demo-app .orders-intro p { font-size: 13px; }
+  .demo-app .attendance-control-card h2 { font-size: 22px; }
+  .demo-app .attendance-control-card p { font-size: 14px; }
+  .demo-app .attendance-open-meta { font-size: 13px; }
+  .demo-app .internal-order-product strong { font-size: 14px; }
+  .demo-app .internal-order-product small { font-size: 12px; }
+  .demo-app .internal-order-footer>span { font-size: 13px; }
+  .demo-app .burger-order-customer strong { font-size: 15px; }
+  .demo-app .burger-order-customer span,
+  .demo-app .burger-order-values span { font-size: 12px; }
+  .demo-app .burger-order-values strong { font-size: 14px; }
+  .demo-app .burger-order-date { font-size: 12px; }
+  .demo-app .burger-catalog-intro strong { font-size: 16px; }
   .demo-app .burger-catalog-intro p,
   .demo-app .burger-catalog-heading p,
   .demo-app .burger-inventory-panel .panel-heading p { font-size: 14px; }
-  .demo-app .burger-catalog-intro strong { font-size: 16px; }
   .demo-app .burger-catalog-metrics article>span,
   .demo-app .burger-inventory-metrics article>span { font-size: 13px; }
   .demo-app .burger-catalog-metrics article>small,
@@ -2526,16 +2612,15 @@
   .demo-app .burger-stock-history>article>div span { font-size: 12px; }
   .demo-app .burger-stock-history>article>div strong,
   .demo-app .burger-stock-history>article>strong { font-size: 14px; }
-  .demo-app .burger-order-customer strong { font-size: 15px; }
-  .demo-app .burger-order-customer span,
-  .demo-app .burger-order-values span { font-size: 12px; }
-  .demo-app .burger-order-values strong { font-size: 14px; }
-  .demo-app .burger-order-date { font-size: 12px; }
-  .demo-app .burger-register-payment { font-size: 12px; }
   .demo-app .burger-catalog-note { font-size: 12px; }
 
-  .demo-app .screen-guide-header h2 { font-size: 28px; }
-  .demo-app .screen-guide-header p { font-size: 15px; }
-  .demo-app .screen-guide-steps li>p { font-size: 14px; line-height: 1.7; }
-  .demo-app .screen-guide-steps li { font-size: 14px; }
+  /* Modals, toast and forms shared by the screens */
+  .demo-app .modal-heading h2 { font-size: 24px; }
+  .demo-app .modal-card label { font-size: 13px; }
+  .demo-app .modal-card input,
+  .demo-app .modal-card select,
+  .demo-app .modal-card textarea { font-size: 14px; }
+  .demo-app .modal-actions button { font-size: 13px; }
+  .hub-shell .modal-heading h2 { font-size: 24px; }
+  .hub-shell .modal-card :is(p,small,label,button,input,select,li) { font-size: 13px; }
 }
