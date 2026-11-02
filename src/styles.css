@@ -2929,3 +2929,131 @@
   .demo-app .text-action { font-size: 14px; }
   .demo-app .demo-footer-note { font-size: 13px; }
 }
+
+
+/* P19 mobile navigation — keep every demo area visible, following the validated P18/P15 grid pattern. */
+@media (max-width: 760px) {
+  .demo-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 66px);
+  }
+
+  .demo-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+
+  .demo-app .sidebar {
+    position: sticky;
+    top: 66px;
+    inset: auto;
+    z-index: 19;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    min-width: 0;
+    padding: 9px 10px 10px;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid #e4eaf0;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(20, 45, 67, .07);
+  }
+
+  .demo-app .sidebar-workspace,
+  .demo-app .sidebar-section-label,
+  .demo-app .sidebar-bottom,
+  .demo-app .sidebar-close {
+    display: none !important;
+  }
+
+  .demo-app .side-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .demo-app .side-nav-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    min-width: 0;
+    min-height: 60px;
+    padding: 7px 4px 9px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: #f7f9fb;
+    color: #65788b;
+    font-size: 12px;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .demo-app .side-nav-item > svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+  }
+
+  .demo-app .side-nav-item > span:nth-child(2) {
+    flex: 0 1 auto;
+    width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+  }
+
+  .demo-app .side-nav-item.active {
+    border-color: var(--accent-border);
+    background: var(--soft);
+    color: var(--accent);
+  }
+
+  .demo-app .side-nav-item.active .nav-active-mark {
+    position: absolute;
+    left: 50%;
+    top: auto;
+    bottom: 2px;
+    width: 28px;
+    height: 2px;
+    transform: translateX(-50%);
+  }
+
+  .demo-app .mobile-menu,
+  .demo-app .mobile-scrim {
+    display: none !important;
+  }
+
+  .demo-app .demo-main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 17px 13px 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .demo-app .sidebar {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .demo-app .side-nav {
+    gap: 4px;
+  }
+
+  .demo-app .side-nav-item {
+    min-height: 58px;
+    padding: 6px 3px 8px;
+    font-size: 11px;
+  }
+}
