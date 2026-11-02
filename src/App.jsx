@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, CircleDollarSign, ClipboardList, Clock3, CreditCard, Eye, Filter, Grid2X2, LayoutDashboard, Menu, Package, PawPrint, Plus, Scissors, Search, Settings2, ShoppingBag, Sparkles, Store, Truck, Utensils, Wrench, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, CircleHelp, Code2, Instagram, Linkedin, ShieldCheck, Star
+  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, CircleDollarSign, ClipboardList, Clock3, CreditCard, Eye, Filter, Grid2X2, LayoutDashboard, Package, PawPrint, Plus, Scissors, Search, Settings2, ShoppingBag, Sparkles, Store, Truck, Utensils, Wrench, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, CircleHelp, Code2, Instagram, Linkedin, ShieldCheck, Star
 } from 'lucide-react';
 import SiteModuleView from './components/SiteModule.jsx';
 import BookingTimeWheelPicker from './components/BookingTimeWheelPicker.jsx';
@@ -202,7 +202,6 @@ export default function App() {
   const [activeModule, setActiveModule] = useState('overview');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('Todos');
-  const [mobileNav, setMobileNav] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [appointments, setAppointments] = useState(INITIAL_APPOINTMENTS);
   const [orders, setOrders] = useState(INITIAL_ORDERS);
@@ -267,14 +266,12 @@ export default function App() {
     setClients(seed.clients);
     setServices(seed.services);
     setAppointmentForm({client:'',contact:'',service:seed.services[0]?.name || '',date:localDateValue(),time:'16:00'});
-    setMobileNav(false);
     setModal(null);
     setGuideOpen(window.matchMedia('(max-width: 760px)').matches);
   }
-  function exitDemo() { setActiveDemo(null); setMobileNav(false); setGuideOpen(false); setPage('catalog'); }
+  function exitDemo() { setActiveDemo(null); setGuideOpen(false); setPage('catalog'); }
   function canUse(module) { return activeDemo?.modules.includes(module); }
   function changeModule(module) {
-    setMobileNav(false);
     setGuideOpen(false);
     if (activeDemo?.modules.includes(module)) setActiveModule(module);
   }
@@ -415,10 +412,9 @@ export default function App() {
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
 
   return <div className={`app-shell demo-app ${activeDemo.color}`}>
-    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="mobile-guide-trigger" type="button" onClick={()=>setGuideOpen(true)} aria-label="Abrir orientações desta tela" title="Orientações desta tela"><CircleHelp size={18}/></button><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
+    <header className="topbar demo-topbar"><div className="brand-lockup"><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="mobile-guide-trigger" type="button" onClick={()=>setGuideOpen(true)} aria-label="Abrir orientações desta tela" title="Orientações desta tela"><CircleHelp size={18}/></button><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
     <div className="demo-layout">
-      <aside className={`sidebar ${mobileNav?'show-mobile':''}`}><div className="sidebar-workspace"><div className={`workspace-avatar ${activeDemo.color}`}><IconForDemo demo={activeDemo}/></div><div className="workspace-meta"><strong>{activeDemo.name}</strong><span>Prévia visual do pacote</span></div><button className="icon-quiet sidebar-close" onClick={()=>setMobileNav(false)}><X size={17}/></button></div><div className="sidebar-section-label">NAVEGAR NA PRÉVIA</div><nav className="side-nav">{currentModules.map(module=>{const item=MODULES[module];const Icon=item.icon;return <button key={module} className={`side-nav-item ${activeModule===module?'active':''}`} onClick={()=>changeModule(module)}><Icon size={18}/><span>{item.label}</span>{activeModule===module&&<span className="nav-active-mark"/>}</button>})}</nav><div className="sidebar-bottom"><div className="demo-data-note"><div><Sparkles size={15}/><strong>Modo demonstração</strong></div><p>Use o menu para alternar entre telas e experimente os botões. As alterações são temporárias e reiniciam ao recarregar.</p></div><button className="side-nav-item exit-item" onClick={exitDemo}><LogOut size={18}/><span>Voltar às modalidades</span></button></div></aside>
-      {mobileNav&&<button className="mobile-scrim" aria-label="Fechar menu" onClick={()=>setMobileNav(false)}/>}
+      <aside className="sidebar"><div className="sidebar-workspace"><div className={`workspace-avatar ${activeDemo.color}`}><IconForDemo demo={activeDemo}/></div><div className="workspace-meta"><strong>{activeDemo.name}</strong><span>Prévia visual do pacote</span></div></div><div className="sidebar-section-label">NAVEGAR NA PRÉVIA</div><nav className="side-nav" aria-label="Navegação das áreas da demonstração">{currentModules.map(module=>{const item=MODULES[module];const Icon=item.icon;return <button key={module} className={`side-nav-item ${activeModule===module?'active':''}`} onClick={()=>changeModule(module)}><Icon size={18}/><span>{item.label}</span>{activeModule===module&&<span className="nav-active-mark"/>}</button>})}</nav><div className="sidebar-bottom"><div className="demo-data-note"><div><Sparkles size={15}/><strong>Modo demonstração</strong></div><p>Use o menu para alternar entre telas e experimente os botões. As alterações são temporárias e reiniciam ao recarregar.</p></div><button className="side-nav-item exit-item" onClick={exitDemo}><LogOut size={18}/><span>Voltar às modalidades</span></button></div></aside>
       <main className="demo-main">
         <div className="demo-breadcrumb"><span>Central 2R</span><ArrowRight size={13}/><span>{activeDemo.segment}</span><ArrowRight size={13}/><strong>{MODULES[activeModule]?.label || 'Demonstração'}</strong></div>
         <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Landing pages na prática':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Entenda o papel de uma página de apresentação e explore um exemplo visual.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> PRÉVIA INTERATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
