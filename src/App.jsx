@@ -136,10 +136,10 @@ const BARBER_TRANSACTIONS = [
   { id:24, description:'Materiais de consumo', category:'Despesa', date:'24 out.', value:95 },
 ];
 const BURGER_TRANSACTIONS = [
-  { id:31, description:'Pedidos do salão e balcão', category:'Receita', date:'Hoje', value:684.50 },
-  { id:32, description:'Compra de ingredientes', category:'Despesa', date:'Ontem', value:246.80 },
-  { id:33, description:'Pedidos delivery', category:'Receita', date:'Ontem', value:428.90 },
-  { id:34, description:'Embalagens e descartáveis', category:'Despesa', date:'27 out.', value:86.40 },
+  { id:31, description:'Pedidos do salão e balcão', category:'Receita', detailCategory:'Pedidos presenciais', date:'Hoje', value:684.50, paymentMethod:'Pix' },
+  { id:32, description:'Compra de ingredientes', category:'Despesa', detailCategory:'Insumos', date:'Ontem', value:246.80, paymentMethod:'Cartão' },
+  { id:33, description:'Pedidos delivery', category:'Receita', detailCategory:'Delivery', date:'Ontem', value:428.90, paymentMethod:'Dinheiro' },
+  { id:34, description:'Embalagens e descartáveis', category:'Despesa', detailCategory:'Operação', date:'27 out.', value:86.40, paymentMethod:'Pix' },
 ];
 const BURGER_MENU = [
   { id:1, name:'Smash clássico', description:'Pão brioche, blend artesanal, queijo e molho da casa.', price:29.90, category:'Hambúrgueres' },

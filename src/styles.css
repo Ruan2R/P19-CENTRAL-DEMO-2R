@@ -2035,3 +2035,71 @@
   letter-spacing:0;
 }
 .demo-main .automation-point p { flex:1; min-width:0; overflow-wrap:anywhere; }
+
+
+/* P16 tabs and summary cards: desktop baseline, then touch-scroll behavior on mobile. */
+.p16-finance-tabs {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  width:100%;
+  max-width:100%;
+  padding:6px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f7f9fb;
+  white-space:nowrap;
+  scrollbar-width:thin;
+  -webkit-overflow-scrolling:touch;
+}
+.p16-finance-tabs>button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  min-height:42px;
+  padding:0 13px;
+  border:1px solid transparent;
+  border-radius:9px;
+  background:transparent;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:750;
+  white-space:nowrap;
+}
+.p16-finance-tabs>button.active {
+  border-color:#cfe1e8;
+  background:#fff;
+  color:var(--blue);
+  box-shadow:0 2px 7px rgba(36,67,85,.06);
+}
+.p16-finance-metrics {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:11px;
+}
+.p16-finance-metric {
+  display:grid;
+  gap:8px;
+  min-width:0;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+.p16-finance-metric>span { color:var(--muted); font-size:11px; font-weight:750; }
+.p16-finance-metric>strong { color:var(--ink); font-size:clamp(19px,2.5vw,25px); line-height:1.15; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.p16-finance-metric>small { color:var(--muted); font-size:10px; line-height:1.45; }
+.p16-finance-metric.prominent { background:linear-gradient(145deg,#edf7fa,#fff); border-color:#d3e7ed; }
+.p16-finance-metric.prominent>strong { color:var(--blue); }
+.p16-finance-metric.income>strong { color:#16865f; }
+.p16-finance-metric.expense>strong { color:#cc5b55; }
+@media(max-width:760px) {
+  .p16-finance-metrics { grid-template-columns:1fr; gap:8px; }
+  .p16-finance-metric { padding:13px; }
+  .p16-finance-tabs { display:flex; flex-wrap:nowrap; }
+  .p16-finance-tabs>button { flex:0 0 auto; }
+}

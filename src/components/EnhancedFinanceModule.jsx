@@ -383,7 +383,7 @@ export default function EnhancedFinanceModule({
       <label>Descrição<input value={description} onChange={event=>setDescription(event.target.value)} minLength={2} maxLength={120} placeholder={direction==='income'?'Ex.: serviço realizado':'Ex.: compra de materiais'} required/></label>
       <div className="p18-finance-fields"><label>Categoria<input value={category} onChange={event=>setCategory(event.target.value)} placeholder="Ex.: Atendimento / Estrutura" required/></label><label>Valor (R$)<input inputMode="decimal" value={amount} onChange={event=>setAmount(event.target.value)} placeholder="0,00" required/></label></div>
       <div className="p18-finance-fields"><label>Data<input type="date" value={movementDate} onChange={event=>setMovementDate(event.target.value)} required/></label><label>Forma de recebimento/pagamento<select value={paymentMethod} onChange={event=>setPaymentMethod(event.target.value)}><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Não informado</option><option>Outro</option></select></label></div>
-      <div className="p18-finance-form-actions"><button className="primary-button" type="submit"><Plus size={15}/> Registrar lançamento</button><button className="secondary-button" type="button" onClick={()=>setShowEntryForm(false)}>Cancelar</button></div>
+      <div className="p18-finance-form-actions"><button className="primary-button" type="submit"><Plus size={15}/> Registrar lançamento</button><button className="secondary-button" type="button" onClick={()=>{setShowEntryForm(false);setMovementFormOpen(false);}}>Cancelar</button></div>
     </form>;
   }
 
