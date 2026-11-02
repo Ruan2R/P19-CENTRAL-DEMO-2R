@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, CircleDollarSign, ClipboardList, Clock3, CreditCard, Eye, Filter, Grid2X2, LayoutDashboard, Menu, Package, Plus, Scissors, Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, CircleHelp, Code2, Linkedin, ShieldCheck, Star
+  Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, CircleDollarSign, ClipboardList, Clock3, CreditCard, Eye, Filter, Grid2X2, LayoutDashboard, Menu, Package, PawPrint, Plus, Scissors, Search, Settings2, ShoppingBag, Sparkles, Store, Truck, Utensils, Wrench, Users, Wallet, X, Boxes, TrendingUp, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight, MoreHorizontal, CheckCircle2, CircleHelp, Code2, Instagram, Linkedin, ShieldCheck, Star
 } from 'lucide-react';
 import SiteModuleView from './components/SiteModule.jsx';
 import BookingTimeWheelPicker from './components/BookingTimeWheelPicker.jsx';
@@ -12,6 +12,8 @@ import { BurgerProductsModule, BurgerInventoryModule } from './components/Burger
 import { ModuleBrief, ScreenGuide } from './components/ContextualGuide.jsx';
 
 const publicAsset = (filename) => `${import.meta.env.BASE_URL}${filename}`;
+const INSTAGRAM_URL = 'https://www.instagram.com/2r.ruanrodrigues/';
+const CUSTOM_WHATSAPP_URL = 'https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Conheci%20o%20portf%C3%B3lio%20da%202R%20e%20gostaria%20de%20conversar%20sobre%20uma%20aplica%C3%A7%C3%A3o%20personalizada%20para%20meu%20neg%C3%B3cio.';
 
 const DEMOS = [
   { id:'landing', name:'2R Landing Pages', segment:'Vitrine', title:'Landing pages', description:'Apresente os três modelos de página e alterne entre Beauty, Barber e Burger sem trocar de página de demonstração.', modules:['site'], highlight:'Modelos de apresentação', color:'blue', icon:'site' },
@@ -385,6 +387,18 @@ export default function App() {
             </div>;
           })}
           {visibleDemos.length===0&&<div className="empty-state"><Search size={28}/><strong>Nenhuma modalidade encontrada</strong><span>Tente outro nome, recurso ou segmento.</span></div>}
+          <section className="custom-solutions-note" aria-labelledby="catalog-custom-title">
+            <div className="custom-solutions-note-icon"><Sparkles size={22}/></div>
+            <div className="custom-solutions-note-copy">
+              <span>SEU SEGMENTO NÃO ESTÁ AQUI?</span>
+              <h3 id="catalog-custom-title">As possibilidades vão além destas demonstrações.</h3>
+              <p>Beauty, Barber e Burger são exemplos. A 2R desenvolve aplicações web personalizadas para diferentes tipos de negócio, com recursos planejados de acordo com cada operação.</p>
+            </div>
+            <div className="custom-solutions-note-actions">
+              <a href={CUSTOM_WHATSAPP_URL} target="_blank" rel="noreferrer"><WhatsAppIcon size={16}/> Conversar sobre meu projeto</a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"><Instagram size={16}/> Instagram da 2R</a>
+            </div>
+          </section>
         </section>
 
         <section className="access-note portfolio-demo-disclaimer"><div className="access-note-icon"><Eye size={20}/></div><div className="access-note-copy"><strong>Prévia visual, sem login e sem cadastro</strong><p>As telas usam informações fictícias. Os botões e formulários servem apenas para demonstrar os fluxos; nada é enviado a clientes ou gravado em banco de dados.</p></div></section>
@@ -589,6 +603,7 @@ function PortfolioHome({ onOpenCatalog }) {
         <nav className={'portfolio-nav' + (mobileMenuOpen ? ' is-open' : '')} aria-label="Navegação principal">
           <a href="#solucoes" onClick={closeMenu}>Soluções</a>
           <a href="#projetos" onClick={closeMenu}>Projetos</a>
+          <a href="#personalizadas" onClick={closeMenu}>Sob medida</a>
           <a href="#sobre" onClick={closeMenu}>Sobre mim</a>
           <a className="portfolio-nav-cta" href="#contato" onClick={closeMenu}>Vamos conversar <ArrowUpRight size={16}/></a>
         </nav>
@@ -666,6 +681,54 @@ function PortfolioHome({ onOpenCatalog }) {
         </div>
       </section>
 
+      <section className="portfolio-section portfolio-custom-section" id="personalizadas">
+        <div className="portfolio-container">
+          <div className="portfolio-section-heading portfolio-custom-heading">
+            <div>
+              <span className="portfolio-section-kicker">APLICAÇÕES PERSONALIZADAS</span>
+              <h2>Seu negócio tem seu jeito. Sua aplicação também.</h2>
+              <p>Os projetos Beauty, Barber e Burger são apenas exemplos. Cada aplicação é planejada do zero e personalizada conforme a rotina, os processos e os objetivos de cada cliente.</p>
+            </div>
+            <span className="portfolio-custom-heading-badge"><Sparkles size={15}/> Feita para sua operação</span>
+          </div>
+
+          <div className="portfolio-custom-grid">
+            <article className="portfolio-custom-card">
+              <span className="portfolio-custom-card-icon"><PawPrint size={21}/></span>
+              <div><h3>Pet shops e cuidados animais</h3><p>Agenda de banho e tosa, cadastro de pets, histórico, serviços e relacionamento com clientes.</p></div>
+            </article>
+            <article className="portfolio-custom-card">
+              <span className="portfolio-custom-card-icon"><Scissors size={21}/></span>
+              <div><h3>Salões, cabelo e unhas</h3><p>Agendamentos, profissionais, procedimentos, pacotes, clientes e controle financeiro.</p></div>
+            </article>
+            <article className="portfolio-custom-card">
+              <span className="portfolio-custom-card-icon"><Store size={21}/></span>
+              <div><h3>Lojas e comércio</h3><p>Produtos, vendas, clientes, estoque, caixa e acompanhamento da operação.</p></div>
+            </article>
+            <article className="portfolio-custom-card">
+              <span className="portfolio-custom-card-icon"><Utensils size={21}/></span>
+              <div><h3>Alimentação e delivery</h3><p>Pedidos, cardápio, produtos, estoque e organização dos atendimentos.</p></div>
+            </article>
+            <article className="portfolio-custom-card">
+              <span className="portfolio-custom-card-icon"><Wrench size={21}/></span>
+              <div><h3>Assistências e prestação de serviços</h3><p>Ordens de serviço, orçamentos, etapas de execução e histórico dos clientes.</p></div>
+            </article>
+            <article className="portfolio-custom-card">
+              <span className="portfolio-custom-card-icon"><Truck size={21}/></span>
+              <div><h3>Distribuidoras e fornecedores</h3><p>Catálogo, pedidos, clientes, controle de estoque e acompanhamento de entregas.</p></div>
+            </article>
+          </div>
+
+          <div className="portfolio-custom-bottom">
+            <div><strong>Não encontrou seu segmento?</strong><p>Essas são apenas algumas possibilidades. Podemos conversar sobre a rotina do seu negócio e planejar uma solução específica para ele.</p></div>
+            <div className="portfolio-custom-actions">
+              <a className="portfolio-button portfolio-button-primary" href={CUSTOM_WHATSAPP_URL} target="_blank" rel="noreferrer"><WhatsAppIcon size={18}/> Conversar sobre meu projeto <ArrowUpRight size={16}/></a>
+              <a className="portfolio-button portfolio-button-light" href={INSTAGRAM_URL} target="_blank" rel="noreferrer"><Instagram size={17}/> @2r.ruanrodrigues <ArrowUpRight size={15}/></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="portfolio-process-section">
         <div className="portfolio-container portfolio-process-layout">
           <div><span className="portfolio-section-kicker">MEU JEITO DE TRABALHAR</span><h2>Menos complicação.<br/><span>Mais clareza no dia a dia.</span></h2><p>A tecnologia precisa facilitar a rotina, não criar mais etapas. Por isso, a ideia é manter as informações acessíveis, os fluxos claros e as ações principais fáceis de encontrar — tanto no computador quanto no celular.</p><a className="portfolio-text-link" href="#contato">Vamos conversar sobre sua necessidade <ArrowRight size={16}/></a></div>
@@ -690,6 +753,7 @@ function PortfolioHome({ onOpenCatalog }) {
           <div><span className="portfolio-section-kicker">VAMOS TIRAR A IDEIA DO PAPEL?</span><h2>Tem uma necessidade?<br/><span>Vamos pensar na solução.</span></h2><p>Converse comigo sobre uma aplicação web, uma melhoria de processo ou uma demanda de tecnologia para seu negócio.</p></div>
           <div className="portfolio-contact-actions">
             <a className="portfolio-button portfolio-button-primary portfolio-whatsapp-button" href="https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Encontrei%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noreferrer" aria-label="Conversar com Ruan pelo WhatsApp no número (67) 99804-2465"><WhatsAppIcon size={19}/> Chamar no WhatsApp <span className="portfolio-whatsapp-number">(67) 99804-2465</span><ArrowUpRight size={16}/></a>
+            <a className="portfolio-button portfolio-button-secondary" href={INSTAGRAM_URL} target="_blank" rel="noreferrer"><Instagram size={17}/> Instagram <span>@2r.ruanrodrigues</span><ArrowUpRight size={16}/></a>
             <a className="portfolio-button portfolio-button-secondary" href="https://www.linkedin.com/in/ruanrodrigues2r/" target="_blank" rel="noreferrer"><Linkedin size={17}/> Perfil profissional <ArrowUpRight size={16}/></a>
           </div>
         </div>

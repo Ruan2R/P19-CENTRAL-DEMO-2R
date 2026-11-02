@@ -32,6 +32,8 @@ O P19 é o portfólio digital da **2R Informática — Seu parceiro em Tecnologi
 
 As modalidades são combinações comerciais de recursos para apresentação. A seleção de um pacote não abre um sistema real nem exige credenciais.
 
+As modalidades e segmentos exibidos são exemplos de referência, não um limite de atuação. A 2R também pode planejar aplicações personalizadas para pet shops, salões, lojas, alimentação, assistências, distribuidoras e outras operações, conforme os processos e objetivos de cada cliente. Para conversar sobre um segmento ainda não demonstrado, os canais apresentados no portfólio são o WhatsApp e o Instagram **@2r.ruanrodrigues**.
+
 ## Prévia visual
 
 O projeto reaproveita referências de layout e fluxo dos projetos P15 (Barber), P16 (Burger) e P18 (Beauty). As cópias-fonte estão guardadas em `apps/barber`, `apps/burger` e `apps/beauty` como referência de desenvolvimento; **não são iniciadas nem consultadas pelo portfólio em execução**.
