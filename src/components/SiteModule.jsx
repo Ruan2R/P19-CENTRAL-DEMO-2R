@@ -3,15 +3,15 @@ import { ArrowRight, ArrowUpRight, Award, Camera, MapPin, Scissors, ShoppingBag,
 
 const SITE_TEMPLATES = {
   Beauty: {
-    initials: 'SB', customer: 'Studio Belle', label: 'BEAUTY STUDIO', city: 'Sidrolândia · MS',
+    initials: '2R', customer: '2R Beauty', label: 'BEAUTY', city: 'Demonstração · MS',
     accent: '#b76d8f', secondary: '#f8edf2',
     tagline: 'BELEZA, TÉCNICA E CUIDADO',
-    hero: 'Realce sua beleza. Revele sua melhor versão.',
-    subtitle: 'Um espaço de beleza e cuidado com experiências personalizadas para valorizar cada detalhe, respeitando seu estilo e seus objetivos.',
-    aboutTitle: 'Beleza com intenção.',
-    about: 'Cada atendimento começa com uma conversa para entender o resultado que você procura. A proposta é unir técnica, cuidado e escolhas personalizadas em uma experiência acolhedora.',
-    aboutSecond: 'Da extensão de cílios à maquiagem e aos cuidados labiais, cada serviço tem sua própria atenção aos detalhes.',
-    action: 'Agendar horário',
+    hero: 'Beleza do seu jeito, no seu ritmo.',
+    subtitle: 'Descubra experiências pensadas para diferentes estilos e ocasiões. Escolha o que combina com você e encontre seu próximo horário com praticidade.',
+    aboutTitle: 'Sua beleza não precisa seguir um padrão.',
+    about: 'Cada pessoa tem seu próprio estilo. Por isso, a experiência começa com escolhas claras: qual resultado você procura, qual ocasião deseja valorizar e qual procedimento faz sentido para seu momento.',
+    aboutSecond: 'A 2R Beauty reúne os serviços em uma apresentação simples, com informações para comparar opções e seguir para o agendamento.',
+    action: 'Escolher meu horário',
     trust: ['Extensão de cílios', 'Maquiagem profissional', 'Cuidados labiais', 'Formação'],
     services: [
       { category: 'OLHAR', name: 'Extensão de cílios', description: 'Mapeamento e acabamento escolhidos de acordo com o formato dos olhos e o efeito desejado.', meta: 'Personalização em cada aplicação' },
@@ -38,7 +38,7 @@ const SITE_TEMPLATES = {
     extraCopy: 'Apresente opções, explique o acabamento e ajude cada pessoa a encontrar a proposta que combina com seu estilo.'
   },
   Barber: {
-    initials: 'BC', customer: 'Barber Club', label: 'BARBEARIA', city: 'Atendimento local · MS',
+    initials: '2R', customer: '2R Barber', label: 'BARBEARIA', city: 'Demonstração · MS',
     accent: '#bd954e', secondary: '#f8f2e6',
     tagline: 'ESTILO, TÉCNICA E IDENTIDADE',
     hero: 'Seu estilo começa nos detalhes.',
@@ -71,7 +71,7 @@ const SITE_TEMPLATES = {
     extraCopy: 'Uma apresentação da rotina profissional: consulta de estilo, execução do serviço, acabamento e acompanhamento dos horários.'
   },
   Burger: {
-    initials: 'BB', customer: 'Brasa Burger', label: 'HAMBURGUERIA', city: 'Operação local · MS',
+    initials: '2R', customer: '2R Burger', label: 'HAMBURGUERIA', city: 'Demonstração · MS',
     accent: '#d8753d', secondary: '#fff0e5',
     tagline: 'SABOR, PERSONALIDADE E PRATICIDADE',
     hero: 'Seu próximo burger favorito está aqui.',
@@ -105,6 +105,96 @@ const SITE_TEMPLATES = {
   }
 };
 
+function BeautyLandingPreview({ changeable, selected, setSiteSegment, onCta }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeDetail, setActiveDetail] = useState(0);
+  const detail = selected.details[activeDetail] || selected.details[0];
+
+  return <div className="beauty-landing" style={{ '--beauty-accent': selected.accent, '--beauty-soft': selected.secondary }}>
+    <header className="beauty-landing-header">
+      <a href="#beauty-start" className="beauty-landing-brand"><span>2R</span><strong>2R BEAUTY<small>EXPERIÊNCIAS DE BELEZA</small></strong></a>
+      <button type="button" className="beauty-menu-toggle" onClick={() => setMenuOpen(value => !value)} aria-expanded={menuOpen}>{menuOpen ? 'Fechar' : 'Menu'}</button>
+      <nav className={menuOpen ? 'is-open' : ''}>
+        <a href="#beauty-experiences" onClick={() => setMenuOpen(false)}>Experiências</a>
+        <a href="#beauty-how" onClick={() => setMenuOpen(false)}>Como funciona</a>
+        <a href="#beauty-faq" onClick={() => setMenuOpen(false)}>Dúvidas</a>
+        <button type="button" onClick={() => { setMenuOpen(false); onCta(); }}>Escolher horário <ArrowUpRight size={15}/></button>
+      </nav>
+    </header>
+    {changeable && <div className="site-demo-switcher"><span>MODELO DA DEMONSTRAÇÃO</span><button type="button" className="active">Beauty</button><button type="button" onClick={() => setSiteSegment('Barber')}>Barber</button><button type="button" onClick={() => setSiteSegment('Burger')}>Burger</button></div>}
+
+    <main className="beauty-landing-page">
+      <section className="beauty-hero" id="beauty-start">
+        <div className="beauty-hero-copy">
+          <span className="beauty-kicker"><i/> BELEZA COM A SUA IDENTIDADE</span>
+          <div className="beauty-hero-mark">2R <span>BEAUTY</span></div>
+          <h1>Seu momento.<br/><em>Seu estilo.</em><br/>Sua escolha.</h1>
+          <p>Serviços de beleza apresentados com clareza para você encontrar a experiência que combina com sua rotina, seu gosto e sua ocasião.</p>
+          <div className="beauty-hero-actions"><button type="button" onClick={onCta}>Explorar horários <ArrowRight size={17}/></button><a href="#beauty-experiences">Conhecer experiências</a></div>
+          <div className="beauty-hero-meta"><span><Sparkles size={15}/> Opções para diferentes estilos</span><span><Clock3 size={15}/> Agendamento simples</span></div>
+        </div>
+        <div className="beauty-hero-visual">
+          <div className="beauty-visual-orbit orbit-a"/>
+          <div className="beauty-visual-orbit orbit-b"/>
+          <div className="beauty-visual-core"><span>2R</span><i/><strong>BEAUTY</strong><small>O SEU TEMPO, DO SEU JEITO</small></div>
+          <div className="beauty-visual-float float-top"><Sparkles size={16}/><span>Autocuidado</span></div>
+          <div className="beauty-visual-float float-bottom"><Heart size={16}/><span>Escolhas personalizadas</span></div>
+        </div>
+      </section>
+
+      <section className="beauty-value-strip">
+        <div><span>01</span><strong>Escolha com confiança</strong><small>Informações objetivas sobre cada experiência</small></div>
+        <div><span>02</span><strong>Encontre seu horário</strong><small>Um caminho simples para solicitar atendimento</small></div>
+        <div><span>03</span><strong>Tenha tudo organizado</strong><small>Detalhes reunidos antes de confirmar</small></div>
+      </section>
+
+      <section className="beauty-landing-section" id="beauty-experiences">
+        <div className="beauty-section-heading"><span className="beauty-kicker">EXPERIÊNCIAS 2R BEAUTY</span><h2>O que combina com o seu momento?</h2><p>Explore as opções e conheça os detalhes antes de escolher.</p></div>
+        <div className="beauty-experience-layout">
+          <div className="beauty-experience-list">
+            {selected.services.map((service, index) => <button type="button" key={service.name} className={activeDetail % selected.services.length === index ? 'active' : ''} onClick={() => setActiveDetail(index % selected.details.length)}>
+              <span className="beauty-experience-number">0{index + 1}</span><span><small>{service.category}</small><strong>{service.name}</strong><em>{service.meta}</em></span><ArrowUpRight size={17}/>
+            </button>)}
+          </div>
+          <article className="beauty-experience-detail">
+            <div className="beauty-detail-art"><span>2R / BEAUTY</span><Sparkles size={54}/><small>CUIDADO EM CADA ESCOLHA</small></div>
+            <div className="beauty-detail-copy"><span className="beauty-kicker">CONHEÇA A EXPERIÊNCIA</span><h3>{detail.name}</h3><p>{detail.desc}</p><div><small>PARA QUEM PROCURA</small><strong>{detail.ideal}</strong></div><div><small>INFORMAÇÕES</small><strong>{detail.info}</strong></div><button type="button" onClick={onCta}>Ver disponibilidade <ArrowRight size={15}/></button></div>
+          </article>
+        </div>
+      </section>
+
+      <section className="beauty-how-section" id="beauty-how">
+        <div className="beauty-how-copy"><span className="beauty-kicker">SEM COMPLICAÇÃO</span><h2>Do primeiro clique<br/>ao seu próximo momento.</h2><p>A página organiza o caminho para que a pessoa entenda as opções e chegue ao agendamento sem precisar procurar informações em vários lugares.</p><button type="button" onClick={onCta}>Começar agendamento <ArrowRight size={16}/></button></div>
+        <div className="beauty-how-steps">
+          <article><span>01</span><div><strong>Explore</strong><p>Conheça as experiências e encontre o serviço que deseja.</p></div></article>
+          <article><span>02</span><div><strong>Escolha</strong><p>Veja os detalhes e siga para a seleção de data e horário.</p></div></article>
+          <article><span>03</span><div><strong>Confirme</strong><p>Preencha seus dados e confira as informações do atendimento.</p></div></article>
+        </div>
+      </section>
+
+      <section className="beauty-note-section">
+        <div className="beauty-note-symbol">2R</div>
+        <div><span className="beauty-kicker">UMA EXPERIÊNCIA BEM APRESENTADA</span><h2>Informação clara também faz parte do cuidado.</h2><p>Uma página profissional pode reunir serviços, orientações, formas de contato e agendamento em um só lugar — com uma identidade visual construída para cada negócio.</p></div>
+      </section>
+
+      <section className="beauty-faq-section" id="beauty-faq">
+        <div><span className="beauty-kicker">ANTES DE AGENDAR</span><h2>Algumas dúvidas comuns.</h2><p>As orientações podem ser personalizadas de acordo com cada serviço e com a rotina do espaço.</p></div>
+        <div className="beauty-faq-list">
+          <details><summary>Como escolho o serviço ideal?<span>+</span></summary><p>Consulte as descrições e detalhes de cada experiência. Em caso de dúvida, use o canal de contato do negócio antes de confirmar.</p></details>
+          <details><summary>Posso escolher meu horário pelo celular?<span>+</span></summary><p>Sim. A estrutura foi pensada para navegação por toque e permite consultar as opções disponíveis na etapa de agendamento.</p></details>
+          <details><summary>Posso alterar as informações da página?<span>+</span></summary><p>Sim. Textos, serviços, identidade visual, contatos e chamadas podem ser personalizados para cada cliente.</p></details>
+        </div>
+      </section>
+
+      <section className="beauty-final-cta">
+        <div><span className="beauty-kicker">2R BEAUTY</span><h2>Seu próximo momento começa com uma escolha.</h2><p>Conheça as opções e siga para a demonstração de agendamento.</p></div>
+        <button type="button" onClick={onCta}>Escolher meu horário <ArrowRight size={17}/></button>
+      </section>
+    </main>
+    <footer className="beauty-landing-footer"><span>2R BEAUTY · PRÉVIA DE APRESENTAÇÃO</span><button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Voltar ao início ↑</button></footer>
+  </div>;
+}
+
 export default function SiteModule({ activeDemo, siteSegment, setSiteSegment, onCta }) {
   const changeable = activeDemo.segment === 'Vitrine';
   const selected = SITE_TEMPLATES[siteSegment] || SITE_TEMPLATES.Beauty;
@@ -133,11 +223,11 @@ export default function SiteModule({ activeDemo, siteSegment, setSiteSegment, on
     closeMobileMenu();
   };
 
+  if (siteSegment === 'Beauty') {
+    return <BeautyLandingPreview changeable={changeable} selected={selected} setSiteSegment={setSiteSegment} onCta={onCta}/>;
+  }
+
   return <div className={'site-demo site-demo-' + siteSegment.toLowerCase()} style={{ '--site-accent': selected.accent, '--site-soft': selected.secondary }}>
-    <a className="site-demo-reference" href="https://ruan2r.github.io/P11-LANDING-PAGE-DANY/" target="_blank" rel="noopener noreferrer">
-      <span>REFERÊNCIA DE ESTRUTURA · PROJETO P11 / DANIELLY</span>
-      <strong>Ver landing page original <ArrowUpRight size={13}/></strong>
-    </a>
     <header className="site-demo-header">
       <a className="site-demo-brand" href="#site-demo-start" onClick={closeMobileMenu}>
         <span className="site-demo-monogram">{selected.initials}</span>

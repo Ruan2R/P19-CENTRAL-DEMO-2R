@@ -10,6 +10,9 @@ import {
 } from 'lucide-react';
 import SiteModuleView from './components/SiteModule.jsx';
 import BookingTimeWheelPicker from './components/BookingTimeWheelPicker.jsx';
+import EnhancedAppointmentsModule from './components/EnhancedAppointmentsModule.jsx';
+import EnhancedClientsModule from './components/EnhancedClientsModule.jsx';
+import EnhancedFinanceModule from './components/EnhancedFinanceModule.jsx';
 import { ModuleBrief, ScreenGuide } from './components/ContextualGuide.jsx';
 
 const publicAsset = (filename) => `${import.meta.env.BASE_URL}${filename}`;
@@ -45,16 +48,16 @@ const MODULES = {
 };
 
 const SEGMENTS = {
-  Beauty: { short:'BEAUTY', customer:'Studio Bella', subtitle:'Beleza, cuidado e praticidade em um só lugar.', accent:'#b76d8f', secondary:'#f8edf2', services:[['Maquiagem social','R$ 160,00','40 min'],['Design de sobrancelhas','R$ 40,00','40 min'],['Lash lifting','R$ 150,00','1h 30min']], hero:'Seu momento de beleza começa aqui.', action:'Agendar horário' },
-  Barber: { short:'BARBER', customer:'Barber Club', subtitle:'Seu estilo. Seu horário. Seu momento.', accent:'#bd954e', secondary:'#f8f2e6', services:[['Corte degradê','R$ 55,00','40 min'],['Barba completa','R$ 35,00','30 min'],['Corte + barba','R$ 80,00','1h']], hero:'Seu próximo corte começa aqui.', action:'Agendar corte' },
-  Burger: { short:'BURGER', customer:'Brasa Burger', subtitle:'Feito na brasa, pensado para matar sua fome.', accent:'#d8753d', secondary:'#fff0e5', services:[['Smash clássico','R$ 29,90','Destaque da casa'],['Combo Brasa','R$ 39,90','Destaque da casa'],['Batata crocante','R$ 14,90','Acompanhamento']], hero:'Seu próximo burger favorito está aqui.', action:'Falar com a hamburgueria' },
+  Beauty: { short:'BEAUTY', customer:'2R Beauty', subtitle:'Experiências de beleza para diferentes estilos e ocasiões.', accent:'#b76d8f', secondary:'#f8edf2', services:[['Maquiagem social','R$ 160,00','40 min'],['Design de sobrancelhas','R$ 40,00','40 min'],['Lash lifting','R$ 150,00','1h 30min']], hero:'Beleza do seu jeito, no seu ritmo.', action:'Escolher meu horário' },
+  Barber: { short:'BARBER', customer:'2R Barber', subtitle:'Seu estilo, seu horário, sua identidade.', accent:'#bd954e', secondary:'#f8f2e6', services:[['Corte degradê','R$ 55,00','40 min'],['Barba completa','R$ 35,00','30 min'],['Corte + barba','R$ 80,00','1h']], hero:'Seu próximo visual começa aqui.', action:'Agendar corte' },
+  Burger: { short:'BURGER', customer:'2R Burger', subtitle:'Sabor, praticidade e uma operação organizada.', accent:'#d8753d', secondary:'#fff0e5', services:[['Smash clássico','R$ 29,90','Destaque da casa'],['Combo Brasa','R$ 39,90','Destaque da casa'],['Batata crocante','R$ 14,90','Acompanhamento']], hero:'Seu próximo burger favorito está aqui.', action:'Conhecer a operação' },
 };
 
 const INITIAL_APPOINTMENTS = [
-  { id:1, client:'Mariana Costa', service:'Maquiagem social', time:'09:00', date:'Hoje', status:'Confirmado', price:160 },
-  { id:2, client:'Camila Oliveira', service:'Design de sobrancelhas', time:'10:30', date:'Hoje', status:'Confirmado', price:40 },
-  { id:3, client:'Juliana Martins', service:'Lash lifting', time:'13:00', date:'Hoje', status:'Aguardando', price:150 },
-  { id:4, client:'Bianca Souza', service:'Design de sobrancelhas', time:'15:00', date:'Hoje', status:'Confirmado', price:40 },
+  { id:1, client:'Mariana Costa', contact:'(67) 99999-0001', service:'Maquiagem social', time:'09:00', date:'Hoje', status:'Confirmado', price:160 },
+  { id:2, client:'Camila Oliveira', contact:'(67) 99999-0002', service:'Design de sobrancelhas', time:'10:30', date:'Hoje', status:'Confirmado', price:40 },
+  { id:3, client:'Juliana Martins', contact:'(67) 99999-0003', service:'Lash lifting', time:'13:00', date:'Hoje', status:'Aguardando', price:150 },
+  { id:4, client:'Bianca Souza', contact:'(67) 99999-0004', service:'Design de sobrancelhas', time:'15:00', date:'Hoje', status:'Confirmado', price:40 },
 ];
 const INITIAL_ORDERS = [
   { id:101, code:'001', customer:'Cliente demonstrativo 01', items:'2x Smash clássico, 1x Batata', total:74.70, status:'Em preparo', payment:'Pendente' },
@@ -75,6 +78,16 @@ const INITIAL_TRANSACTIONS = [
   { id:3, description:'Serviços realizados', category:'Receita', date:'Ontem', value:540 },
   { id:4, description:'Reposição de produtos', category:'Despesa', date:'27 out.', value:220 },
 ];
+const INITIAL_PAYABLES = [
+  { id: 501, description: 'Reposição de materiais', category: 'Materiais', amount: 185, dueDate: '2026-11-05', status: 'Em aberto' },
+  { id: 502, description: 'Assinatura de ferramentas', category: 'Serviços', amount: 79.90, dueDate: '2026-11-10', status: 'Em aberto' },
+  { id: 503, description: 'Compra de produtos', category: 'Estoque', amount: 132.50, dueDate: '2026-10-28', status: 'Paga', paidAt: '2026-10-28' },
+];
+const INITIAL_RECEIVABLES = [
+  { id: 601, client: 'Mariana Costa', service: 'Maquiagem social', date: 'Hoje', total: 160, received: 40, balance: 120 },
+  { id: 602, client: 'Camila Oliveira', service: 'Design de sobrancelhas', date: 'Ontem', total: 40, received: 0, balance: 40 },
+];
+
 const CLIENTS = [
   { name:'Mariana Costa', contact:'(67) 9 0000-0001', visits:8, last:'Hoje' },
   { name:'Camila Oliveira', contact:'(67) 9 0000-0002', visits:5, last:'Hoje' },
@@ -101,10 +114,10 @@ const BARBER_CLIENTS = [
   { name:'Rafael Martins', contact:'(67) 9 0000-0104', visits:16, last:'27 out.' },
 ];
 const BARBER_APPOINTMENTS = [
-  { id:21, client:'Lucas Mendes', service:'Corte degradê', time:'09:00', date:'Hoje', status:'Confirmado', price:55, professional:'Profissional 1' },
-  { id:22, client:'Pedro Henrique', service:'Barba completa', time:'10:00', date:'Hoje', status:'Confirmado', price:35, professional:'Profissional 2' },
-  { id:23, client:'André Costa', service:'Corte + barba', time:'11:30', date:'Hoje', status:'Aguardando', price:80, professional:'Profissional 1' },
-  { id:24, client:'Rafael Martins', service:'Corte degradê', time:'14:00', date:'Hoje', status:'Confirmado', price:55, professional:'Profissional 1' },
+  { id:21, client:'Lucas Mendes', contact:'(67) 99999-0101', service:'Corte degradê', time:'09:00', date:'Hoje', status:'Confirmado', price:55, professional:'Profissional 1' },
+  { id:22, client:'Pedro Henrique', contact:'(67) 99999-0102', service:'Barba completa', time:'10:00', date:'Hoje', status:'Confirmado', price:35, professional:'Profissional 2' },
+  { id:23, client:'André Costa', contact:'(67) 99999-0103', service:'Corte + barba', time:'11:30', date:'Hoje', status:'Aguardando', price:80, professional:'Profissional 1' },
+  { id:24, client:'Rafael Martins', contact:'(67) 99999-0104', service:'Corte degradê', time:'14:00', date:'Hoje', status:'Confirmado', price:55, professional:'Profissional 1' },
 ];
 const BARBER_TRANSACTIONS = [
   { id:21, description:'Cortes e serviços do dia', category:'Receita', date:'Hoje', value:620 },
@@ -201,12 +214,14 @@ export default function App() {
   const [promotions, setPromotions] = useState([{id:1,name:'Combo corte + barba',kind:'Combo',services:['Corte degradê','Barba completa'],regular:90,promo:75,validity:'Período demonstrativo',status:'Ativa'},{id:2,name:'Acabamento especial',kind:'Serviço',services:['Acabamento'],regular:20,promo:15,validity:'Período demonstrativo',status:'Programada'}]);
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
   const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS);
+  const [payables, setPayables] = useState(INITIAL_PAYABLES);
+  const [receivables, setReceivables] = useState(INITIAL_RECEIVABLES);
   const [clients, setClients] = useState(CLIENTS);
   const [services, setServices] = useState(SERVICES);
   const [modal, setModal] = useState(null);
   const [toast, setToast] = useState('');
   const [siteSegment, setSiteSegment] = useState('Beauty');
-  const [appointmentForm, setAppointmentForm] = useState({client:'',service:'Design de sobrancelhas',time:'16:00'});
+  const [appointmentForm, setAppointmentForm] = useState({client:'',contact:'',service:'Design de sobrancelhas',date:localDateValue(),time:'16:00'});
   const [transactionForm, setTransactionForm] = useState({description:'',category:'Receita',value:''});
 
   const visibleDemos = useMemo(() => DEMOS.filter(demo => {
@@ -245,9 +260,13 @@ export default function App() {
     setPromotions([{id:1,name:'Combo corte + barba',kind:'Combo',services:['Corte degradê','Barba completa'],regular:90,promo:75,validity:'Período demonstrativo',status:'Ativa'},{id:2,name:'Acabamento especial',kind:'Serviço',services:['Acabamento'],regular:20,promo:15,validity:'Período demonstrativo',status:'Programada'}]);
     setProducts(seed.products);
     setTransactions(seed.transactions);
+    setPayables(INITIAL_PAYABLES.map(item=>({...item})));
+    setReceivables(demo.segment === 'Barber'
+      ? [{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]
+      : demo.segment === 'Burger' ? [] : INITIAL_RECEIVABLES.map(item=>({...item})));
     setClients(seed.clients);
     setServices(seed.services);
-    setAppointmentForm({client:'',service:seed.services[0]?.name || '',time:'16:00'});
+    setAppointmentForm({client:'',contact:'',service:seed.services[0]?.name || '',date:localDateValue(),time:'16:00'});
     setTransactionForm({description:'',category:'Receita',value:''});
     setMobileNav(false);
     setModal(null);
@@ -334,12 +353,12 @@ export default function App() {
         <ModuleBrief demo={activeDemo} module={activeModule} onOpenGuide={()=>setGuideOpen(true)} />
         {activeModule==='site'&&<SiteModuleView activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
         {activeModule==='overview'&&<OverviewModule demo={activeDemo} appointments={appointments} orders={orders} products={products} transactions={transactions} changeModule={changeModule}/>} 
-         {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professionalAssignments?.map(item=>item.service+': '+item.professional).join(' · ')}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />}
+         {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{const appointmentId=Date.now();setAppointments(prev=>[...prev,{id:appointmentId,client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professionalAssignments?.map(item=>item.service+': '+item.professional).join(' · ')}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase()||String(item.contact||'').replace(/\D/g,'')===String(payload.contact||'').replace(/\D/g,''))?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);setReceivables(prev=>[...prev,{id:appointmentId,client:payload.client,service:payload.services.map(item=>item.name).join(' + '),date:payload.date,total:payload.total,received:0,balance:payload.total}]);notify('Agendamento fictício confirmado. O cadastro do cliente foi associado automaticamente.');}} />}
          {activeModule==='orders'&&<BurgerOrdersModule attendanceOpen={attendanceOpen} setAttendanceOpen={setAttendanceOpen} attendanceOrders={attendanceOrders} setAttendanceOrders={setAttendanceOrders} products={products} setProducts={setProducts} notify={notify} />}
-        {activeModule==='appointments'&&<AppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>setModal('appointment')} isBarber={isBarber} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
-        {activeModule==='clients'&&<ClientsModule clients={clients} />}
-        {activeModule==='services'&&<ServicesModule services={services} />}
-        {activeModule==='finance'&&<FinanceModule transactions={transactions} setTransactions={setTransactions} openModal={()=>setModal('transaction')} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} />}
+        {activeModule==='appointments'&&<EnhancedAppointmentsModule appointments={appointments} setAppointments={setAppointments} openModal={()=>{setAppointmentForm({client:'',contact:'',service:services[0]?.name||'',date:localDateValue(),time:'16:00'});setModal('appointment');}} resetAppointments={()=>setAppointments(getSeedData(activeDemo.segment).appointments)} />}
+        {activeModule==='clients'&&<EnhancedClientsModule clients={clients} setClients={setClients} notify={notify} />}
+        {activeModule==='services'&&<ServicesModule services={services} onIllustrativeAction={()=>notify('A inclusão e edição de serviços são ilustrativas nesta central. A configuração completa está disponível no sistema contratado.')} />}
+        {activeModule==='finance'&&<EnhancedFinanceModule transactions={transactions} setTransactions={setTransactions} payables={payables} setPayables={setPayables} receivables={receivables} setReceivables={setReceivables} resetTransactions={()=>setTransactions(getSeedData(activeDemo.segment).transactions)} resetFinance={()=>{setTransactions(getSeedData(activeDemo.segment).transactions);setPayables(INITIAL_PAYABLES.map(item=>({...item})));setReceivables(isBarber?[{id:611,client:'Lucas Mendes',service:'Corte degradê',date:'Hoje',total:55,received:15,balance:40},{id:612,client:'Pedro Henrique',service:'Barba completa',date:'Ontem',total:35,received:0,balance:35}]:isBurger?[]:INITIAL_RECEIVABLES.map(item=>({...item})));}} notify={notify} />}
         {activeModule==='servicePromotions'&&<PromotionsPreview promotions={promotions} setPromotions={setPromotions} />}
         {activeModule==='products'&&<ProductsModule products={products} />}
         {activeModule==='inventory'&&<InventoryModule products={products} setProducts={setProducts} />}
@@ -350,7 +369,7 @@ export default function App() {
         <div className="demo-footer-note"><Eye size={14}/><span>Como testar: navegue pelo menu lateral, abra formulários e experimente as ações. Os dados são fictícios, nada é enviado ou salvo e recarregar a página reinicia a demonstração.</span></div>
       </main>
     </div>
-    {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();setAppointments(prev=>[...prev,{id:Date.now(),client:appointmentForm.client||'Cliente demonstrativo',service:appointmentForm.service,time:appointmentForm.time,date:'Hoje',status:'Aguardando',price:services.find(s=>s.name===appointmentForm.service)?.price||40}].sort((a,b)=>a.time.localeCompare(b.time)));setModal(null);notify('Agendamento fictício adicionado.')}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins"/></label><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar exemplo</button></div></form></Modal>}
+    {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const phone=appointmentForm.contact.trim();const clientName=appointmentForm.client.trim()||'Cliente demonstrativo';const appointmentId=Date.now();setAppointments(prev=>[...prev,{id:appointmentId,client:clientName,contact:phone,service:appointmentForm.service,time:appointmentForm.time,date:appointmentForm.date,status:'Aguardando',price:services.find(s=>s.name===appointmentForm.service)?.price||40}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===clientName.toLowerCase()||(phone&&String(item.contact||'').replace(/\D/g,'')===phone.replace(/\D/g,'')))?prev:[{name:clientName,contact:phone||'Telefone não informado',visits:0,last:'Sem visitas'},...prev]);setModal(null);notify('Agendamento lançado. Quando o cliente não existia, o cadastro foi criado automaticamente.');}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins" required/></label><label>Telefone / WhatsApp<input type="tel" inputMode="tel" value={appointmentForm.contact} onChange={e=>setAppointmentForm({...appointmentForm,contact:e.target.value})} placeholder="(67) 99999-9999"/></label><p className="appointment-auto-customer-hint"><BadgeCheck size={14}/> Cliente lançado por aqui e ainda sem cadastro? Ao salvar, um cadastro demonstrativo será criado automaticamente e ficará disponível na aba Clientes.</p><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Data<input type="date" value={appointmentForm.date} onChange={e=>setAppointmentForm({...appointmentForm,date:e.target.value})} min={localDateValue()}/></label></div><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar agendamento</button></div></form></Modal>}
     {modal==='transaction'&&<Modal title="Novo lançamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const value=Number(String(transactionForm.value).replace(',','.'));if(!transactionForm.description||!Number.isFinite(value)||value<=0){notify('Preencha a descrição e um valor válido.');return;}setTransactions(prev=>[{id:Date.now(),description:transactionForm.description,category:transactionForm.category,date:'Hoje',value},...prev]);setModal(null);setTransactionForm({description:'',category:'Receita',value:''});notify('Lançamento fictício adicionado.')}}><label>Descrição<input value={transactionForm.description} onChange={e=>setTransactionForm({...transactionForm,description:e.target.value})} placeholder="Ex.: Venda de serviço" required/></label><div className="form-grid"><label>Tipo<select value={transactionForm.category} onChange={e=>setTransactionForm({...transactionForm,category:e.target.value})}><option>Receita</option><option>Despesa</option></select></label><label>Valor (R$)<input inputMode="decimal" value={transactionForm.value} onChange={e=>setTransactionForm({...transactionForm,value:e.target.value})} placeholder="0,00" required/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar lançamento</button></div></form></Modal>}
     {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
     {guideOpen&&<ScreenGuide mode="demo" demo={activeDemo} module={activeModule} onClose={()=>setGuideOpen(false)}/>}
@@ -516,7 +535,13 @@ function ProductsModule({products}) { return <><div className="metric-grid"><Met
 function InventoryModule({products,setProducts}) { return <><div className="welcome-strip inventory-welcome"><div className="welcome-icon"><Boxes size={19}/></div><div><strong>Controle de estoque demonstrativo</strong><p>Os produtos com estoque usam quantidade. Itens feitos sob pedido não mantêm saldo de unidades.</p></div></div><section className="panel table-panel"><div className="panel-heading"><div><h3>Posição atual do estoque</h3><p>{products.filter(p=>p.stock!==null).length} produto(s) com controle de quantidade</p></div><button className="secondary-button" onClick={()=>setProducts(INITIAL_PRODUCTS)}><RefreshCw size={15}/> Restaurar</button></div><ProductTable products={products} inventory setProducts={setProducts}/></section></>; }
 function ProductTable({products,inventory=false,setProducts}) { return <div className="data-table"><div className="table-head product-head"><span>Produto</span><span>Tipo</span><span>Estoque</span><span>Preço / custo demo</span>{inventory&&<span>Movimentar</span>}</div>{products.map(p=><div className="table-row product-head" key={p.id}><span className="product-name"><span className="product-thumb"><Package size={17}/></span><strong>{p.name}</strong></span><span><span className={`category-pill ${p.stock===null?'made-to-order':'in-stock'}`}>{p.category}</span></span><span>{p.stock===null?<span className="muted-text">Sob pedido</span>:<strong>{p.stock} <small>{p.unit}</small></strong>}</span><span>{money(p.price)}</span>{inventory&&<span className="stock-actions">{p.stock!==null&&<><button title="Retirar uma unidade" onClick={()=>setProducts(prev=>prev.map(item=>item.id===p.id?{...item,stock:Math.max(0,item.stock-1)}:item))} disabled={p.stock===0}>−</button><button title="Adicionar uma unidade" onClick={()=>setProducts(prev=>prev.map(item=>item.id===p.id?{...item,stock:item.stock+1}:item))}>+</button></>}</span>}</div>)}</div>; }
 function ClientsModule({clients}) { const [query,setQuery]=useState('');const filtered=clients.filter(c=>c.name.toLowerCase().includes(query.toLowerCase()));return <section className="panel table-panel"><div className="panel-heading"><div><h3>Clientes demonstrativos</h3><p>Registros de exemplo, sem relação com pessoas reais.</p></div><label className="search-box compact"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar cliente..."/></label></div><div className="data-table"><div className="table-head client-head"><span>Cliente</span><span>Contato fictício</span><span>Atendimentos</span><span>Última visita</span></div>{filtered.map(c=><div className="table-row client-head" key={c.name}><span className="client-cell"><span className="table-avatar">{c.name.split(' ').map(x=>x[0]).slice(0,2).join('')}</span><strong>{c.name}</strong></span><span className="muted-text">{c.contact}</span><span>{c.visits}</span><span className="muted-text">{c.last}</span></div>)}</div></section>; }
-function ServicesModule({services}) { return <><div className="service-card-grid">{services.map((s,i)=><article className="service-card" key={s.name}><div className={`service-number n${i+1}`}>{String(i+1).padStart(2,'0')}</div><div className="service-category">{s.type}</div><h3>{s.name}</h3><div className="service-detail"><Clock3 size={14}/>{s.duration}</div><div className="service-price">{money(s.price)}</div><div className="service-enabled"><span/>Disponível no exemplo</div></article>)}</div><div className="service-helper"><Settings2 size={18}/><div><strong>Catálogo demonstrativo</strong><p>Na integração das funcionalidades originais, os campos editáveis serão vinculados às regras reais do sistema de origem.</p></div></div></>; }
+function ServicesModule({services,onIllustrativeAction}) {
+  return <>
+    <div className="module-toolbar services-demo-toolbar"><div><span className="muted-text">Catálogo demonstrativo de procedimentos e valores.</span></div><button type="button" className="primary-button" onClick={onIllustrativeAction}><Plus size={15}/> Adicionar serviço</button></div>
+    <div className="service-card-grid">{services.map((s,i)=><article className="service-card" key={s.name}><div className={`service-number n${i+1}`}>{String(i+1).padStart(2,'0')}</div><div className="service-category">{s.type}</div><h3>{s.name}</h3><div className="service-detail"><Clock3 size={14}/>{s.duration}</div><div className="service-price">{money(s.price)}</div><div className="service-enabled"><span/>Disponível no exemplo</div></article>)}</div>
+    <div className="service-helper"><Settings2 size={18}/><div><strong>Catálogo demonstrativo</strong><p>Os cartões representam os serviços cadastrados. O botão “Adicionar serviço” é ilustrativo nesta central e informa como funciona a personalização no sistema contratado.</p></div></div>
+  </>;
+}
 function SiteModule({activeDemo,siteSegment,setSiteSegment,onCta}) {
   const changeable=activeDemo.segment==='Vitrine';
   const selected=SEGMENTS[siteSegment]||SEGMENTS.Beauty;

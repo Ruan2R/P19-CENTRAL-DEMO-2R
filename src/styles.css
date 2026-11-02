@@ -1540,3 +1540,344 @@
   .site-demo-reference { align-items:flex-start; flex-direction:column; gap:4px; padding:8px 12px; }
   .site-demo-reference>span { font-size:7px; }
 }
+
+
+/* P19 refinement: P18-like appointment tools, customer management and finance areas. */
+.appointments-toolbar { display:flex; justify-content:flex-end; margin-bottom:12px; }
+.appointments-toolbar-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.appointments-toolbar-actions .primary-button,
+.appointments-toolbar-actions .secondary-button { min-height:40px; }
+.appointment-filter-tools { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:9px; margin:0 0 10px; }
+.appointment-search-field { display:flex; align-items:center; gap:9px; min-width:0; min-height:43px; padding:0 12px; border:1px solid var(--border,#e2e9f0); border-radius:10px; background:#fff; color:#8191a0; }
+.appointment-search-field input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:var(--ink,#16334d); font:inherit; font-size:12px; }
+.appointment-search-field input::placeholder { color:#9aa7b2; }
+.appointment-search-clear { display:grid; place-items:center; flex:0 0 28px; width:28px; height:28px; border:0; border-radius:7px; background:#f0f4f6; color:#718397; }
+.appointment-filter-toggle { display:inline-flex; align-items:center; gap:7px; min-height:43px; padding:0 12px; }
+.appointment-filter-toggle.active { border-color:#91c6d5; background:#eff8fa; color:#087c9d; }
+.appointment-filter-count { display:grid; place-items:center; min-width:18px; height:18px; padding:0 4px; border-radius:99px; background:#087fa7; color:#fff; font-size:9px; font-weight:900; }
+.appointment-advanced-filters { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:0 0 12px; padding:14px; border:1px solid #e0e9ef; border-radius:12px; background:#f8fbfd; }
+.appointment-filter-field { display:grid; gap:6px; min-width:0; color:#50667a; font-size:10px; font-weight:800; }
+.appointment-filter-field select,.appointment-filter-field input { box-sizing:border-box; width:100%; min-width:0; min-height:40px; padding:0 10px; border:1px solid #dfe7ec; border-radius:8px; background:#fff; color:#314a60; font:inherit; font-size:11px; }
+.appointment-date-range { grid-column:1/-1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.appointment-filter-error,.appointment-filter-hint { grid-column:1/-1; margin:0; font-size:10px; line-height:1.5; color:#738699; }
+.appointment-filter-error { color:#b44949; }
+.appointment-filter-footer { grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; gap:12px; padding-top:9px; border-top:1px solid #e5edf1; color:#7b8b99; font-size:9px; }
+.appointment-clear-filters { font-size:10px; }
+.filter-toolbar { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:11px 0; }
+.segmented-filters { display:inline-flex; align-items:center; gap:3px; padding:3px; border:1px solid #e2e9ee; border-radius:10px; background:#f4f7f9; }
+.segmented-filters>button { min-height:32px; padding:0 12px; border:0; border-radius:7px; background:transparent; color:#77899a; font-size:10px; font-weight:800; }
+.segmented-filters>button.active { background:#fff; color:#087fa7; box-shadow:0 1px 4px rgba(20,50,70,.09); }
+.results-count { color:#7e8e9e; font-size:10px; font-weight:750; white-space:nowrap; }
+.appointment-demo-list { display:grid; gap:0; }
+.appointment-demo-row { display:grid; grid-template-columns:72px minmax(145px,1.15fr) minmax(120px,1fr) 90px minmax(130px,.9fr); align-items:center; gap:11px; padding:13px 12px; border-bottom:1px solid #edf1f4; }
+.appointment-demo-row:last-child { border-bottom:0; }
+.appointment-demo-date { display:grid; gap:5px; color:#536b80; }
+.appointment-demo-date>strong { font-size:10px; font-weight:850; text-transform:capitalize; }
+.appointment-demo-date>span { display:inline-flex; align-items:center; gap:5px; color:#087fa7; font-size:11px; font-weight:900; font-variant-numeric:tabular-nums; }
+.appointment-demo-customer { display:flex; align-items:center; gap:8px; min-width:0; }
+.appointment-demo-customer>span:last-child { display:grid; gap:3px; min-width:0; }
+.appointment-demo-customer strong,.appointment-demo-service strong { display:block; overflow:hidden; color:#29445b; font-size:10px; text-overflow:ellipsis; white-space:nowrap; }
+.appointment-demo-customer small,.appointment-demo-service small { display:block; overflow:hidden; color:#8594a2; font-size:8px; text-overflow:ellipsis; white-space:nowrap; }
+.appointment-demo-service { display:grid; gap:4px; min-width:0; }
+.appointment-demo-value { color:#314c62; font-size:10px; font-weight:850; white-space:nowrap; }
+.appointment-demo-status { display:grid; gap:6px; min-width:0; }
+.appointment-demo-status select { width:100%; min-width:0; min-height:30px; padding:0 7px; border:1px solid #e0e7ec; border-radius:7px; background:#fff; color:#667b8f; font-size:9px; }
+.appointment-table-card .panel-heading { padding-bottom:12px; }
+.appointment-table-card .table-foot { margin-top:0; }
+.empty-table { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; min-height:145px; padding:22px; color:#8b9aa7; text-align:center; }
+.empty-table>strong { color:#536b80; font-size:12px; }
+.empty-table>span { color:#8795a2; font-size:10px; line-height:1.5; }
+.appointment-auto-customer-hint { display:flex; align-items:flex-start; gap:7px; margin:0; padding:10px 11px; border:1px solid #d9e9ed; border-radius:9px; background:#f1f9fa; color:#587587; font-size:10px; line-height:1.5; }
+.appointment-auto-customer-hint svg { flex:0 0 15px; color:#1581a0; margin-top:1px; }
+.sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+
+/* Customers: manual entry, vCard import preview and deduplication feedback. */
+.customers-admin-panel { overflow:visible; }
+.customers-admin-heading { align-items:flex-start; }
+.customers-admin-actions { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:8px; }
+.customers-admin-actions .primary-button,.customers-admin-actions .secondary-button { min-height:39px; }
+.customers-admin-note { display:flex; align-items:flex-start; gap:8px; margin:0 0 14px; padding:10px 12px; border-radius:9px; background:#f0f8fa; color:#637f90; font-size:9px; line-height:1.55; }
+.customers-admin-note svg { flex:0 0 16px; color:#1385a3; }
+.customer-demo-form,.customer-import-panel { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin:0 0 14px; padding:14px; border:1px solid #e2eaf0; border-radius:11px; background:#f8fbfd; }
+.customer-demo-form>label,.customer-import-panel>div:first-child { display:grid; gap:6px; min-width:0; color:#536a7d; font-size:10px; font-weight:800; }
+.customer-demo-form input { box-sizing:border-box; width:100%; min-width:0; min-height:39px; padding:0 10px; border:1px solid #dce5eb; border-radius:8px; background:#fff; color:#29445b; font:inherit; font-size:11px; }
+.customer-demo-form-actions { grid-column:1/-1; display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.customer-demo-form-actions .primary-button,.customer-demo-form-actions .secondary-button { min-height:38px; }
+.customer-import-panel { grid-template-columns:1fr; }
+.customer-import-panel>div:first-child p { margin:0; color:#7b8d9c; font-size:9px; font-weight:500; line-height:1.6; }
+.customer-import-panel input[type=file] { max-width:100%; min-height:36px; color:#63798c; font-size:10px; }
+.contact-import-preview { display:grid; gap:6px; padding:12px; border:1px solid #dbe8ed; border-radius:9px; background:#fff; }
+.contact-import-preview>strong { color:#304c62; font-size:11px; }
+.contact-import-preview>span,.contact-import-preview>small { color:#788b9b; font-size:9px; line-height:1.5; }
+.contact-import-message { margin:0; padding:10px 12px; border-radius:8px; font-size:10px; line-height:1.5; }
+.contact-import-message.error { background:#fff3f2; color:#ac4d4a; }
+.contact-import-message.success { background:#eef8f2; color:#357856; }
+.customers-admin-search { max-width:390px; margin:0 0 12px auto; }
+.customers-admin-table { margin-top:2px; }
+
+/* Finance area follows the P18 information architecture, with demo actions connected to the totals. */
+.finance-demo-header { display:flex; justify-content:space-between; align-items:flex-end; gap:18px; margin:0 0 16px; }
+.finance-demo-header h2 { margin:6px 0 5px; color:#243b50; font:800 19px Manrope,sans-serif; }
+.finance-demo-header p { max-width:620px; margin:0; color:#718397; font-size:10px; line-height:1.6; }
+.finance-month-picker { display:grid; gap:5px; color:#718397; font-size:9px; font-weight:800; white-space:nowrap; }
+.finance-month-picker input { min-height:36px; padding:0 9px; border:1px solid #dce6ec; border-radius:8px; background:#fff; color:#354e62; font-size:10px; }
+.finance-demo-summary { grid-template-columns:repeat(5,minmax(0,1fr)); }
+.finance-summary-card { min-width:0; padding:14px; border:1px solid #e4ebf0; border-radius:12px; background:#fff; }
+.finance-summary-card>span { display:flex; align-items:center; gap:6px; color:#718397; font-size:9px; font-weight:800; }
+.finance-summary-card>strong { display:block; margin:10px 0 5px; color:#29445b; font:800 clamp(15px,1.8vw,20px) Manrope,sans-serif; overflow-wrap:anywhere; }
+.finance-summary-card>small { display:block; color:#8998a5; font-size:8px; line-height:1.4; }
+.finance-summary-card.income>span svg { color:#25956f; }
+.finance-summary-card.expense>span svg { color:#c76d69; }
+.finance-summary-card.balance>span svg { color:#087fa7; }
+.finance-summary-card.receivable>span svg { color:#ad873b; }
+.finance-summary-card.due>span svg { color:#9c75a8; }
+.finance-summary-card.balance.negative>strong { color:#b94e4e; }
+.finance-demo-tabs { display:flex; align-items:center; gap:5px; margin:15px 0 12px; padding:5px; overflow-x:auto; border:1px solid #e3ebf0; border-radius:11px; background:#f6f9fb; -webkit-overflow-scrolling:touch; }
+.finance-demo-tabs>button { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:39px; flex:1 0 auto; padding:0 12px; border:0; border-radius:8px; background:transparent; color:#76899a; font-size:10px; font-weight:800; white-space:nowrap; }
+.finance-demo-tabs>button.active { background:#fff; color:#087fa7; box-shadow:0 1px 5px rgba(28,55,74,.09); }
+.finance-demo-panel { margin-bottom:13px; }
+.finance-result-breakdown { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; padding:4px 0 6px; }
+.finance-result-breakdown>div { display:grid; gap:7px; padding:12px; border:1px solid #e9eef1; border-radius:9px; background:#fbfcfd; }
+.finance-result-breakdown span { color:#77899a; font-size:9px; }
+.finance-result-breakdown strong { color:#2c4a60; font:800 16px Manrope,sans-serif; }
+.finance-result-breakdown strong.positive { color:#278c6b; }
+.finance-result-breakdown strong.negative { color:#b85d5d; }
+.finance-result-breakdown .finance-result-total { border-color:#cfe4ea; background:#f2fafb; }
+.finance-demo-movements { display:grid; }
+.finance-demo-movement { display:grid; grid-template-columns:34px minmax(0,1fr) auto; align-items:center; gap:10px; padding:12px 3px; border-bottom:1px solid #edf1f3; }
+.finance-demo-movement:last-child { border-bottom:0; }
+.finance-demo-movement>div { display:grid; gap:3px; min-width:0; }
+.finance-demo-movement>div>strong { color:#324e63; font-size:10px; }
+.finance-demo-movement>div>span { color:#7c8d9b; font-size:9px; }
+.finance-demo-movement>div>small { color:#9aa5ad; font-size:8px; }
+.finance-entry-icon { display:grid; place-items:center; width:32px; height:32px; border-radius:9px; background:#f0f8f4; color:#29926c; }
+.finance-entry-icon.expense { background:#fff3f2; color:#bf6b67; }
+.finance-entry-amount { font-size:10px; font-weight:900; white-space:nowrap; }
+.finance-entry-amount.income { color:#258a67; }
+.finance-entry-amount.expense { color:#bd625e; }
+.finance-demo-form { margin:0 0 14px; padding:14px; border:1px solid #e5edf1; border-radius:11px; background:#f8fbfc; }
+.finance-demo-form label { display:grid; gap:5px; min-width:0; color:#536b7e; font-size:10px; font-weight:800; }
+.finance-demo-form input,.finance-demo-form select { box-sizing:border-box; width:100%; min-width:0; min-height:39px; padding:0 9px; border:1px solid #dfe7ec; border-radius:8px; background:#fff; color:#324d62; font:inherit; font-size:10px; }
+.finance-demo-form-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.finance-demo-form-actions .primary-button,.finance-demo-form-actions .secondary-button { min-height:38px; }
+.finance-demo-receivables,.finance-demo-payables { display:grid; }
+.finance-demo-receivable,.finance-demo-payable { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(190px,.65fr); align-items:center; gap:13px; padding:14px 3px; border-bottom:1px solid #edf1f3; }
+.finance-demo-receivable:last-child,.finance-demo-payable:last-child { border-bottom:0; }
+.finance-demo-receivable>div:first-child,.finance-demo-payable>div:first-child { display:grid; gap:4px; min-width:0; }
+.finance-demo-receivable>div:first-child>strong,.finance-demo-payable>div:first-child>strong { color:#2f4b61; font-size:11px; }
+.finance-demo-receivable>div:first-child>span,.finance-demo-payable>div:first-child>span { color:#718597; font-size:9px; }
+.finance-demo-receivable>div:first-child>small,.finance-demo-payable>div:first-child>small { color:#8b99a5; font-size:8px; }
+.finance-demo-receivable-balance { display:grid; gap:4px; text-align:right; }
+.finance-demo-receivable-balance>small { color:#8b99a5; font-size:8px; }
+.finance-demo-receivable-balance>strong { color:#ad873b; font-size:13px; }
+.finance-demo-receive-actions { display:grid; grid-template-columns:1fr; gap:7px; }
+.finance-demo-receive-actions label { display:grid; gap:4px; color:#73869a; font-size:8px; font-weight:800; }
+.finance-demo-receive-actions select { min-height:32px; padding:0 8px; border:1px solid #dfe7ec; border-radius:7px; background:#fff; color:#4d667a; font-size:9px; }
+.finance-demo-receive-actions button { min-height:35px; justify-content:center; font-size:9px; }
+.finance-payable-amount { color:#3d5569; font-size:11px; white-space:nowrap; }
+.finance-demo-payable-actions { display:flex; justify-content:flex-end; }
+.finance-demo-payable-actions .button { min-height:34px; }
+.finance-demo-payable small.is-paid { color:#27875f; }
+.finance-demo-foot { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.finance-demo-foot .text-action { display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+
+/* Beauty landing page has its own brand, content flow and layout, distinct from P11. */
+.beauty-landing { --beauty-accent:#b76d8f; --beauty-soft:#f8edf2; overflow:hidden; border:1px solid #e4e8ed; border-radius:17px; background:#fff; color:#263947; }
+.beauty-landing * { box-sizing:border-box; }
+.beauty-landing button,.beauty-landing a { font:inherit; }
+.beauty-landing a { color:inherit; text-decoration:none; }
+.beauty-landing-header { position:sticky; top:0; z-index:18; display:flex; align-items:center; justify-content:space-between; gap:15px; min-height:67px; padding:9px clamp(15px,3vw,30px); border-bottom:1px solid #e9e8eb; background:rgba(255,255,255,.96); backdrop-filter:blur(12px); }
+.beauty-landing-brand { display:flex; align-items:center; gap:10px; min-width:0; }
+.beauty-landing-brand>span { display:grid; place-items:center; width:39px; height:39px; border-radius:11px; background:#153d50; color:#fff; font:900 13px Manrope,sans-serif; }
+.beauty-landing-brand>strong { display:grid; gap:3px; color:#213b4d; font:900 11px Manrope,sans-serif; letter-spacing:.08em; }
+.beauty-landing-brand small { color:#8a97a0; font:800 7px Manrope,sans-serif; letter-spacing:.15em; }
+.beauty-landing-header nav { display:flex; align-items:center; gap:clamp(10px,2vw,23px); }
+.beauty-landing-header nav>a { color:#687c8c; font-size:10px; font-weight:800; }
+.beauty-landing-header nav>button { display:inline-flex; align-items:center; gap:7px; min-height:38px; padding:0 13px; border:0; border-radius:8px; background:#173e52; color:#fff; font-size:10px; font-weight:850; }
+.beauty-menu-toggle { display:none; min-height:37px; padding:0 12px; border:1px solid #e1e8ec; border-radius:8px; background:#fff; color:#526b7c; font-size:10px; font-weight:850; }
+.beauty-landing-page { display:block; }
+.beauty-hero { position:relative; display:grid; grid-template-columns:minmax(0,1.1fr) minmax(240px,.9fr); align-items:center; gap:35px; min-height:470px; padding:clamp(32px,5vw,65px) clamp(20px,5vw,58px); overflow:hidden; background:linear-gradient(120deg,#f5f9fa 0%,#fff 62%,#f7edf2 100%); }
+.beauty-hero:after { content:""; position:absolute; right:-140px; top:-190px; width:470px; height:470px; border:1px solid rgba(183,109,143,.16); border-radius:50%; pointer-events:none; }
+.beauty-hero-copy { position:relative; z-index:1; min-width:0; }
+.beauty-kicker { display:inline-flex; align-items:center; gap:8px; color:var(--beauty-accent); font-size:8px; font-weight:950; letter-spacing:.16em; }
+.beauty-kicker>i { width:6px; height:6px; border-radius:50%; background:var(--beauty-accent); }
+.beauty-hero-mark { margin:21px 0 10px; color:#173e52; font:900 10px Manrope,sans-serif; letter-spacing:.28em; }
+.beauty-hero-mark>span { margin-left:5px; color:#ac6e8a; font-size:8px; }
+.beauty-hero h1 { max-width:650px; margin:0 0 15px; color:#1d3b4e; font:800 clamp(40px,5.5vw,66px)/.98 Manrope,sans-serif; letter-spacing:-.065em; }
+.beauty-hero h1 em { color:#b36f8d; font-style:normal; }
+.beauty-hero-copy>p { max-width:540px; margin:0; color:#718290; font-size:12px; line-height:1.8; }
+.beauty-hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:23px; }
+.beauty-hero-actions>button,.beauty-how-copy>button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:0 16px; border:0; border-radius:8px; background:#173e52; color:#fff; font-size:10px; font-weight:850; }
+.beauty-hero-actions>a { color:#8b6580; font-size:10px; font-weight:850; }
+.beauty-hero-meta { display:flex; align-items:center; flex-wrap:wrap; gap:17px; margin-top:26px; }
+.beauty-hero-meta>span { display:inline-flex; align-items:center; gap:6px; color:#718593; font-size:9px; font-weight:750; }
+.beauty-hero-meta svg { color:#af6d8a; }
+.beauty-hero-visual { position:relative; display:grid; place-items:center; min-height:300px; }
+.beauty-visual-orbit { position:absolute; width:min(90%,345px); aspect-ratio:1; border:1px solid rgba(183,109,143,.28); border-radius:50%; }
+.beauty-visual-orbit.orbit-a { transform:rotate(25deg) scaleY(.73); }
+.beauty-visual-orbit.orbit-b { transform:rotate(-28deg) scaleY(.73); border-color:rgba(23,62,82,.2); }
+.beauty-visual-core { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:205px; height:205px; border:1px solid rgba(255,255,255,.95); border-radius:50%; background:linear-gradient(145deg,#fff,#f6eaf0); box-shadow:0 24px 65px rgba(73,49,64,.12); }
+.beauty-visual-core>span { color:#173e52; font:900 67px Manrope,sans-serif; letter-spacing:-.1em; }
+.beauty-visual-core>i { width:35px; height:2px; margin:5px 0 8px; background:#b36f8d; }
+.beauty-visual-core>strong { color:#b36f8d; font:900 10px Manrope,sans-serif; letter-spacing:.3em; }
+.beauty-visual-core>small { margin-top:8px; color:#81919c; font-size:6px; font-weight:900; letter-spacing:.17em; }
+.beauty-visual-float { position:absolute; z-index:2; display:flex; align-items:center; gap:7px; padding:10px 12px; border:1px solid #e6e6eb; border-radius:9px; background:rgba(255,255,255,.94); color:#607585; box-shadow:0 9px 25px rgba(37,54,66,.08); font-size:8px; font-weight:850; }
+.beauty-visual-float svg { color:#b36f8d; }
+.beauty-visual-float.float-top { top:17%; right:2%; }
+.beauty-visual-float.float-bottom { bottom:14%; left:0; }
+.beauty-value-strip { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); padding:18px clamp(20px,5vw,58px); border-top:1px solid #e9eef0; border-bottom:1px solid #e9eef0; background:#fff; }
+.beauty-value-strip>div { display:grid; grid-template-columns:26px minmax(0,1fr); gap:3px 9px; padding:5px 15px; border-right:1px solid #edf0f2; }
+.beauty-value-strip>div:last-child { border-right:0; }
+.beauty-value-strip>div>span { grid-row:span 2; color:#b36f8d; font:900 11px Manrope,sans-serif; }
+.beauty-value-strip strong { color:#304b5d; font:850 10px Manrope,sans-serif; }
+.beauty-value-strip small { color:#8b99a3; font-size:8px; line-height:1.45; }
+.beauty-landing-section { padding:clamp(35px,5vw,64px) clamp(18px,5vw,58px); }
+.beauty-section-heading { max-width:660px; margin-bottom:24px; }
+.beauty-section-heading h2,.beauty-how-copy h2,.beauty-note-section h2,.beauty-faq-section h2 { margin:9px 0 10px; color:#203e51; font:850 clamp(27px,3.6vw,43px)/1.05 Manrope,sans-serif; letter-spacing:-.045em; }
+.beauty-section-heading p,.beauty-how-copy>p,.beauty-note-section p,.beauty-faq-section>div:first-child>p { margin:0; color:#768694; font-size:11px; line-height:1.75; }
+.beauty-experience-layout { display:grid; grid-template-columns:minmax(240px,.85fr) minmax(0,1.15fr); gap:16px; align-items:stretch; }
+.beauty-experience-list { display:grid; gap:7px; }
+.beauty-experience-list>button { display:grid; grid-template-columns:30px minmax(0,1fr) 18px; align-items:center; gap:9px; min-width:0; padding:13px 12px; border:1px solid #e8edf0; border-radius:10px; background:#fff; text-align:left; }
+.beauty-experience-list>button.active { border-color:#d9b2c3; background:#fcf6f9; box-shadow:inset 3px 0 #b36f8d; }
+.beauty-experience-number { color:#b36f8d; font:900 10px Manrope,sans-serif; }
+.beauty-experience-list>button>span:nth-child(2) { display:grid; gap:3px; min-width:0; }
+.beauty-experience-list small { color:#b36f8d; font-size:7px; font-weight:900; letter-spacing:.12em; }
+.beauty-experience-list strong { color:#344f60; font-size:10px; }
+.beauty-experience-list em { color:#8d9aa3; font-size:8px; font-style:normal; }
+.beauty-experience-list svg { color:#9a7a8c; }
+.beauty-experience-detail { display:grid; grid-template-columns:minmax(120px,.55fr) minmax(0,1fr); min-width:0; overflow:hidden; border:1px solid #e8e9ed; border-radius:13px; background:#fff; }
+.beauty-detail-art { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:25px; min-height:260px; padding:17px; background:linear-gradient(145deg,#173e52,#2a5b70); color:#f1dce6; text-align:center; }
+.beauty-detail-art>span,.beauty-detail-art>small { color:#d6e4e9; font-size:7px; font-weight:900; letter-spacing:.14em; }
+.beauty-detail-copy { display:flex; flex-direction:column; align-items:flex-start; min-width:0; padding:20px; }
+.beauty-detail-copy h3 { margin:7px 0 9px; color:#263f50; font:850 24px Manrope,sans-serif; letter-spacing:-.04em; }
+.beauty-detail-copy>p { margin:0 0 13px; color:#71818e; font-size:10px; line-height:1.7; }
+.beauty-detail-copy>div { display:grid; gap:4px; width:100%; padding:9px 0; border-top:1px solid #edf0f2; }
+.beauty-detail-copy>div>small { color:#b36f8d; font-size:7px; font-weight:900; letter-spacing:.12em; }
+.beauty-detail-copy>div>strong { color:#526979; font-size:9px; line-height:1.5; }
+.beauty-detail-copy>button { display:inline-flex; align-items:center; gap:7px; margin-top:auto; padding:10px 0 2px; border:0; border-bottom:1px solid #bc8ba2; background:none; color:#a56482; font-size:9px; font-weight:900; }
+.beauty-how-section { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); gap:34px; align-items:center; padding:clamp(35px,5vw,60px) clamp(18px,5vw,58px); background:#f4f8f9; }
+.beauty-how-copy>button { margin-top:20px; }
+.beauty-how-steps { display:grid; gap:11px; }
+.beauty-how-steps>article { display:grid; grid-template-columns:40px minmax(0,1fr); align-items:start; gap:12px; padding:15px; border:1px solid #e3eaed; border-radius:11px; background:#fff; }
+.beauty-how-steps>article>span { display:grid; place-items:center; width:36px; height:36px; border-radius:10px; background:#f6eaf0; color:#a96886; font:900 10px Manrope,sans-serif; }
+.beauty-how-steps>article>div { display:grid; gap:5px; }
+.beauty-how-steps strong { color:#324e60; font:850 11px Manrope,sans-serif; }
+.beauty-how-steps p { margin:0; color:#7b8b97; font-size:9px; line-height:1.55; }
+.beauty-note-section { display:grid; grid-template-columns:100px minmax(0,1fr); gap:23px; align-items:center; padding:35px clamp(18px,5vw,58px); background:#fff; }
+.beauty-note-symbol { display:grid; place-items:center; width:86px; height:86px; border:1px solid #d8e4e8; border-radius:22px; background:#f4f8f9; color:#173e52; font:900 32px Manrope,sans-serif; }
+.beauty-note-section h2 { max-width:650px; font-size:clamp(23px,3vw,35px); }
+.beauty-faq-section { display:grid; grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr); gap:35px; padding:clamp(35px,5vw,60px) clamp(18px,5vw,58px); background:#fbf7f9; }
+.beauty-faq-list { display:grid; gap:7px; }
+.beauty-faq-list details { padding:13px 15px; border:1px solid #eadfe5; border-radius:9px; background:#fff; }
+.beauty-faq-list summary { display:flex; justify-content:space-between; align-items:center; gap:12px; color:#395466; font-size:10px; font-weight:850; cursor:pointer; list-style:none; }
+.beauty-faq-list summary::-webkit-details-marker { display:none; }
+.beauty-faq-list summary>span { color:#b36f8d; font-size:16px; }
+.beauty-faq-list details p { margin:10px 0 0; color:#778793; font-size:9px; line-height:1.6; }
+.beauty-final-cta { display:flex; align-items:center; justify-content:space-between; gap:25px; padding:clamp(28px,5vw,48px) clamp(18px,5vw,58px); background:#173e52; }
+.beauty-final-cta h2 { max-width:590px; margin:8px 0; color:#fff; font:850 clamp(25px,3.6vw,42px)/1.04 Manrope,sans-serif; letter-spacing:-.05em; }
+.beauty-final-cta p { margin:0; color:#c5d6dd; font-size:10px; line-height:1.6; }
+.beauty-final-cta button { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex:0 0 auto; min-height:43px; padding:0 15px; border:0; border-radius:8px; background:#fff; color:#1b4358; font-size:10px; font-weight:900; }
+.beauty-landing-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px clamp(18px,5vw,58px); border-top:1px solid #e6ebee; background:#f7f9fa; }
+.beauty-landing-footer>span { color:#8a98a2; font-size:8px; font-weight:900; letter-spacing:.12em; }
+.beauty-landing-footer>button { padding:5px 0; border:0; background:none; color:#a96886; font-size:9px; font-weight:850; }
+
+@media(max-width:1000px) {
+  .finance-demo-summary { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .appointment-demo-row { grid-template-columns:64px minmax(130px,1fr) minmax(100px,1fr) 80px minmax(120px,.9fr); gap:8px; padding:12px 8px; }
+}
+@media(max-width:760px) {
+  .appointments-toolbar { justify-content:stretch; }
+  .appointments-toolbar-actions { width:100%; display:grid; grid-template-columns:1fr 1fr; }
+  .appointments-toolbar-actions .primary-button,.appointments-toolbar-actions .secondary-button { justify-content:center; min-width:0; padding:0 8px; font-size:10px; }
+  .appointment-filter-tools { grid-template-columns:minmax(0,1fr) auto; }
+  .appointment-search-field { min-height:42px; padding:0 9px; }
+  .appointment-search-field input { font-size:10px; }
+  .appointment-filter-toggle { gap:5px; min-height:42px; padding:0 9px; font-size:9px; }
+  .appointment-advanced-filters { grid-template-columns:1fr; padding:11px; }
+  .appointment-date-range { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .appointment-filter-footer { align-items:flex-start; }
+  .filter-toolbar { align-items:flex-start; flex-direction:column; }
+  .segmented-filters { width:100%; }
+  .segmented-filters>button { flex:1; }
+  .appointment-demo-row { grid-template-columns:58px minmax(0,1fr) auto; gap:8px; padding:12px 9px; }
+  .appointment-demo-service { grid-column:2; grid-row:2; }
+  .appointment-demo-value { grid-column:3; grid-row:1; text-align:right; }
+  .appointment-demo-status { grid-column:2/4; grid-row:3; grid-template-columns:auto minmax(110px,1fr); align-items:center; gap:8px; }
+  .appointment-demo-date { grid-row:1/3; }
+  .appointment-demo-customer { grid-column:2/4; }
+  .appointment-demo-customer strong { font-size:10px; }
+  .appointment-demo-status select { min-height:34px; }
+  .customers-admin-heading { flex-direction:column; }
+  .customers-admin-actions { width:100%; display:grid; grid-template-columns:1fr 1fr; }
+  .customers-admin-actions button { justify-content:center; min-width:0; padding:0 7px; font-size:9px; }
+  .customer-demo-form { grid-template-columns:1fr; }
+  .customer-demo-form-actions { grid-column:auto; }
+  .customers-admin-search { max-width:none; }
+  .customers-admin-table .table-head,.customers-admin-table .table-row { min-width:620px; }
+  .finance-demo-header { align-items:stretch; flex-direction:column; }
+  .finance-demo-header .finance-month-picker { max-width:180px; }
+  .finance-demo-summary { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .finance-summary-card { padding:11px; }
+  .finance-summary-card>strong { font-size:17px; }
+  .finance-demo-tabs { justify-content:flex-start; }
+  .finance-demo-tabs>button { flex:0 0 auto; padding:0 10px; font-size:9px; }
+  .finance-result-breakdown { grid-template-columns:1fr; }
+  .finance-result-breakdown>div { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .finance-result-breakdown strong { font-size:14px; }
+  .finance-demo-receivable,.finance-demo-payable { grid-template-columns:minmax(0,1fr) auto; gap:9px; }
+  .finance-demo-receivable-balance { text-align:right; }
+  .finance-demo-receive-actions,.finance-demo-payable-actions { grid-column:1/-1; display:flex; align-items:flex-end; justify-content:space-between; gap:8px; }
+  .finance-demo-receive-actions label { flex:1; }
+  .finance-demo-receive-actions button { flex:1; min-width:0; padding:0 7px; }
+  .finance-demo-foot { align-items:flex-start; flex-direction:column; }
+  .beauty-landing { border-radius:12px; }
+  .beauty-landing-header { min-height:60px; padding:8px 12px; }
+  .beauty-landing-brand>span { width:35px; height:35px; }
+  .beauty-landing-brand>strong { font-size:10px; }
+  .beauty-menu-toggle { display:inline-flex; align-items:center; justify-content:center; }
+  .beauty-landing-header nav { display:none; position:absolute; top:calc(100% + 5px); left:9px; right:9px; z-index:30; flex-direction:column; align-items:stretch; gap:2px; padding:9px; border:1px solid #e0e8ec; border-radius:11px; background:#fff; box-shadow:0 12px 30px rgba(0,0,0,.12); }
+  .beauty-landing-header nav.is-open { display:flex; }
+  .beauty-landing-header nav>a { display:flex; align-items:center; min-height:40px; padding:0 10px; font-size:11px; }
+  .beauty-landing-header nav>button { justify-content:center; min-height:42px; }
+  .beauty-hero { grid-template-columns:1fr; gap:15px; min-height:0; padding:29px 17px 23px; }
+  .beauty-hero h1 { font-size:clamp(41px,11vw,53px); }
+  .beauty-hero-copy>p { font-size:11px; }
+  .beauty-hero-visual { min-height:230px; }
+  .beauty-visual-core { width:160px; height:160px; }
+  .beauty-visual-core>span { font-size:53px; }
+  .beauty-visual-orbit { width:250px; }
+  .beauty-visual-float.float-top { top:8%; right:1%; }
+  .beauty-visual-float.float-bottom { bottom:5%; left:0; }
+  .beauty-value-strip { grid-template-columns:1fr; gap:8px; padding:13px 16px; }
+  .beauty-value-strip>div { grid-template-columns:24px minmax(0,1fr); padding:7px 2px; border-right:0; border-bottom:1px solid #edf0f2; }
+  .beauty-value-strip>div:last-child { border-bottom:0; }
+  .beauty-landing-section { padding:34px 15px; }
+  .beauty-section-heading h2,.beauty-how-copy h2,.beauty-note-section h2,.beauty-faq-section h2 { font-size:30px; }
+  .beauty-experience-layout { grid-template-columns:1fr; }
+  .beauty-experience-list>button { min-height:70px; }
+  .beauty-experience-detail { grid-template-columns:90px minmax(0,1fr); }
+  .beauty-detail-art { min-height:250px; padding:9px; }
+  .beauty-detail-art>span,.beauty-detail-art>small { font-size:6px; text-align:center; }
+  .beauty-detail-copy { padding:13px; }
+  .beauty-detail-copy h3 { font-size:20px; }
+  .beauty-detail-copy>p { font-size:9px; }
+  .beauty-how-section { grid-template-columns:1fr; gap:18px; padding:34px 15px; }
+  .beauty-note-section { grid-template-columns:57px minmax(0,1fr); gap:13px; padding:28px 15px; }
+  .beauty-note-symbol { width:54px; height:54px; border-radius:15px; font-size:22px; }
+  .beauty-faq-section { grid-template-columns:1fr; gap:17px; padding:34px 15px; }
+  .beauty-final-cta { align-items:stretch; flex-direction:column; gap:17px; padding:30px 16px; }
+  .beauty-final-cta button { width:100%; min-height:46px; }
+  .beauty-landing-footer { align-items:flex-start; flex-direction:column; padding:14px 16px; }
+}
+@media(max-width:390px) {
+  .appointment-demo-row { grid-template-columns:52px minmax(0,1fr) auto; padding-left:6px; padding-right:6px; }
+  .appointment-demo-customer { gap:6px; }
+  .appointment-demo-customer .table-avatar { width:27px; height:27px; min-width:27px; font-size:8px; }
+  .appointment-demo-value { font-size:9px; }
+  .finance-summary-card>strong { font-size:15px; }
+  .finance-demo-receive-actions { align-items:stretch; flex-direction:column; }
+  .finance-demo-receive-actions button { width:100%; }
+  .beauty-hero { padding-left:14px; padding-right:14px; }
+  .beauty-experience-detail { grid-template-columns:75px minmax(0,1fr); }
+  .beauty-detail-copy { padding:10px; }
+}

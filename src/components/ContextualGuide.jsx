@@ -30,20 +30,20 @@ const MODULE_GUIDES = {
   },
   appointments: {
     title: 'Agenda e acompanhamento dos atendimentos',
-    summary: 'Esta tela concentra horários, clientes, serviços e status. Os filtros ajudam a localizar registros e as ações simulam a atualização do atendimento.',
+    summary: 'Esta tela concentra horários, clientes, serviços e status. Você pode pesquisar por nome, telefone ou procedimento, alternar Próximos/Pendentes/Todos e filtrar situação e período.',
     steps: [
-      'Use a busca para localizar um cliente e o filtro para separar os status.',
-      'Abra “Novo agendamento” para incluir um registro demonstrativo.',
-      'Confirme, conclua ou cancele um atendimento e observe a mudança de status.'
+      'Pesquise por nome, telefone ou procedimento e use Próximos, Pendentes ou Todos.',
+      'Abra Filtros para separar por situação e período, inclusive intervalo personalizado.',
+      'Em Novo agendamento, informe nome e telefone. Se o cliente ainda não existir, o cadastro demonstrativo é criado automaticamente.'
     ]
   },
   clients: {
     title: 'Cadastro e histórico de clientes',
-    summary: 'A lista reúne contatos fictícios e um resumo do relacionamento, como quantidade de atendimentos e última visita.',
+    summary: 'A lista reúne contatos fictícios, permite adicionar clientes manualmente e importar contatos de um arquivo vCard (.vcf), além de pesquisar por nome ou telefone.',
     steps: [
-      'Use a busca para localizar um nome.',
-      'Compare contato, quantidade de visitas e última visita.',
-      'Abra outro módulo para ver como os registros se conectam à operação.'
+      'Use a busca para localizar por nome ou telefone.',
+      'Adicione um cliente manualmente ou importe contatos de um arquivo .vcf; duplicados são ignorados na prévia.',
+      'Compare contato, quantidade de atendimentos e última visita.'
     ]
   },
   services: {
@@ -52,16 +52,16 @@ const MODULE_GUIDES = {
     steps: [
       'Compare as categorias e os procedimentos disponíveis.',
       'Observe a duração e o valor de cada serviço.',
-      'Volte ao agendamento público e selecione os mesmos procedimentos.'
+      'O botão Adicionar serviço é ilustrativo nesta central; a configuração completa fica no sistema contratado.'
     ]
   },
   finance: {
     title: 'Resumo e movimentações financeiras',
-    summary: 'Os indicadores mostram receitas, despesas, saldo e quantidade de lançamentos. A tabela detalha cada movimentação da demonstração.',
+    summary: 'O Financeiro é dividido em Resumo, Entradas, Saídas, Valores a receber e Contas a pagar, com resultado mensal e atualização demonstrativa dos totais.',
     steps: [
-      'Confira os totais de receitas, despesas e saldo no início da tela.',
-      'Leia a tabela para identificar categoria, data e valor de cada movimentação.',
-      'Use “Novo lançamento” para adicionar uma receita ou despesa fictícia e veja os totais serem atualizados.'
+      'No Resumo, confira entradas, saídas, resultado do mês, valores a receber e contas a pagar.',
+      'Abra Entradas ou Saídas para consultar e registrar movimentações; em Valores a receber, confirme o recebimento de um atendimento.',
+      'Em Contas a pagar, cadastre uma conta e marque como paga para registrar a saída automaticamente.'
     ]
   },
   servicePromotions: {
