@@ -73,6 +73,24 @@ const MODULE_GUIDES = {
       'Ative, pause ou adicione um exemplo para testar a interação.'
     ]
   },
+  blocks: {
+    title: 'Bloqueios e indisponibilidades da agenda',
+    summary: 'Use esta área para reservar períodos em que não haverá atendimento. No Barber, o bloqueio pode valer para um profissional ou para toda a barbearia; no Beauty, ele vale para a agenda da profissional.',
+    steps: [
+      'Escolha a data em que a agenda ficará indisponível.',
+      'No Barber, selecione um profissional ou toda a barbearia. No Beauty, o bloqueio se aplica à agenda completa.',
+      'Informe início e fim para reservar apenas um período ou deixe os horários vazios no Beauty para bloquear o dia inteiro. Depois, confira e remova os exemplos na lista.'
+    ]
+  },
+  policies: {
+    title: 'Políticas e orientações para clientes',
+    summary: 'Defina quais avisos serão apresentados antes da confirmação do agendamento, como tolerância a atrasos, prazo de cancelamento, acompanhantes e faltas.',
+    steps: [
+      'Ative somente as orientações que devem aparecer para o cliente.',
+      'Quando uma opção estiver ativa, ajuste o prazo ou o texto correspondente.',
+      'Salve as orientações para atualizar a prévia. Os dados são demonstrativos e não são publicados em uma agenda real.'
+    ]
+  },
   orders: {
     title: 'Pedidos e operação do atendimento',
     summary: 'O fluxo segue o P16: abra um atendimento, lance os produtos, acompanhe o preparo, registre a entrega e confirme o recebimento. Pedidos e financeiro compartilham os valores pendentes.',
