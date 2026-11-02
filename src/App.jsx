@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Activity, ArrowLeft, ArrowRight, BadgeCheck, CalendarDays, Check, ChevronDown,
   CircleDollarSign, ClipboardList, Clock3, Copy, CreditCard, ExternalLink, Eye,
@@ -6,8 +6,11 @@ import {
   Search, Settings2, ShoppingBag, Sparkles, Store, Users, Wallet, X, Boxes,
   TrendingUp, ReceiptText, MonitorSmartphone, LockKeyhole, LogOut, ArrowUpRight,
   MoreHorizontal, CheckCircle2, CircleHelp, Clock, CircleAlert, RefreshCw,
-  Code2, Wrench, Network, Linkedin, ShieldCheck
+  Code2, Wrench, Network, Linkedin, ShieldCheck, Star
 } from 'lucide-react';
+import SiteModuleView from './components/SiteModule.jsx';
+import BookingTimeWheelPicker from './components/BookingTimeWheelPicker.jsx';
+import { ModuleBrief, ScreenGuide } from './components/ContextualGuide.jsx';
 
 const publicAsset = (filename) => `${import.meta.env.BASE_URL}${filename}`;
 
@@ -212,6 +215,20 @@ export default function App() {
     return matchesText && matchesFilter;
   }), [search, filter]);
 
+  const featuredDemoIds = ['beauty.agenda.financeiro', 'barber.agenda.financeiro', 'burger.gestao'];
+  const isFeaturedDemo = (demo) => featuredDemoIds.includes(demo.id);
+
+  useEffect(() => {
+    const scrollToStart = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      const main = document.querySelector('.demo-main');
+      if (main) main.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      const layout = document.querySelector('.demo-layout');
+      if (layout) layout.scrollTop = 0;
+    };
+    window.requestAnimationFrame(scrollToStart);
+  }, [activeDemo?.id, activeModule, page]);
+
   function notify(message) {
     setToast(message);
     window.setTimeout(() => setToast(''), 2300);
@@ -240,6 +257,7 @@ export default function App() {
   function canUse(module) { return activeDemo?.modules.includes(module); }
   function changeModule(module) {
     setMobileNav(false);
+    setGuideOpen(false);
     if (activeDemo?.modules.includes(module)) setActiveModule(module);
   }
 
@@ -280,12 +298,12 @@ export default function App() {
           </button>
 
           {['Vitrine','Beauty','Barber','Burger'].filter(group=>filter==='Todos'||filter===group).map(group=>{
-            const list=visibleDemos.filter(d=>d.segment===group);
+            const list=visibleDemos.filter(d=>d.segment===group).sort((a,b)=>Number(isFeaturedDemo(b))-Number(isFeaturedDemo(a)));
             if (!list.length) return null;
             return <div className="segment-group" key={group}><div className="segment-heading"><div className={`segment-icon ${group.toLowerCase()}`}>{group==='Vitrine'?<MonitorSmartphone size={18}/>:group==='Beauty'?<Sparkles size={18}/>:group==='Barber'?<Scissors size={18}/>:<ShoppingBag size={18}/>}</div><div><h3>{group==='Vitrine'?'Modelos de landing page':group==='Beauty'?'Beauty & estética':group==='Barber'?'Barbearia':'Pedidos & alimentação'}</h3><p>{group==='Vitrine'?'Demonstre diferentes estilos de página':group==='Beauty'?'Agenda, gestão e financeiro para profissionais da beleza':group==='Barber'?'Agenda e gestão para barbearias':'Pedidos, produtos, estoque e financeiro'}</p></div><span className="group-count">{list.length} {list.length===1?'modalidade':'modalidades'}</span></div>
-              <div className="demo-grid">{list.map((demo,index)=><article className={`demo-card ${demo.color}`} key={demo.id} style={{'--card-index':index}}><div className="demo-card-top"><div className={`demo-card-icon ${demo.color}`}><IconForDemo demo={demo}/></div><span className="demo-segment-tag">{demo.segment==='Vitrine'?'LANDING PAGE':demo.segment.toUpperCase()}</span></div><h4>{demo.name}</h4><div className="demo-card-title">{demo.title}</div><p>{demo.description}</p><div className="module-chips">{demo.modules.filter(m=>m!=='overview').slice(0,4).map(m=><span key={m}>{MODULES[m].label}</span>)}{demo.modules.filter(m=>m!=='overview').length>4&&<span>+{demo.modules.filter(m=>m!=='overview').length-4}</span>}</div>
+              <div className="demo-grid">{list.map((demo,index)=><article className={`demo-card ${demo.color} ${isFeaturedDemo(demo) ? 'featured-demo-card' : ''}`} key={demo.id} style={{'--card-index':index}}><div className="demo-card-top"><div className={`demo-card-icon ${demo.color}`}><IconForDemo demo={demo}/></div><span className="demo-segment-tag">{demo.segment==='Vitrine'?'LANDING PAGE':demo.segment.toUpperCase()}</span>{isFeaturedDemo(demo)&&<span className="demo-featured-badge"><Star size={12} fill="currentColor"/> MAIS INDICADO</span>}</div><h4>{demo.name}</h4><div className="demo-card-title">{demo.title}</div><p>{demo.description}</p><div className="module-chips">{demo.modules.filter(m=>m!=='overview').slice(0,4).map(m=><span key={m}>{MODULES[m].label}</span>)}{demo.modules.filter(m=>m!=='overview').length>4&&<span>+{demo.modules.filter(m=>m!=='overview').length-4}</span>}</div>
                 
-                <button className="enter-demo-button" onClick={()=>enterDemo(demo)}><span>Visualizar modalidade</span><ArrowUpRight size={17}/></button></article>)}</div>
+                <button className="enter-demo-button" onClick={()=>enterDemo(demo)}><span>{isFeaturedDemo(demo)?'Conhecer Gestão':'Visualizar modalidade'}</span><ArrowUpRight size={17}/></button></article>)}</div>
             </div>;
           })}
           {visibleDemos.length===0&&<div className="empty-state"><Search size={28}/><strong>Nenhuma modalidade encontrada</strong><span>Tente outro nome, recurso ou segmento.</span></div>}
@@ -295,7 +313,7 @@ export default function App() {
       </main>
       <footer className="footer"><span>2R INFORMÁTICA · Seu parceiro em Tecnologia</span><span><span className="footer-dot"/> Dados fictícios para demonstração</span></footer>
       {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
-      {guideOpen&&<MobileGuide mode="catalog" onClose={()=>setGuideOpen(false)}/>}
+      {guideOpen&&<ScreenGuide mode="catalog" demo={null} module="catalog" onClose={()=>setGuideOpen(false)}/>}
     </div>;
   }
 
@@ -306,14 +324,15 @@ export default function App() {
   const segmentLabel = isBurger ? 'Burger' : isBarber ? 'Barber' : 'Beauty';
 
   return <div className={`app-shell demo-app ${activeDemo.color}`}>
-    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="mobile-guide-trigger" type="button" onClick={()=>setGuideOpen(true)} aria-label="Abrir guia de navegação"><CircleHelp size={18}/></button><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
+    <header className="topbar demo-topbar"><div className="brand-lockup"><button className="mobile-menu icon-quiet" onClick={()=>setMobileNav(v=>!v)} aria-label="Abrir menu"><Menu size={20}/></button><div className="brand-mark">2R</div><div><div className="brand-name">2R INFORMÁTICA</div><div className="brand-tagline">Prévia visual de modalidades</div></div></div><div className="demo-topbar-right"><span className={`workspace-badge ${activeDemo.color}`}><span className="workspace-dot"/>{activeDemo.segment==='Vitrine'?'LANDING PAGES':activeDemo.segment.toUpperCase()}</span><button className="mobile-guide-trigger" type="button" onClick={()=>setGuideOpen(true)} aria-label="Abrir orientações desta tela" title="Orientações desta tela"><CircleHelp size={18}/></button><button className="back-hub-button" onClick={exitDemo}><ArrowLeft size={16}/><span>Voltar às modalidades</span></button></div></header>
     <div className="demo-layout">
       <aside className={`sidebar ${mobileNav?'show-mobile':''}`}><div className="sidebar-workspace"><div className={`workspace-avatar ${activeDemo.color}`}><IconForDemo demo={activeDemo}/></div><div className="workspace-meta"><strong>{activeDemo.name}</strong><span>Prévia visual do pacote</span></div><button className="icon-quiet sidebar-close" onClick={()=>setMobileNav(false)}><X size={17}/></button></div><div className="sidebar-section-label">NAVEGAR NA PRÉVIA</div><nav className="side-nav">{currentModules.map(module=>{const item=MODULES[module];const Icon=item.icon;return <button key={module} className={`side-nav-item ${activeModule===module?'active':''}`} onClick={()=>changeModule(module)}><Icon size={18}/><span>{item.label}</span>{activeModule===module&&<span className="nav-active-mark"/>}</button>})}</nav><div className="sidebar-bottom"><div className="demo-data-note"><div><Sparkles size={15}/><strong>Modo demonstração</strong></div><p>Use o menu para alternar entre telas e experimente os botões. As alterações são temporárias e reiniciam ao recarregar.</p></div><button className="side-nav-item exit-item" onClick={exitDemo}><LogOut size={18}/><span>Voltar às modalidades</span></button></div></aside>
       {mobileNav&&<button className="mobile-scrim" aria-label="Fechar menu" onClick={()=>setMobileNav(false)}/>}
       <main className="demo-main">
         <div className="demo-breadcrumb"><span>Central 2R</span><ArrowRight size={13}/><span>{activeDemo.segment}</span><ArrowRight size={13}/><strong>{MODULES[activeModule]?.label || 'Demonstração'}</strong></div>
         <div className="main-title-row"><div><div className="eyebrow muted-eyebrow">{activeDemo.name.toUpperCase()}</div><h1>{activeModule==='site'?'Landing pages na prática':MODULES[activeModule]?.label || activeDemo.title}</h1><p>{activeModule==='site'?'Entenda o papel de uma página de apresentação e explore um exemplo visual.':MODULES[activeModule]?.description || activeDemo.description}</p></div><div className="main-title-actions"><span className="fake-live"><span className="pulse-dot"/> PRÉVIA INTERATIVA</span><button className="secondary-button" onClick={exitDemo}><Grid2X2 size={16}/> Catálogo</button></div></div>
-        {activeModule==='site'&&<SiteModule activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
+        <ModuleBrief demo={activeDemo} module={activeModule} onOpenGuide={()=>setGuideOpen(true)} />
+        {activeModule==='site'&&<SiteModuleView activeDemo={activeDemo} siteSegment={siteSegment} setSiteSegment={setSiteSegment} onCta={()=>{if(canUse('booking')&&siteSegment!=='Burger'){changeModule('booking');return;}if(siteSegment==='Burger'){notify('Em uma página de alimentação, este botão pode abrir o WhatsApp ou endereço da loja. Os pedidos do P16 são lançados pela equipe na área interna, não por um cardápio público.');return;}notify('O destino deste botão é definido conforme o objetivo do negócio: WhatsApp, formulário, agendamento ou outro canal de contato. Nesta prévia, nenhum envio é realizado.');}} />}
         {activeModule==='overview'&&<OverviewModule demo={activeDemo} appointments={appointments} orders={orders} products={products} transactions={transactions} changeModule={changeModule}/>} 
          {activeModule==='booking'&&<PublicBookingModule segment={segmentLabel} services={services} onBook={(payload)=>{setAppointments(prev=>[...prev,{id:Date.now(),client:payload.client,contact:payload.contact,service:payload.services.map(item=>item.name).join(' + '),time:payload.time,date:payload.date,status:'Confirmado',price:payload.total,professional:payload.professionalAssignments?.map(item=>item.service+': '+item.professional).join(' · ')}].sort((a,b)=>a.time.localeCompare(b.time)));setClients(prev=>prev.some(item=>item.name.toLowerCase()===payload.client.toLowerCase())?prev:[{name:payload.client,contact:payload.contact,visits:1,last:'Hoje'},...prev]);notify('Agendamento fictício confirmado e enviado para a agenda administrativa.');}} />}
          {activeModule==='orders'&&<BurgerOrdersModule attendanceOpen={attendanceOpen} setAttendanceOpen={setAttendanceOpen} attendanceOrders={attendanceOrders} setAttendanceOrders={setAttendanceOrders} products={products} setProducts={setProducts} notify={notify} />}
@@ -334,7 +353,7 @@ export default function App() {
     {modal==='appointment'&&<Modal title="Novo agendamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();setAppointments(prev=>[...prev,{id:Date.now(),client:appointmentForm.client||'Cliente demonstrativo',service:appointmentForm.service,time:appointmentForm.time,date:'Hoje',status:'Aguardando',price:services.find(s=>s.name===appointmentForm.service)?.price||40}].sort((a,b)=>a.time.localeCompare(b.time)));setModal(null);notify('Agendamento fictício adicionado.')}}><label>Nome do cliente<input value={appointmentForm.client} onChange={e=>setAppointmentForm({...appointmentForm,client:e.target.value})} placeholder="Ex.: Ana Martins"/></label><div className="form-grid"><label>Serviço<select value={appointmentForm.service} onChange={e=>setAppointmentForm({...appointmentForm,service:e.target.value})}>{services.map(s=><option key={s.name}>{s.name}</option>)}</select></label><label>Horário<input type="time" value={appointmentForm.time} onChange={e=>setAppointmentForm({...appointmentForm,time:e.target.value})}/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar exemplo</button></div></form></Modal>}
     {modal==='transaction'&&<Modal title="Novo lançamento de demonstração" onClose={()=>setModal(null)}><form onSubmit={e=>{e.preventDefault();const value=Number(String(transactionForm.value).replace(',','.'));if(!transactionForm.description||!Number.isFinite(value)||value<=0){notify('Preencha a descrição e um valor válido.');return;}setTransactions(prev=>[{id:Date.now(),description:transactionForm.description,category:transactionForm.category,date:'Hoje',value},...prev]);setModal(null);setTransactionForm({description:'',category:'Receita',value:''});notify('Lançamento fictício adicionado.')}}><label>Descrição<input value={transactionForm.description} onChange={e=>setTransactionForm({...transactionForm,description:e.target.value})} placeholder="Ex.: Venda de serviço" required/></label><div className="form-grid"><label>Tipo<select value={transactionForm.category} onChange={e=>setTransactionForm({...transactionForm,category:e.target.value})}><option>Receita</option><option>Despesa</option></select></label><label>Valor (R$)<input inputMode="decimal" value={transactionForm.value} onChange={e=>setTransactionForm({...transactionForm,value:e.target.value})} placeholder="0,00" required/></label></div><div className="modal-actions"><button type="button" className="secondary-button" onClick={()=>setModal(null)}>Cancelar</button><button type="submit" className="primary-button"><Plus size={16}/> Adicionar lançamento</button></div></form></Modal>}
     {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}</div>}
-    {guideOpen&&<MobileGuide mode="demo" demo={activeDemo} onClose={()=>setGuideOpen(false)}/>}
+    {guideOpen&&<ScreenGuide mode="demo" demo={activeDemo} module={activeModule} onClose={()=>setGuideOpen(false)}/>}
   </div>;
 }
 
@@ -584,10 +603,8 @@ function PublicBookingModule({segment,services,onBook}) {
         </section>
         <section className="panel booking-card"><div className="booking-step"><span>02</span><div><h3>Data e horário</h3><p>Selecione uma opção para a demonstração.</p></div></div>
           <div className="booking-fields"><label>Data<input type="date" min={localDateValue()} value={form.date} onChange={e=>setForm(prev=>({...prev,date:e.target.value}))} required/></label>{segment==='Barber'?<div className="booking-professional-assignments"><strong>Profissional por procedimento</strong>{selectedServices.map(service=><label key={service.name}>{service.name}<select value={form.professionalByService[service.name]||'Sem preferência'} onChange={e=>setForm(prev=>({...prev,professionalByService:{...prev.professionalByService,[service.name]:e.target.value}}))}><option>Sem preferência</option><option>Profissional 1</option><option>Profissional 2</option></select></label>)}</div>:<label>Profissional<select disabled value="Profissional principal"><option>Profissional principal</option></select></label>}</div>
-          {segment==='Barber' ? <div className="booking-time-grid">{timeSlots.map(time=><button type="button" key={time} aria-pressed={form.time===time} className={form.time===time?'selected':''} onClick={()=>setForm(prev=>({...prev,time}))}>{time}</button>)}</div> : <div className="booking-time-picker">
-            <div className="booking-time-picker-group"><span className="booking-time-picker-label">Escolha a hora</span><div className="booking-hour-grid">{hourOptions.map(hour=><button type="button" key={hour} aria-pressed={form.time.slice(0,2)===hour} className={form.time.slice(0,2)===hour?'selected':''} onClick={()=>setForm(prev=>({...prev,time:`${hour}:${prev.time.slice(3)}`}))}>{hour}:00</button>)}</div></div>
-            <div className="booking-time-picker-group"><span className="booking-time-picker-label">Escolha o minuto</span><div className="booking-minute-grid">{minuteOptions.map(minute=><button type="button" key={minute} aria-pressed={form.time.slice(3)===minute} className={form.time.slice(3)===minute?'selected':''} onClick={()=>setForm(prev=>({...prev,time:`${prev.time.slice(0,2)}:${minute}`}))}>{minute}</button>)}</div></div>
-          </div>}<p className="booking-availability-note">{segment==='Barber'?'Grade demonstrativa em intervalos de 30 minutos. A disponibilidade real considera duração, profissional e bloqueios.':'Seletor demonstrativo minuto a minuto. A disponibilidade real considera duração, horários ocupados e bloqueios.'}</p>
+          <BookingTimeWheelPicker slots={timeSlots} value={form.time} onChange={(time)=>setForm(prev=>({...prev,time}))} id="public-booking-time" />
+          <p className="booking-availability-note">{segment==='Barber'?'Grade demonstrativa em intervalos de 30 minutos. A disponibilidade real considera duração, profissional e bloqueios.':'Role as colunas de hora e minuto para encontrar o horário. Nesta prévia, as opções são ilustrativas.'}</p>
         </section>
       </div>
       <aside className="panel booking-summary"><div className="booking-step"><span>03</span><div><h3>Seus dados</h3><p>Contato fictício para finalizar.</p></div></div>
