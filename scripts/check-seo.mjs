@@ -39,7 +39,7 @@ const checks = [
   ['link-in-bio page title', linksPage.includes('<title>Links | 2R Informática</title>')],
   ['link-in-bio WhatsApp', linksPage.includes('wa.me/5567998042465')],
   ['link-in-bio Instagram', linksPage.includes('instagram.com/ruan.bkp/')],
-  ['link-in-bio portfolio', linksPage.includes('href="/"')]
+  ['link-in-bio portfolio', linksPage.includes('href="../"')]
 ];
 
 for (const [label, passed] of checks) {
