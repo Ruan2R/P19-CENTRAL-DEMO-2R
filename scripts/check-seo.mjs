@@ -4,7 +4,7 @@ import { join } from 'node:path';
 const root = process.cwd();
 const dist = join(root, 'dist');
 const publicUrl = 'https://2rinformatica.com.br/';
-const requiredFiles = ['index.html', 'robots.txt', 'sitemap.xml', 'favicon.svg', '2r-logo.png', 'CNAME'];
+const requiredFiles = ['index.html', 'robots.txt', 'sitemap.xml', 'favicon.svg', '2r-logo.png', 'CNAME', 'links/index.html'];
 
 function fail(message) {
   console.error('SEO check failed:', message);
@@ -20,6 +20,7 @@ if (process.exitCode) process.exit(1);
 const html = readFileSync(join(dist, 'index.html'), 'utf8');
 const robots = readFileSync(join(dist, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(dist, 'sitemap.xml'), 'utf8');
+const linksPage = readFileSync(join(dist, 'links', 'index.html'), 'utf8');
 
 const checks = [
   ['title', /<title>2R Informática \| Sistemas de Gestão e Aplicações Web<\/title>/i.test(html)],
@@ -34,7 +35,11 @@ const checks = [
   ['sitemap URL', sitemap.includes(`<loc>${publicUrl}</loc>`)],
   ['CNAME domain', readFileSync(join(dist, 'CNAME'), 'utf8').trim() === '2rinformatica.com.br'],
   ['favicon link', /rel="icon" type="image\/svg\+xml" href="[^"]*favicon\.svg"/i.test(html)],
-  ['social image asset', html.includes(`${publicUrl}2r-logo.png`)]
+  ['social image asset', html.includes(`${publicUrl}2r-logo.png`)],
+  ['link-in-bio page title', /<title>Links \\| 2R Informática<\\/title>/i.test(linksPage)],
+  ['link-in-bio WhatsApp', linksPage.includes('wa.me/5567998042465')],
+  ['link-in-bio Instagram', linksPage.includes('instagram.com/ruan.bkp/')],
+  ['link-in-bio portfolio', linksPage.includes('href="/"')]
 ];
 
 for (const [label, passed] of checks) {
