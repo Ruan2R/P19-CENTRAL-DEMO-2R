@@ -3,5 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.GITHUB_ACTIONS ? '/P19-CENTRAL-DEMO-2R/' : '/',
+  // O domínio próprio serve a aplicação diretamente na raiz.
+  base: '/',
 });

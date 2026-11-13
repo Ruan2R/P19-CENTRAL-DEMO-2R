@@ -3,8 +3,8 @@ import { join } from 'node:path';
 
 const root = process.cwd();
 const dist = join(root, 'dist');
-const publicUrl = 'https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/';
-const requiredFiles = ['index.html', 'robots.txt', 'sitemap.xml', 'favicon.svg', '2r-logo.png'];
+const publicUrl = 'https://2rinformatica.com.br/';
+const requiredFiles = ['index.html', 'robots.txt', 'sitemap.xml', 'favicon.svg', '2r-logo.png', 'CNAME'];
 
 function fail(message) {
   console.error('SEO check failed:', message);
@@ -32,6 +32,7 @@ const checks = [
   ['robots.txt allow', /User-agent:\s*\*\s*Allow:\s*\//i.test(robots)],
   ['robots sitemap', robots.includes(`Sitemap: ${publicUrl}sitemap.xml`)],
   ['sitemap URL', sitemap.includes(`<loc>${publicUrl}</loc>`)],
+  ['CNAME domain', readFileSync(join(dist, 'CNAME'), 'utf8').trim() === '2rinformatica.com.br'],
   ['favicon link', /rel="icon" type="image\/svg\+xml" href="[^"]*favicon\.svg"/i.test(html)],
   ['social image asset', html.includes(`${publicUrl}2r-logo.png`)]
 ];

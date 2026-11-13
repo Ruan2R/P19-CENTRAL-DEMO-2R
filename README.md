@@ -65,9 +65,9 @@ npm run check:seo
 
 ## Publicação
 
-A versão pública é disponibilizada pelo GitHub Pages:
+A versão pública é disponibilizada pelo GitHub Pages no domínio próprio:
 
-[https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/](https://ruan2r.github.io/P19-CENTRAL-DEMO-2R/)
+[https://2rinformatica.com.br/](https://2rinformatica.com.br/)
 
 O GitHub Actions executa a instalação, compilação e verificação dos arquivos de SEO. O fluxo de publicação utiliza o conteúdo compilado pelo Vite em `dist/`.
 
@@ -82,7 +82,7 @@ O GitHub Actions executa a instalação, compilação e verificação dos arquiv
 - `robots.txt` mantido no repositório como referência para uma futura publicação na raiz de um domínio próprio.
 - Checagem automatizada dos metadados e arquivos gerados no fluxo de build.
 
-**Limite atual do GitHub Pages:** este projeto é servido em um subdiretório de `ruan2r.github.io`. O arquivo `robots.txt` só tem efeito quando publicado na raiz do host; um arquivo dentro do subdiretório do projeto não controla o rastreamento do host. Ao adotar um domínio próprio ou uma publicação na raiz, o arquivo poderá ser disponibilizado no endereço correto. O sitemap deste projeto continua disponível no caminho do próprio projeto e pode ser informado no Google Search Console.
+**Domínio próprio:** o portfólio é publicado na raiz de `2rinformatica.com.br` pelo GitHub Pages. O `robots.txt` e o `sitemap.xml` são gerados para esse endereço e podem ser informados no Google Search Console após a propagação do DNS e a ativação do HTTPS.
 
 O portfólio é uma aplicação de página única. As abas e módulos das demonstrações não têm URLs públicas individuais; o sitemap lista apenas a página principal.
 
