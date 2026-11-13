@@ -71,7 +71,7 @@ A versão pública é disponibilizada pelo GitHub Pages no domínio próprio:
 
 O GitHub Actions executa a instalação, compilação e verificação dos arquivos de SEO. O fluxo de publicação utiliza o conteúdo compilado pelo Vite em `dist/`.
 
-## Central de links\n\nA página de links da bio é publicada em `public/links/index.html` e fica disponível em `https://2rinformatica.com.br/links/`. Ela reúne contato pelo WhatsApp, portfólio, demonstrações e Instagram.\n\n## SEO e indexação
+## Central de links\n\nA página de links da bio é publicada em `public/links/index.html` e fica disponível em `https://2rinformatica.com.br/links/`. Ela reúne contato pelo WhatsApp, portfólio, demonstrações e Instagram. O link de demonstrações usa `?view=demos` para abrir diretamente o catálogo. A página também orienta visitantes que chegam pelo navegador interno do Instagram a escolher a opção de abrir no navegador externo; a abertura externa não pode ser forçada por uma página web.\n\n## SEO e indexação
 
 - Título e descrição em português do Brasil.
 - URL canônica para a página principal.

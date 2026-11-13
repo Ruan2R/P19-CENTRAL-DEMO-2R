@@ -261,6 +261,18 @@ export default function App() {
     return matchesText && matchesFilter;
   }), [search, filter]);
 
+  // Deep link da central de links: abre o catálogo diretamente, sem passar
+  // pela página inicial do portfólio. Também aceita um filtro de segmento.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') !== 'demos') return;
+    const allowedSegments = ['Todos', 'Vitrine', 'Beauty', 'Barber', 'Burger'];
+    const requestedSegment = params.get('segment') || 'Todos';
+    setFilter(allowedSegments.includes(requestedSegment) ? requestedSegment : 'Todos');
+    setSearch('');
+    setPage('catalog');
+  }, []);
+
   const featuredDemoIds = ['beauty.agenda.financeiro', 'barber.agenda.financeiro', 'burger.gestao.pedidos'];
   const isFeaturedDemo = (demo) => featuredDemoIds.includes(demo.id);
 

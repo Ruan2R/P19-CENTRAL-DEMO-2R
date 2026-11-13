@@ -21,6 +21,7 @@ const html = readFileSync(join(dist, 'index.html'), 'utf8');
 const robots = readFileSync(join(dist, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(dist, 'sitemap.xml'), 'utf8');
 const linksPage = readFileSync(join(dist, 'links', 'index.html'), 'utf8');
+const appSource = readFileSync(join(root, 'src', 'App.jsx'), 'utf8');
 
 const checks = [
   ['title', /<title>2R Informática \| Sistemas de Gestão e Aplicações Web<\/title>/i.test(html)],
@@ -39,7 +40,10 @@ const checks = [
   ['link-in-bio page title', linksPage.includes('<title>Links | 2R Informática</title>')],
   ['link-in-bio WhatsApp', linksPage.includes('wa.me/5567998042465')],
   ['link-in-bio Instagram', linksPage.includes('instagram.com/ruan.bkp/')],
-  ['link-in-bio portfolio', linksPage.includes('href="../"')]
+  ['link-in-bio portfolio', linksPage.includes('href="../"')],
+  ['link-in-bio demos deep link', linksPage.includes('href="../?view=demos"')],
+  ['link-in-bio external browser guidance', linksPage.includes('Abrir no navegador')],
+  ['app handles demos deep link', appSource.includes("params.get('view') !== 'demos'") && appSource.includes("setPage('catalog')")]
 ];
 
 for (const [label, passed] of checks) {
