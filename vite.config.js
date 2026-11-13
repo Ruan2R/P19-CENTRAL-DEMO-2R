@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  // O domínio próprio serve a aplicação diretamente na raiz.
-  base: '/',
+  // Caminhos relativos permitem servir o mesmo build na raiz do domínio
+  // próprio e no subdiretório do GitHub Pages.
+  base: './',
 });
