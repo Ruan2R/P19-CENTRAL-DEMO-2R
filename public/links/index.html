@@ -76,13 +76,10 @@
     }
     .link.primary:hover { background: linear-gradient(110deg, #78e3ed, #15a8c5); }
     .link svg { width: 19px; height: 19px; flex: 0 0 auto; }
-    .browser-help {
-      display: grid; gap: 5px; margin: 19px 0 17px; padding: 12px 14px;
-      border: 1px solid rgba(88,214,229,.25); border-radius: 12px;
-      background: rgba(3,146,178,.09); color: #c8dce9; font-size: 12px; line-height: 1.5;
+    .browser-hint {
+      margin: 15px 0 0; text-align: center; color: #8197a8;
+      font-size: 10px; line-height: 1.5;
     }
-    .browser-help strong { color: #70dbe8; font-size: 12px; }
-    .browser-help span { color: #b2c7d6; }
     footer { padding-top: 23px; text-align: center; color: #8faabd; font-size: 11px; line-height: 1.7; }
     footer strong { color: #c2d5e3; font-weight: 700; }
     @media (max-width: 380px) {
@@ -107,11 +104,6 @@
 
       <p class="intro">Tecnologia que simplifica seu negócio.<br />Escolha por onde deseja começar:</p>
 
-      <aside class="browser-help" role="note" aria-label="Dica para abrir no navegador externo">
-        <strong>Está acessando pelo Instagram?</strong>
-        <span>Para abrir no navegador do celular, toque no menu de três pontos (⋯) e escolha “Abrir no navegador” ou “Abrir em Chrome/Safari”. O Instagram mantém os links dentro do próprio aplicativo até essa opção ser escolhida.</span>
-      </aside>
-
       <nav class="links" aria-label="Links da 2R Informática">
         <a class="link primary" href="https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Conheci%20o%20portf%C3%B3lio%20da%202R%20e%20gostaria%20de%20conversar%20sobre%20uma%20aplica%C3%A7%C3%A3o%20personalizada%20para%20meu%20neg%C3%B3cio." target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20l1.2-5.3A8.4 8.4 0 1 1 21 11.5Z"/><path d="M8.8 8.7c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c-.2.2-.2.4 0 .7.5.8 1.2 1.4 2.1 1.8.2.1.4.1.6-.1l.7-.8c.2-.2.4-.2.6-.1l1.6.8c.3.1.4.3.4.5 0 .4-.2 1-.6 1.3-.4.4-1 .6-1.6.6-.5 0-1.2-.2-2.1-.6-1-.5-2-1.3-2.8-2.2-.7-.8-1.2-1.8-1.4-2.5-.2-.8 0-1.6.6-2.2Z"/></svg>
@@ -130,6 +122,8 @@
           Instagram da 2R · @ruan.bkp
         </a>
       </nav>
+
+      <p class="browser-hint">Para abrir fora do Instagram: menu ⋯ → “Abrir no navegador”.</p>
 
       <footer>
         <strong>2R INFORMÁTICA</strong><br />

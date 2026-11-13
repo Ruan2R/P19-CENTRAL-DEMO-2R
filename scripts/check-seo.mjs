@@ -42,7 +42,7 @@ const checks = [
   ['link-in-bio Instagram', linksPage.includes('instagram.com/ruan.bkp/')],
   ['link-in-bio portfolio', linksPage.includes('href="../"')],
   ['link-in-bio demos deep link', linksPage.includes('href="../?view=demos"')],
-  ['link-in-bio external browser guidance', linksPage.includes('Abrir no navegador')],
+  ['subtle external browser hint', linksPage.includes('class="browser-hint"') && linksPage.includes('Abrir no navegador') && !linksPage.includes('class="browser-help"')],
   ['app handles demos deep link', appSource.includes("params.get('view') !== 'demos'") && appSource.includes("setPage('catalog')")]
 ];
 
