@@ -40,6 +40,7 @@ const checks = [
   ['link-in-bio page title', linksPage.includes('<title>Links | 2R Informática</title>')],
   ['link-in-bio WhatsApp', linksPage.includes('wa.me/5567998042465')],
   ['link-in-bio Instagram', linksPage.includes('instagram.com/ruan.bkp/')],
+  ['link-in-bio LinkedIn', linksPage.includes('linkedin.com/in/ruanrodrigues2r/')],
   ['link-in-bio portfolio', linksPage.includes('href="../"')],
   ['link-in-bio demos deep link', linksPage.includes('href="../?view=demos"')],
   ['subtle external browser hint', linksPage.includes('class="browser-hint"') && linksPage.includes('Abrir no navegador') && !linksPage.includes('class="browser-help"')],
