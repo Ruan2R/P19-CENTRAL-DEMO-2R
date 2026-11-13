@@ -12,7 +12,7 @@ import { BurgerProductsModule, BurgerInventoryModule } from './components/Burger
 import { ModuleBrief, ScreenGuide } from './components/ContextualGuide.jsx';
 
 const publicAsset = (filename) => `${import.meta.env.BASE_URL}${filename}`;
-const INSTAGRAM_URL = 'https://www.instagram.com/2r.ruanrodrigues/';
+const INSTAGRAM_URL = 'https://www.instagram.com/ruan.bkp/';
 const CUSTOM_WHATSAPP_URL = 'https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Conheci%20o%20portf%C3%B3lio%20da%202R%20e%20gostaria%20de%20conversar%20sobre%20uma%20aplica%C3%A7%C3%A3o%20personalizada%20para%20meu%20neg%C3%B3cio.';
 
 const DEMOS = [
@@ -895,7 +895,7 @@ function PortfolioHome({ onOpenCatalog }) {
             <div><strong>Não encontrou seu segmento?</strong><p>Essas são apenas algumas possibilidades. Podemos conversar sobre a rotina do seu negócio e planejar uma solução específica para ele.</p></div>
             <div className="portfolio-custom-actions">
               <a className="portfolio-button portfolio-button-primary" href={CUSTOM_WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><WhatsAppIcon size={18}/> Conversar sobre meu projeto <ArrowUpRight size={16}/></a>
-              <a className="portfolio-button portfolio-button-light" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"><Instagram size={17}/> @2r.ruanrodrigues <ArrowUpRight size={15}/></a>
+              <a className="portfolio-button portfolio-button-light" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"><Instagram size={17}/> @ruan.bkp <ArrowUpRight size={15}/></a>
             </div>
           </div>
         </div>
@@ -925,7 +925,7 @@ function PortfolioHome({ onOpenCatalog }) {
           <div><span className="portfolio-section-kicker">VAMOS TIRAR A IDEIA DO PAPEL?</span><h2>Tem uma necessidade?<br/><span>Vamos pensar na solução.</span></h2><p>Converse comigo sobre uma aplicação web, uma melhoria de processo ou uma demanda de tecnologia para seu negócio.</p></div>
           <div className="portfolio-contact-actions">
             <a className="portfolio-button portfolio-button-primary portfolio-whatsapp-button" href="https://wa.me/5567998042465?text=Ol%C3%A1%2C%20Ruan!%20Encontrei%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener noreferrer" aria-label="Conversar com Ruan pelo WhatsApp no número (67) 99804-2465"><WhatsAppIcon size={19}/> Chamar no WhatsApp <span className="portfolio-whatsapp-number">(67) 99804-2465</span><ArrowUpRight size={16}/></a>
-            <a className="portfolio-button portfolio-button-secondary" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"><Instagram size={17}/> Instagram <span>@2r.ruanrodrigues</span><ArrowUpRight size={16}/></a>
+            <a className="portfolio-button portfolio-button-secondary" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"><Instagram size={17}/> Instagram <span>@ruan.bkp</span><ArrowUpRight size={16}/></a>
             <a className="portfolio-button portfolio-button-secondary" href="https://www.linkedin.com/in/ruanrodrigues2r/" target="_blank" rel="noopener noreferrer"><Linkedin size={17}/> Perfil profissional <ArrowUpRight size={16}/></a>
           </div>
         </div>
