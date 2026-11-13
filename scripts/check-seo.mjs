@@ -36,7 +36,7 @@ const checks = [
   ['CNAME domain', readFileSync(join(dist, 'CNAME'), 'utf8').trim() === '2rinformatica.com.br'],
   ['favicon link', /rel="icon" type="image\/svg\+xml" href="[^"]*favicon\.svg"/i.test(html)],
   ['social image asset', html.includes(`${publicUrl}2r-logo.png`)],
-  ['link-in-bio page title', /<title>Links \\| 2R Informática<\\/title>/i.test(linksPage)],
+  ['link-in-bio page title', linksPage.includes('<title>Links | 2R Informática</title>')],
   ['link-in-bio WhatsApp', linksPage.includes('wa.me/5567998042465')],
   ['link-in-bio Instagram', linksPage.includes('instagram.com/ruan.bkp/')],
   ['link-in-bio portfolio', linksPage.includes('href="/"')]
